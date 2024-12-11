@@ -1,0 +1,1 @@
+{"root":["./src/const.ts","./src/index.ts","./src/passport.ts","./src/db/index.ts","./src/router/auth.ts"],"errors":true,"version":"5.6.3"}
