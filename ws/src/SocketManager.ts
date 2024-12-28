@@ -56,6 +56,14 @@ class SocketManager {
       user.socket.send(message);
     });
   }
+  
+  // change
+  ask(oppPlayer: string | null | undefined , roomId: string, message:string) {
+    const users = this.interestedSockets.get(roomId);
+    const opponent = users?.find((u) => u.userId === oppPlayer);
+
+    opponent?.socket.send(message);
+  }
 
   removeUser(user: User) {
     const roomId = this.userRoomMappping.get(user.userId);

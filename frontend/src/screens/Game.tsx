@@ -1,24 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from "../components/Button";
 import { ChessBoard, isPromoting } from "../components/chessBoard";
 import { useSocket } from "../hooks/useSocket";
 import { Chess , Move} from "chess.js";
-import { GameResult as Result, INIT_GAME, GAME_OVER, MOVE, JOIN_ROOM, GAME_JOINED , GAME_ADDED, USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME} 
+import { GameResult as Result, INIT_GAME, GAME_OVER, MOVE, JOIN_ROOM, GAME_JOINED , GAME_ADDED, USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
 from "../../../modules/src/Message.ts";
 import { GAME_TIME_MS } from '../../../modules/const';
 import { useUser } from '../../../modules/src/hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import { movesAtom, userSelectedMoveIndexAtom } from '../../../modules/src/atoms/chessBoard.ts'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-// import MoveSound from '/move.wav';
+import MoveSound from '/move.mp3';
+import Notify from '/notify.mp3';
 import GameEndModal from '../components/GameEndModal.tsx';
 import { UserAvatar } from '../components/UserAvatar.tsx';
 import { ShareGame } from '../components/ShareGame.tsx';
 import { Waitopponent } from '../components/ui/Waitopponent.tsx';
 import ExitGameModel from '../components/ExitGameModal.tsx';
 import MovesTable from '../components/MovesTable.tsx';
+import DrawModel from '../components/DrawModal.tsx';
 
-// const moveAudio = new Audio(MoveSound);
+const moveAudio = new Audio(MoveSound);
+const NotifyAudio = new Audio(Notify);
 
 export interface GameResult {
     result: Result;
@@ -41,21 +44,44 @@ export function Game(){
     const { gameId } = useParams();
     const user = useUser();
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    
+    function usePersistance(init_val:boolean) {
+      // Set initial value
+      const initial_value = useMemo(() => {
+        const local_storage_value = localStorage.getItem('added:');
+        // If there is a value stored in localStorage, use that
+        if(local_storage_value) {
+          return JSON.parse(local_storage_value);
+        } 
+        // Otherwise use initial_value that was passed to the function
+        return init_val;
+      },[]);
+
+      const [added, setAdded] = useState(initial_value);
+
+      useEffect(() => {
+        const state_str = JSON.stringify(added); // Stringified state
+        localStorage.setItem('added:', state_str) // Set stringified state as item in localStorage
+      }, [added]);
+
+      return [added, setAdded];
+    }
+    
 
     const [chess, _setChess] = useState(new Chess());
     const [board, setBoard] = useState(chess.board());
-    const [added, setAdded] = useState(false);
+    const [added, setAdded] = usePersistance(false);
     const [started, setStarted] = useState(false);
     const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
     const [result, setResult] = useState<GameResult | null>(null);
     const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
     const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
     const [gameID,setGameID] = useState("");
+    const [isDraw, setIsDraw] = useState(false);
     const setMoves = useSetRecoilState(movesAtom);
     const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
     const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
-
 
     useEffect(() => {
         userSelectedMoveIndexRef.current = userSelectedMoveIndex;
@@ -63,6 +89,8 @@ export function Game(){
     
     useEffect(() => {
         if (!user) {
+          cancelGame();
+          localStorage.removeItem('added:');
           window.location.href = '/login';
         }
     }, [user]);
@@ -86,6 +114,7 @@ export function Game(){
                 whitePlayer: message.payload.whitePlayer,
               });
               navigate(`/game/${message.payload.gameId}`);
+              NotifyAudio.play();
               break;
             case MOVE:
              
@@ -97,6 +126,7 @@ export function Game(){
                 setMoves((moves) => [...moves, move]);
                 return;
               }
+
               try {
                 if (isPromoting(chess, move.from, move.to)) {
                   chess.move({
@@ -108,13 +138,15 @@ export function Game(){
                   chess.move({ from: move.from, to: move.to });
                 }
                 setMoves((moves) => [...moves, move]);
-                // moveAudio.play();
+                moveAudio.play();
+                
               } catch (error) {
                 console.log('Error', error);
               }
               break;
             case GAME_OVER:
               setResult(message.payload.result);
+              NotifyAudio.play();
               break;
     
             case GAME_ENDED:
@@ -133,16 +165,22 @@ export function Game(){
                 result: message.payload.result,
                 by: wonBy,
               });
-              console.log(result);
+              
               chess.reset();
               setStarted(false);
+              localStorage.removeItem('added:');
               setAdded(false);
+              NotifyAudio.play();
               break;
     
             case USER_TIMEOUT:
               setResult(message.payload.win);
               break;
               
+             
+            case IS_DRAW:
+              setIsDraw(true);
+              break;
 
             case GAME_JOINED:
               setGameMetadata({
@@ -214,30 +252,62 @@ export function Game(){
             );
         };
     
-        const handleExit = () => {
+        const handleExit = (msg: string) => {
             socket?.send(
                 JSON.stringify({
-                    type: EXIT_GAME,
+                    type: msg,
                     payload: {
                         gameId,
                     },
                 }),
             );
             setMoves([]);
-            navigate('/');
+            navigate("/");
         };
-    
-    
+
+        // cancel game before any opponent join
+        const cancelGame = () => {
+          socket?.send(
+            JSON.stringify({
+                type: EXIT,
+                payload: {
+                    gameID,
+                },
+            }),
+        );
+        setAdded(false);
+        setGameID('');
+        }
+
+        // handle draw from the one who suggest it 
+        const handleDraw = () => {
+          socket?.send(
+            JSON.stringify({
+              type: DO_DRAW,
+              payload: {
+                gameID
+              }
+            })
+          )
+        }
+  
+
     if(!socket) return <div className="text-white flex justify-center text-4xl pt-20">connecting...</div>
     return (
         <div>
-      {result && (
-        <GameEndModal
-          blackPlayer={gameMetadata?.blackPlayer}
-          whitePlayer={gameMetadata?.whitePlayer}
-          gameResult={result}
-        ></GameEndModal>
-      )}
+          
+          {isDraw && (
+            <DrawModel onClick={() => handleExit(DRAW)}></DrawModel>
+          )}
+            
+          {result && (
+            <GameEndModal
+              blackPlayer={gameMetadata?.blackPlayer}
+              whitePlayer={gameMetadata?.whitePlayer}
+              gameResult={result}
+            ></GameEndModal>
+          )}
+      
       {started && (
         <div className="justify-center flex pt-4 text-white">
           {(user.id === gameMetadata?.blackPlayer?.id ? 'b' : 'w') ===
@@ -248,7 +318,7 @@ export function Game(){
       )}
       <div className="justify-center flex">
         <div className="pt-2 w-full">
-          <div className="flex gap-8 w-full">
+          <div className="flex flex-col lg:flex-row gap-8 w-full">
             <div className="text-white">
               <div className="flex justify-center">
                 <div>
@@ -299,6 +369,7 @@ export function Game(){
                     <div className='flex flex-col items-center space-y-4 justify-center'>
                       <div className="text-white"><Waitopponent/></div>
                       <ShareGame gameId={gameID}/>
+                      <Button onClick={() => cancelGame()} content="Cancel"></Button>
                     </div>
                   ) : (
                     gameId === 'random' && (
@@ -317,11 +388,13 @@ export function Game(){
                 </div>
               ) : (
                 <div className="p-8 flex justify-center w-full">
-                  <ExitGameModel onClick={() => handleExit()} />
+                  <ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Exit'} />
                 </div>
               )}
               <div>
-                <MovesTable/>
+                {started &&
+                <MovesTable resign={<ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Resign'} />} 
+                handleDraw={() => handleDraw()}/>}
               </div>
             </div>
           </div>

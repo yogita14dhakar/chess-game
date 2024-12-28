@@ -103,7 +103,7 @@ router.get('/logout', (req: Request, res: Response) => {
 //google
 router.get(
   '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }),
+  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }),
 );
 
 router.get(
@@ -117,7 +117,7 @@ router.get(
 //github
 router.get(
   '/github',
-  passport.authenticate('github', { scope: ['read:user', 'user:email'] }),
+  passport.authenticate('github', { scope: ['read:user', 'user:email'], prompt: 'select_account' }),
 );
 
 router.get(

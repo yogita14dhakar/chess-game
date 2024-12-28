@@ -12,7 +12,11 @@ import {
     GAME_ADDED,
     GAME_ENDED,
     EXIT_GAME,
-    GameStatus 
+    GameStatus, 
+    DRAW,
+    IS_DRAW,
+    DO_DRAW,
+    EXIT
     } from "../../modules/src/Message";
 
 export class GameManager{
@@ -45,6 +49,11 @@ export class GameManager{
         this.games = this.games.filter((g) => g.gameId !== gameId);
     }
 
+    removePendingGame(gameId: string) {
+      this.games = this.games.filter((g) => g.gameId !== gameId);
+      this.pendingGameId = null;
+    }
+
     private userHandler(user: User){
         user.socket.on("message", async (data)=>{
             const message = JSON.parse(data.toString());
@@ -57,6 +66,7 @@ export class GameManager{
                         console.error('Pending game not found?');
                         return;
                     }
+
                     if(user.userId === game.player1UserId){
                         socketManager.broadcast(
                             game.gameId,
@@ -89,7 +99,7 @@ export class GameManager{
             }
 
             if(message.type === MOVE){
-                const gameId = message.payload.gameId;
+                const gameId = message.payload?.gameId;
                 const game = this.games.find((game) => game.gameId === gameId);
                 if(game){
                     game.makeMove(user, message.payload.move);
@@ -99,15 +109,37 @@ export class GameManager{
                 }
             }
 
-            if (message.type === EXIT_GAME){
+            if (message.type === EXIT_GAME || message.type === DRAW){
                 const gameId = message.payload.gameId;
                 const game = this.games.find((game) => game.gameId === gameId); 
                 if (game) {
-                  await game.exitGame(user);
+                  await message.type === EXIT_GAME ? game.exitGame(user) : game.draw(user);
                   this.removeGame(game.gameId)
                 }
             }
-        
+
+            // if user want to cancel game before any user joined the room
+            if (message.type === EXIT) {
+              const gameId = message.payload.gameID;
+              const game = this.games.find((game) => game.gameId === gameId); 
+              if (game) {
+                this.removePendingGame(game.gameId)
+              }
+            }
+            
+            // send draw request to opponent
+            if (message.type === DO_DRAW) {
+              const gameId = message.payload?.gameID;
+              const game =this.games.find((g) => g.gameId === gameId);
+              const oppPlayer = user.userId === game?.player1UserId ? game?.player2UserId : game?.player1UserId;
+
+              socketManager.ask(oppPlayer, gameId,
+                JSON.stringify({
+                  type: IS_DRAW,
+                })
+              )
+            }
+            
             if (message.type === JOIN_ROOM) {
                 const gameId = message.payload?.gameId;
                 if (!gameId) {

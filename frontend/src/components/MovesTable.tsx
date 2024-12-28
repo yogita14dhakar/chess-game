@@ -4,7 +4,7 @@ import {
     userSelectedMoveIndexAtom,
   } from '../../../modules/src/atoms/chessBoard';
   import { Move } from 'chess.js';
-  import { useEffect, useRef } from 'react';
+  import { ReactElement, useEffect, useRef } from 'react';
   import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
   import {
     HandshakeIcon,
@@ -16,7 +16,7 @@ import {
     RefreshCw,
   } from 'lucide-react';
   
-  const MovesTable = () => {
+  const MovesTable = (func: {resign: ReactElement, handleDraw: ()=> void}) => {
     const [userSelectedMoveIndex, setUserSelectedMoveIndex] = useRecoilState(
       userSelectedMoveIndexAtom,
     );
@@ -83,14 +83,16 @@ import {
         {moves.length ? (
           <div className="w-full p-2 bg-[#20211D] flex items-center justify-between">
             <div className="flex gap-4">
-              <button className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
+              {/*change*/}
+              <button onClick={() => func.handleDraw()} className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
                 {<HandshakeIcon size={16} />}
                 Draw
               </button>
-              <button className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
+              {/*change*/}
+              <div className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
                 {<FlagIcon size={16} />}
-                Resign
-              </button>
+                {func.resign}
+              </div>
             </div>
             <div className="flex gap-1">
               <button

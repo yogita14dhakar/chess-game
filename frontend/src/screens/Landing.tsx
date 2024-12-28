@@ -1,8 +1,12 @@
 import { useNavigate } from "react-router-dom"
 import { Button } from "../components/Button";
-import dotenv from 'dotenv';
+import { BACKEND_URL } from "../../../modules/src/atoms/user";
+import { useUser } from "../../../modules/src/hooks/useUser";
 
-dotenv.config();
+function getUrl(){
+    const user = useUser();
+    return user;
+}
 
 export function Landing(){
     const navigate = useNavigate();
@@ -12,7 +16,8 @@ export function Landing(){
             <div>            
                 <div className="flex justify-center mt-20 gap-4">
                     <Button onClick={ () => navigate("/game/random")} content="Play Online"></Button>
-                    <Button onClick={ () => navigate(document.cookie === '' ? "/login" : `${process.env.BACKEND_URL}/auth/logout`)} content={document.cookie === '' ? "Login" : "Logout"}></Button>
+                    {getUrl() == null ? <Button onClick={ () => navigate(`/login`)} content="Login"></Button>:
+                    <Button onClick={ () => window.open(`${BACKEND_URL}/auth/logout`, '_self')} content="logout"/>}
                 </div>
                 <div className="flex justify-center mt-5 md:mt-20">
                     <img src="chessImage.png" className="h-96 "></img>

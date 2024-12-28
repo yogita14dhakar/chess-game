@@ -3,8 +3,8 @@ import { MouseEvent, memo, useEffect, useState } from 'react';
 import  { MOVE }  from "../../../modules/src/Message";
 import { useRecoilState } from 'recoil';
 import { isBoardFlippedAtom, movesAtom, userSelectedMoveIndexAtom } from '../../../modules/src/atoms/chessBoard';
-// import MoveSound from '/move.wav';
-// import CaptureSound from '/capture.wav';
+import MoveSound from '/move.mp3';
+import CaptureSound from '/capture.mp3';
 import ChessSquare from './chess-board/ChessSquare';
 import LetterNotation from './chess-board/LetterNotation';
 import LegalMoveIndicator from './chess-board/LegalMoveIndicator';
@@ -81,8 +81,8 @@ export const ChessBoard = memo(
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const boxSize = 80;
     const [gameOver, setGameOver] = useState(false);
-    // const moveAudio = new Audio(MoveSound);
-    // const captureAudio = new Audio(CaptureSound);
+    const moveAudio = new Audio(MoveSound);
+    const captureAudio = new Audio(CaptureSound);
     
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
         e.preventDefault();
@@ -247,10 +247,10 @@ export const ChessBoard = memo(
                                 });
                               }
                               if (moveResult) {
-                                // moveAudio.play();
+                                moveAudio.play();
 
                                 if (moveResult?.captured) {
-                                //   captureAudio.play();
+                                  captureAudio.play();
                                 }
                                 setMoves((prev) => [...prev, moveResult]);
                                 setFrom(null);

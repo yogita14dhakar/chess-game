@@ -5,21 +5,19 @@ import {
     AlertDialogHeader,
     AlertDialogFooter,
     AlertDialog,
-    AlertDialogTrigger,
     AlertDialogContent,
     AlertDialogDescription,
   } from './ui/alert-dialog';
   
-  const ExitGameModel = ( onClick : {onClick : () => void, name:string}) => {
-  
+  const DrawModel = ( onClick : {onClick : () => void}) => {
     return (
-      <AlertDialog defaultOpen={onClick.name === 'Leave' ? true : false}>
-        { onClick.name !== 'Leave' ? <AlertDialogTrigger className='w-24 h-12  bg-stone-800 rounded-md font-semibold text-white'>{onClick.name}</AlertDialogTrigger> : null }
+      
+      <AlertDialog defaultOpen={true}>
         <AlertDialogContent className='bg-stone-800 border-stone-800'>
           <AlertDialogHeader>
-            <AlertDialogTitle className='text-white font-mono'>Do You Want To Leave The Game?</AlertDialogTitle>
+            <AlertDialogTitle className='text-white font-mono'>Consent: Your Opponent Suggest To Draw The Game?</AlertDialogTitle>
             <AlertDialogDescription className='text-white font-mono'>
-              This action cannot be undone. This will be considered as a loss.
+              Would You Like To Draw The Game Here. This action cannot be undone. This will be considered as a Draw.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -28,7 +26,7 @@ import {
               onClick={onClick.onClick}
               className='bg-[#e2e6aa] min-w-20 text-gray-900 hover:text-slate-100 hover:bg-[#bbc259] font-semibold'
             >
-              {onClick.name}
+              Draw
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -36,4 +34,4 @@ import {
     );
   };
   
-  export default ExitGameModel;
+  export default DrawModel;

@@ -1,12 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import { userAtom } from '../../../modules/src/atoms/user';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const BACKEND_URL = process.env.BACKEND_URL;
+import { BACKEND_URL, userAtom } from '../../../modules/src/atoms/user';
 
 const Login = () => {
   const navigate = useNavigate();

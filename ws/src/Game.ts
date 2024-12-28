@@ -150,7 +150,7 @@ export class Game{
 
   async addMoveToDb(move: Move, moveTimestamp: Date) {
     const q1 = "INSERT INTO Move (id, gameId, moveNumber, `from`, `to`, `before`, `after`, createdAt, timeTaken, san) VALUES ?";
-    const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp, moveTimestamp.getTime() - this.lastMoveTime.getTime(), move.san]];
+    const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp, moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime(), move.san]];
     const q2 = `UPDATE Game SET currentFen = '${move.after}' WHERE id = '${this.gameId}'`;
     await transaction(q1, q2, VALUES);
   }
@@ -196,11 +196,11 @@ export class Game{
 
     // flipped because move has already happened
     if (this.board.turn() === 'b') {
-      this.player1TimeConsumed = this.player1TimeConsumed + (moveTimestamp.getTime() - this.lastMoveTime.getTime());
+      this.player1TimeConsumed = this.player1TimeConsumed + (moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime());
     }
 
     if (this.board.turn() === 'w') {
-      this.player2TimeConsumed = this.player2TimeConsumed + (moveTimestamp.getTime() - this.lastMoveTime.getTime());
+      this.player2TimeConsumed = this.player2TimeConsumed + (moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime());
     }
 
     await this.addMoveToDb(move, moveTimestamp);
@@ -232,14 +232,14 @@ export class Game{
 
   getPlayer1TimeConsumed() {
     if (this.board.turn() === 'w') {
-      return this.player1TimeConsumed + (new Date(Date.now()).getTime() - this.lastMoveTime.getTime());
+      return this.player1TimeConsumed + (new Date(Date.now()).getTime() - new Date(this.lastMoveTime).getTime());
     }
     return this.player1TimeConsumed;
   }
 
   getPlayer2TimeConsumed() {
     if (this.board.turn() === 'b') {
-      return this.player2TimeConsumed + (new Date(Date.now()).getTime() - this.lastMoveTime.getTime());
+      return this.player2TimeConsumed + (new Date(Date.now()).getTime() - new Date(this.lastMoveTime).getTime());
     }
     return this.player2TimeConsumed;
   }
@@ -268,6 +268,11 @@ export class Game{
   async exitGame(user : User) {
     this.endGame(GameStatus.PLAYER_EXIT, user.userId === this.player2UserId ? GameResult.WHITE_WINS : GameResult.BLACK_WINS);
     
+  }
+
+  // change
+  async draw(user : User) {
+    this.endGame(GameStatus.COMPLETED, GameResult.DRAW)
   }
 
   async endGame(status: GameStatus, result: GameResult) {
