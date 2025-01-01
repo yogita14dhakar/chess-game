@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm install && npx ts-node ",
+    "start": "node dist/backend/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
