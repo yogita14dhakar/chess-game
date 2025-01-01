@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm install && tsc",
+    "build": "npm install && npx ts-node -b",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
