@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm install && tsc-node src/index.ts",
+    "build": "npm install && ts-node src/index.ts",
     "start": "node dist/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
