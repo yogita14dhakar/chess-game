@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm install && npx ts-node ",
+    "build": "npm install && npx tsc -b",
     "start": "node dist/backend/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

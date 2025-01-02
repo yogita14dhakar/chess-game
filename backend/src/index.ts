@@ -1,3 +1,4 @@
+console.log(__dirname);
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
