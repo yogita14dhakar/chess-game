@@ -15,10 +15,10 @@ function App() {
       <Suspense fallback={<Loader />}>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<Landing/>}></Route>
-            <Route path='/login' element={<Login/>}></Route>
-            <Route path='/game/:gameId' element={<Game/>}></Route>
-            <Route path='*' element={<Others/>}></Route>
+            <Route path='https://lets-play-2fi3.onrender.com/' element={<Landing/>}></Route>
+            <Route path='https://lets-play-2fi3.onrender.com/login' element={<Login/>}></Route>
+            <Route path='https://lets-play-2fi3.onrender.com/game/:gameId' element={<Game/>}></Route>
+            <Route path='https://lets-play-2fi3.onrender.com/*' element={<Others/>}></Route>
           </Routes>
         </BrowserRouter>
       </Suspense>
