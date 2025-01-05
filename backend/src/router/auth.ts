@@ -3,7 +3,7 @@ import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { COOKIE_MAX_AGE } from "../const";
-import { insertUser , find} from '../../../modules/src/db';
+import { insertUser , find} from '../modules/src/db';
 import dotenv from 'dotenv';
 
 dotenv.config();

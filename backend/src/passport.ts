@@ -3,7 +3,7 @@ const GithubStrategy = require('passport-github2').Strategy;
 import passport from 'passport';
 import dotenv from 'dotenv';
 import {v4 as uuidv4} from 'uuid';
-import { find, insertUser } from '../../modules/src/db';
+import { find, insertUser } from './modules/src/db';
 
 dotenv.config();
 interface GithubEmailRes {

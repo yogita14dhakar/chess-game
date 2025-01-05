@@ -30,7 +30,6 @@
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.0",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/mysql2": "github:types/mysql2",
     "@types/node": "^22.10.3",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16"
