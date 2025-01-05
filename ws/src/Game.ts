@@ -1,10 +1,10 @@
 import { Chess, Move, Square } from 'chess.js';
-import { INIT_GAME, MOVE, AuthProvider, GAME_ENDED} from "../../modules/src/Message";
-import { findMany, insertUser, transaction, find, update } from "../../modules/src/db";
+import { INIT_GAME, MOVE, AuthProvider, GAME_ENDED} from "./modules/src/Message";
+import { findMany, insertUser, transaction, find, update } from "./modules/src/db";
 import { randomUUID } from 'crypto';
 import { socketManager, User } from './SocketManager';
-import { GameResult, GameStatus } from '../../modules/src/Message';
-import { GAME_TIME_MS } from '../../modules/const';
+import { GameResult, GameStatus } from './modules/src/Message';
+import { GAME_TIME_MS } from './modules/const';
 
 export function isPromoting(chess: Chess, from: Square, to: Square) {
     if (!from) {

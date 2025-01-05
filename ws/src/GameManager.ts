@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { socketManager, User } from './SocketManager';
-import { find, findMany } from '../../modules/src/db';
+import { find, findMany } from './modules/src/db';
 import { 
     INIT_GAME,
     MOVE,
