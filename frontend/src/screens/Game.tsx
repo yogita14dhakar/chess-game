@@ -91,7 +91,7 @@ export function Game(){
         if (!user) {
           cancelGame();
           localStorage.removeItem('added:');
-          window.location.href = '/login';
+          navigate(`/login`);
         }
     }, [user]);
     
