@@ -1,8 +1,8 @@
 import { Chess, Color, Move, PieceSymbol, Square } from 'chess.js';
 import { MouseEvent, memo, useEffect, useState } from 'react';
-import  { MOVE }  from "../../../modules/src/Message";
+import  { MOVE }  from "../modules/src/Message";
 import { useRecoilState } from 'recoil';
-import { isBoardFlippedAtom, movesAtom, userSelectedMoveIndexAtom } from '../../../modules/src/atoms/chessBoard';
+import { isBoardFlippedAtom, movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard';
 import MoveSound from '/move.mp3';
 import CaptureSound from '/capture.mp3';
 import ChessSquare from './chess-board/ChessSquare';

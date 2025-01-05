@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser } from "../../../modules/src/hooks/useUser";
+import { useUser } from "../modules/src/hooks/useUser";
 
 const ws_URL = "ws://localhost:8080";
 

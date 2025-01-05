@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GameResult} from '../screens/Game';
-import { GameResult as Result } from '../../../modules/src/Message';
+import { GameResult as Result } from '../modules/src/Message';
 
 interface ModalProps {
   blackPlayer?: { id: string; name: string };
