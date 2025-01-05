@@ -17,7 +17,7 @@ import {
     IS_DRAW,
     DO_DRAW,
     EXIT
-    } from "../../modules/src/Message";
+    } from "./modules/src/Message";
 
 export class GameManager{
     private games: Game[];
