@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import session from 'express-session';
+import cookieSession from 'cookie-session';
 import { initPassport } from './passport';
 import dotenv from 'dotenv';
 import passport from 'passport';
@@ -14,14 +14,23 @@ const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-    session({
-      secret: process.env.COOKIE_SECRET || 'keyboard cat',
-      resave: false,
-      saveUninitialized: false,
-      cookie: { secure: false, maxAge: COOKIE_MAX_AGE },
-    }),
-  );
+
+app.use(cookieSession({
+  name: 'guest',
+  keys: [process.env.COOKIE_SECRET || 'keyboard cat', process.env.COOKIE_SECRET || 'keyboard cat'],
+
+  // Cookie Options
+  maxAge: COOKIE_MAX_AGE
+}))
+  // app.use(cookieSession({
+  //   cookie:{
+  //       secure: true,
+  //       maxAge:COOKIE_MAX_AGE
+  //          },
+  //   secret: process.env.COOKIE_SECRET || 'keyboard cat',
+  //   saveUninitialized: true,
+  //   resave: false
+  //   }));
 
 initPassport();
 app.use(passport.initialize());
