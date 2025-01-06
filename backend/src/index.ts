@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 app.use(cookieSession({
   name: 'guest',
-  keys: [process.env.COOKIE_SECRET || 'keyboard cat', process.env.COOKIE_SECRET || 'keyboard cat'],
+  secret: process.env.COOKIE_SECRET || 'keyboard cat',
 
   // Cookie Options
   maxAge: COOKIE_MAX_AGE
