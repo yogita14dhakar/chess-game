@@ -50,8 +50,6 @@ router.post('/guest', async (req: Request, res: Response) => {
 });
   
 router.get('/refresh', async (req: Request, res: Response) => {
-  console.log(req.cookies);
-  console.log(req.session.cookie);
   if (req.user) {
     const user = req.user as UserDetails;
     const q = `SELECT * FROM User WHERE id = '${user.id}'`;
@@ -63,7 +61,6 @@ router.get('/refresh', async (req: Request, res: Response) => {
       name: userDb.name,
     }); 
   }
-  
   else if (req.cookies && req.cookies.guest) {
     const decoded = jwt.verify(req.cookies.guest, JWT_SECRET) as userJwtClaims;
     const token = jwt.sign(

@@ -1,12 +1,26 @@
 import express from 'express';
 import cors from 'cors';
-import cookieSession from 'cookie-session';
+import session from 'express-session';
 import { initPassport } from './passport';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import authRoute from './router/auth';
 import { COOKIE_MAX_AGE } from './const';
+const MySQLStore = require('express-mysql-session')(session);
+
+import { connection } from './modules/src/db/index';
+const sessionStore = new MySQLStore({
+  schema: {
+    tableName: 'user_sessions',
+    columnNames: {
+      session_id: 'session_id',
+      expires: 'expires',
+      data: 'data'
+    }
+  }
+}, connection);
+
 
 const app = express();
 
@@ -15,22 +29,16 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cookieSession({
-  name: 'guest',
-  secret: process.env.COOKIE_SECRET || 'keyboard cat',
-
-  // Cookie Options
-  maxAge: COOKIE_MAX_AGE
-}))
-  // app.use(cookieSession({
-  //   cookie:{
-  //       secure: true,
-  //       maxAge:COOKIE_MAX_AGE
-  //          },
-  //   secret: process.env.COOKIE_SECRET || 'keyboard cat',
-  //   saveUninitialized: true,
-  //   resave: false
-  //   }));
+  app.use(session({
+    cookie:{
+      secure: true,
+      maxAge:COOKIE_MAX_AGE,
+    },
+    store: sessionStore,
+    secret: process.env.COOKIE_SECRET || 'keyboard cat',
+    saveUninitialized: true,
+    resave: false
+    }));
 
 initPassport();
 app.use(passport.initialize());
