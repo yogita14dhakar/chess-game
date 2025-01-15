@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { socketManager, User } from './SocketManager';
-import { find, findMany } from './modules/src/db';
+import { connect_db, connection, find, findMany } from './modules/src/db';
 import { 
     INIT_GAME,
     MOVE,
@@ -147,10 +147,12 @@ export class GameManager{
                 }
         
                 let availableGame = this.games.find((game) => game.gameId === gameId);
+                connect_db;
                 const gameFromDb = await find(`SELECT * FROM Game WHERE id = '${gameId}'`); 
                 const whitePlayer = await find(`SELECT * FROM User WHERE id = '${gameFromDb.whitePlayerId}'`);
                 const blackPlayer = await find(`SELECT * FROM User WHERE id = '${gameFromDb.blackPlayerId}'`);
                 const moves = await findMany(`SELECT * FROM Move WHERE gameId = '${gameFromDb?.id}' ORDER BY moveNumber ASC`);
+                connection.end();
                 // There is a game created but no second player available
         
                 if (availableGame && !availableGame.player2UserId) {

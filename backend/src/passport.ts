@@ -3,7 +3,7 @@ const GithubStrategy = require('passport-github2').Strategy;
 import passport from 'passport';
 import dotenv from 'dotenv';
 import {v4 as uuidv4} from 'uuid';
-import { find, insertUser } from './modules/src/db';
+import { connect_db, connection, find, insertUser } from './modules/src/db';
 
 dotenv.config();
 interface GithubEmailRes {
@@ -50,9 +50,10 @@ export function initPassport(){
                 const q1 = `INSERT INTO User (id, email, name, provider, lastLogin) 
                 VALUES ? ON DUPLICATE KEY UPDATE name = '${profile.displayName}', provider = 'GOOGLE', lastLogin = CURRENT_TIMESTAMP()`;
                 const VALUES = [[uuidv4(), `${profile.emails[0].value}`, `${profile.displayName}`, 'GOOGLE', new Date().toISOString().slice(0, 19).replace('T', ' ')]];
+                connect_db;
                 await insertUser(q1, VALUES); // if user exist it will update the nameor else it will insert in table
                 const user = await find(`SELECT * FROM User WHERE email = '${profile.emails[0].value}'`);
-                console.log(user);
+                connection.end();
                 done(null, user);
             }
 
@@ -85,9 +86,10 @@ export function initPassport(){
                 const q1 = `INSERT INTO User (id, email, name, provider, lastLogin) 
                 VALUES ? ON DUPLICATE KEY UPDATE name = '${profile.displayName}', provider = 'GITHUB', lastLogin = CURRENT_TIMESTAMP()`;
                 const VALUES = [[uuidv4(), `${primaryEmail!.email}`, `${profile.displayName}`, 'GITHUB', new Date().toISOString().slice(0, 19).replace('T', ' ')]];
+                connect_db;
                 await insertUser(q1, VALUES); // if user exist it will update the nameor else it will insert in table
                 const user = await find(`SELECT * FROM User WHERE email = '${primaryEmail!.email}'`);
-                console.log(user);
+                connection.end();
                 done(null, user);
             }
         )

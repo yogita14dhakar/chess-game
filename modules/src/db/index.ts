@@ -10,10 +10,12 @@ export const connection = mysql.createPool({
     database: process.env.DATABASE,
     password: process.env.PASSWORD 
 });
-connection.getConnection((err, conn)=> {
+export const connect_db = () => {
+    connection.getConnection((err, conn)=> {
     if(err) throw err;
     console.log("connected to the database");
 });
+}
 
 export const insertUser = async (q:string, VALUES: any[][])=>{
     try{
