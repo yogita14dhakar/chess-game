@@ -52,6 +52,8 @@ router.post('/guest', async (req: Request, res: Response) => {
 });
   
 router.get('/refresh', async (req: Request, res: Response) => {
+  console.log(req.cookies);
+  console.log(req.session);
   if (req.user) {
     const user = req.user as UserDetails; 
     const q = `SELECT * FROM User WHERE id = '${user.id}'`;
