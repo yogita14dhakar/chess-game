@@ -47,7 +47,7 @@ router.post('/guest', async (req: Request, res: Response) => {
       token: token,
       isGuest: true,
     };
-    res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, domain: 'onrender.com', secure: true, sameSite: 'none'});
+    res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, secure: true, sameSite: 'none'});
     res.json(UserDetails);
 });
   
@@ -79,7 +79,7 @@ router.get('/refresh', async (req: Request, res: Response) => {
       token: token,
       isGuest: true,
     };
-    res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, domain: 'onrender.com', secure: true, sameSite: 'none' });
+    res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, secure: true, sameSite: 'none' });
     res.json(User);
   } 
   else {
