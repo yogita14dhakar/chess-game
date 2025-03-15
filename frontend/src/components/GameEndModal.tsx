@@ -28,7 +28,7 @@ const GameEndModal: React.FC<ModalProps> = ({
     gameResult: Result;
     isWhite: boolean;
   }) => {
-    const imageSrc = isWhite ? '../../public/wk.png' : '../../public/bk.jpg';
+    const imageSrc = isWhite ? '/wk.png' : '/bk.jpg';
     const borderColor =
       gameResult === (isWhite ? Result.WHITE_WINS : Result.BLACK_WINS)
         ? 'border-green-400'

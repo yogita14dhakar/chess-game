@@ -30,7 +30,6 @@ const Login = () => {
       });
       const user = await response.json();
       setUser(user);
-      navigate('/game/random');
     }
 
   return (

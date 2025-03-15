@@ -18,6 +18,7 @@ function App() {
             <Route path='/' element={<Landing/>}></Route>
             <Route path='/login' element={<Login/>}></Route>
             <Route path='/game/:gameId' element={<Game/>}></Route>
+            <Route path='/game/computer/:gameId' element={<Game/>}></Route>
             <Route path='*' element={<Others/>}></Route>
           </Routes>
         </BrowserRouter>

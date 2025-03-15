@@ -387,15 +387,16 @@ export function Game(){
                   )}
                 </div>
               ) : (
-                <div className="p-8 flex justify-center w-full">
-                  <ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Exit'} />
+                <div>
+                  <div className="p-8 flex justify-center w-full">
+                    <ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Exit'} />
+                  </div>
+                
+                  <MovesTable resign={<ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Resign'} />} 
+                  handleDraw={() => handleDraw()}/>
                 </div>
               )}
-              <div>
-                {started &&
-                <MovesTable resign={<ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Resign'} />} 
-                handleDraw={() => handleDraw()}/>}
-              </div>
+              
             </div>
           </div>
         </div>
