@@ -28,7 +28,7 @@ export const insertUser = async (q:string, VALUES: any[][])=>{
     let connection;
     try{
         connection = await connPool.getConnection();
-        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.execute(q, [VALUES]);
+        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.query(q, [VALUES]);
             if(err) throw err;
             return;
     }catch(err){
