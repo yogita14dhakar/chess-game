@@ -41,9 +41,7 @@ export interface Metadata {
 export function ComputerGame(){
     
     const { gameId } = useParams();
-    console.log(gameId);
     const user = useUser();
-    console.log(user);
     const navigate = useNavigate()
     
 
@@ -64,7 +62,7 @@ export function ComputerGame(){
     }, [userSelectedMoveIndex]);
     
     useEffect(() => {
-      console.log(user);
+      console.log('useeffect', user);
         if (!user) {
           navigate(`/login`);
         }
@@ -93,7 +91,7 @@ export function ComputerGame(){
       NotifyAudio.play();
     }
     
-    createGame();
+    user && createGame();
     const msg = function (event:any){
       const message = JSON.parse(event.data);
       switch (message.type) {
