@@ -68,104 +68,104 @@ export function ComputerGame(){
         }
     }, [user]);
     
-    //create game in database
-    const createGame = async() => {
-      const response = await fetch(`${BACKEND_URL}/computer`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          gameId: gameId,
-          user: user.id
-        }),
-      });
-      const game = await response.json();
-      setGameID(game.gameId);
-      setBoard(chess.board());
-      setGameMetadata({
-        blackPlayer: game.payload.blackPlayer,                
-        whitePlayer: game.payload.whitePlayer,
-      });
-      NotifyAudio.play();
-    }
+    // //create game in database
+    // const createGame = async() => {
+    //   const response = await fetch(`${BACKEND_URL}/computer`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     credentials: 'include',
+    //     body: JSON.stringify({
+    //       gameId: gameId,
+    //       user: user.id
+    //     }),
+    //   });
+    //   const game = await response.json();
+    //   setGameID(game.gameId);
+    //   setBoard(chess.board());
+    //   setGameMetadata({
+    //     blackPlayer: game.payload.blackPlayer,                
+    //     whitePlayer: game.payload.whitePlayer,
+    //   });
+    //   NotifyAudio.play();
+    // }
     
-    user && createGame();
-    const msg = function (event:any){
-      const message = JSON.parse(event.data);
-      switch (message.type) {
-        case MOVE:
+    // user && createGame();
+    // const msg = function (event:any){
+    //   const message = JSON.parse(event.data);
+    //   switch (message.type) {
+    //     case MOVE:
          
-          const { move, player1TimeConsumed, player2TimeConsumed } =
-            message.payload;
-          setPlayer1TimeConsumed(player1TimeConsumed);
-          setPlayer2TimeConsumed(player2TimeConsumed);
-          if (userSelectedMoveIndexRef.current !== null) {
-            setMoves((moves) => [...moves, move]);
-            return;
-          }
+    //       const { move, player1TimeConsumed, player2TimeConsumed } =
+    //         message.payload;
+    //       setPlayer1TimeConsumed(player1TimeConsumed);
+    //       setPlayer2TimeConsumed(player2TimeConsumed);
+    //       if (userSelectedMoveIndexRef.current !== null) {
+    //         setMoves((moves) => [...moves, move]);
+    //         return;
+    //       }
 
-          try {
-            if (isPromoting(chess, move.from, move.to)) {
-              chess.move({
-                from: move.from,
-                to: move.to,
-                promotion: 'q',
-              });
-            } else {
-              chess.move({ from: move.from, to: move.to });
-            }
-            setMoves((moves) => [...moves, move]);
-            moveAudio.play();
+    //       try {
+    //         if (isPromoting(chess, move.from, move.to)) {
+    //           chess.move({
+    //             from: move.from,
+    //             to: move.to,
+    //             promotion: 'q',
+    //           });
+    //         } else {
+    //           chess.move({ from: move.from, to: move.to });
+    //         }
+    //         setMoves((moves) => [...moves, move]);
+    //         moveAudio.play();
             
-          } catch (error) {
-            console.log('Error', error);
-          }
-          break;
-        case GAME_OVER:
-          setResult(message.payload.result);
-          NotifyAudio.play();
-          break;
+    //       } catch (error) {
+    //         console.log('Error', error);
+    //       }
+    //       break;
+    //     case GAME_OVER:
+    //       setResult(message.payload.result);
+    //       NotifyAudio.play();
+    //       break;
 
-        case GAME_ENDED:
-          let wonBy;
-          switch (message.payload.status) {
-            case 'COMPLETED':
-              wonBy = message.payload.result !== 'DRAW' ? 'CheckMate' : 'Draw';
-              break;
-            case 'PLAYER_EXIT':
-              wonBy = 'Player Exit';
-              break;
-            default:
-              wonBy = 'Timeout';
-          }
-          setResult({
-            result: message.payload.result,
-            by: wonBy,
-          });
+    //     case GAME_ENDED:
+    //       let wonBy;
+    //       switch (message.payload.status) {
+    //         case 'COMPLETED':
+    //           wonBy = message.payload.result !== 'DRAW' ? 'CheckMate' : 'Draw';
+    //           break;
+    //         case 'PLAYER_EXIT':
+    //           wonBy = 'Player Exit';
+    //           break;
+    //         default:
+    //           wonBy = 'Timeout';
+    //       }
+    //       setResult({
+    //         result: message.payload.result,
+    //         by: wonBy,
+    //       });
           
-          chess.reset();
+    //       chess.reset();
      
-          localStorage.removeItem('added:');
+    //       localStorage.removeItem('added:');
       
-          NotifyAudio.play();
-          break;
+    //       NotifyAudio.play();
+    //       break;
 
-        case USER_TIMEOUT:
-          setResult(message.payload.win);
-          break;
+    //     case USER_TIMEOUT:
+    //       setResult(message.payload.win);
+    //       break;
           
          
-        case IS_DRAW:
-          setIsDraw(true);
-          break;
+    //     case IS_DRAW:
+    //       setIsDraw(true);
+    //       break;
 
-        default:
-          alert(message.payload.message);
-          break;
-      }
-    };
+    //     default:
+    //       alert(message.payload.message);
+    //       break;
+    //   }
+    // };
     
     useEffect(() => {
         
@@ -252,7 +252,7 @@ export function ComputerGame(){
                         chess={chess}
                         setBoard={setBoard}
                         socket={null}
-                        msg={msg}
+                        msg={null}
                         board={board}
                       />
                     </div>
