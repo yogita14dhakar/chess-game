@@ -1,6 +1,6 @@
 import { Chess, Move, Square } from 'chess.js';
 import { INIT_GAME, MOVE, AuthProvider, GAME_ENDED} from "./modules/src/Message";
-import { findMany, insertUser, transaction, find, update, connect_db, connection } from "./modules/src/db";
+import { findMany, insertUser, transaction,  update} from "./modules/src/db";
 import { randomUUID } from 'crypto';
 import { socketManager, User } from './SocketManager';
 import { GameResult, GameStatus } from './modules/src/Message';
@@ -103,11 +103,8 @@ export class Game{
 
     async updateSecondPlayer(player2UserId: string) {
     this.player2UserId = player2UserId;
-
     const q = `SELECT * FROM User WHERE id IN ('${this.player1UserId}', '${this.player2UserId}')`
-    connect_db;
     let users = await findMany(q);
-    connection.end();
     try {
       await this.createGameInDb();
     } catch (e) {
@@ -146,18 +143,14 @@ export class Game{
     this.lastMoveTime = this.startTime;
     const q = "INSERT INTO Game (id, whitePlayerId, blackPlayerId, status, currentFen, startAt, timeControl) VALUES ?";
     const VALUES = [[this.gameId, this.player1UserId, this.player2UserId, 'IN_PROGRESS','rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', this.startTime, 'CLASSICAL']];
-    connect_db;
     await insertUser(q, VALUES); 
-    connection.end();
   }
 
   async addMoveToDb(move: Move, moveTimestamp: Date) {
     const q1 = "INSERT INTO Move (id, gameId, moveNumber, `from`, `to`, `before`, `after`, createdAt, timeTaken, san) VALUES ?";
     const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp, moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime(), move.san]];
     const q2 = `UPDATE Game SET currentFen = '${move.after}' WHERE id = '${this.gameId}'`;
-    connect_db;
     await transaction(q1, q2, VALUES);
-    connection.end();
   }
 
   async makeMove(
@@ -281,13 +274,11 @@ export class Game{
   }
 
   async endGame(status: GameStatus, result: GameResult) {
-    connect_db;
     await update(`UPDATE Game SET status = '${status}', result = '${result}', endAt = CURRENT_TIMESTAMP() WHERE id = '${this.gameId}'`);
-    const updatedGame = await find(`SELECT * FROM Game WHERE id = '${this.gameId}'`);
+    const updatedGame = await update(`SELECT * FROM Game WHERE id = '${this.gameId}'`);
     const allMoves = await findMany(`SELECT * FROM Move WHERE gameId = '${updatedGame?.id}' ORDER BY moveNumber ASC`);
-    const whitePlayer = await find(`SELECT * FROM User WHERE id = '${updatedGame?.whitePlayerId}'`);
-    const blackPlayer = await find(`SELECT * FROM User WHERE id = '${updatedGame?.blackPlayerId}'`);
-    connection.end();
+    const whitePlayer = await update(`SELECT * FROM User WHERE id = '${updatedGame?.whitePlayerId}'`);
+    const blackPlayer = await update(`SELECT * FROM User WHERE id = '${updatedGame?.blackPlayerId}'`);
     socketManager.broadcast(
       this.gameId,
       JSON.stringify({

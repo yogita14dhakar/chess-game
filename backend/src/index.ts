@@ -6,10 +6,11 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import authRoute from './router/auth';
+import compRoute from './modules/computerGame'
 import { COOKIE_MAX_AGE } from './const';
 const MySQLStore = require('express-mysql-session')(session);
 
-import { connection } from './modules/src/db/index';
+import { connPool } from './modules/src/db/index';
 const sessionStore = new MySQLStore({
   schema: {
     tableName: 'user_sessions',
@@ -19,7 +20,7 @@ const sessionStore = new MySQLStore({
       data: 'data'
     }
   }
-}, connection);
+}, connPool);
 
 
 const app = express();
@@ -55,6 +56,7 @@ app.use(
 );
 
 app.use('/auth', authRoute);
+app.use('/computer', compRoute);
 
 const PORT = 3000;
 app.listen(PORT, () => {

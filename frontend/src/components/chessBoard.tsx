@@ -47,6 +47,7 @@ export const ChessBoard = memo(
         board,
         socket,
         setBoard,
+        msg
       }: {
         myColor: Color;
         gameId: string;
@@ -66,7 +67,10 @@ export const ChessBoard = memo(
           type: PieceSymbol;
           color: Color;
         } | null)[][];
-        socket: WebSocket;
+        socket: WebSocket | null;
+        msg: {
+          (event: any): void;
+      } | null
       })=> {
     const [isFlipped, setIsFlipped] = useRecoilState(isBoardFlippedAtom);
     const [userSelectedMoveIndex, setUserSelectedMoveIndex] = useRecoilState(userSelectedMoveIndexAtom);
@@ -258,7 +262,7 @@ export const ChessBoard = memo(
                                 if (moveResult.san.includes('#')) {
                                   setGameOver(true);
                                 }
-                                socket.send(
+                                socket ? socket.send(
                                   JSON.stringify({
                                     type: MOVE,
                                     payload: {
@@ -266,7 +270,11 @@ export const ChessBoard = memo(
                                       move: moveResult,
                                     },
                                   })
-                                );
+                                ):
+                                msg && msg({type: MOVE, payload: {
+                                  move: moveResult
+                                }})
+
                               }
                             } catch (e) {
                               console.log('e', e);

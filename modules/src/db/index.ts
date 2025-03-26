@@ -1,83 +1,92 @@
 import mysql, { FieldPacket } from 'mysql2';
 import dotenv from 'dotenv';
 
+import { createPool } from 'mysql2/promise';
+
 dotenv.config();
 
-export const connection = mysql.createPool({
-    //add as env variable
-    host: process.env.HOST,
-    user: process.env.USER,
-    database: process.env.DATABASE,
-    password: process.env.PASSWORD 
-});
-export const connect_db = () => {
-    connection.getConnection((err, conn)=> {
-    if(err) throw err;
-    console.log("connected to the database");
-});
+function sleep(ms:number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Create the connection pool. The pool-specific settings are the defaults
+export const connPool = createPool({
+  host                  : 'localhost',
+  user                  : 'root',
+  password              : '@1234',
+  database              : 'chess_data',
+  waitForConnections    : true,
+  connectionLimit       : 3,
+  maxIdle               : 3, // max idle connections, the default value is the same as `connectionLimit`
+  idleTimeout           : 60000, // idle connections timeout, in milliseconds, the default value 60000
+  queueLimit            : 0,
+  enableKeepAlive       : true,
+  keepAliveInitialDelay : 0,
+});
+
 export const insertUser = async (q:string, VALUES: any[][])=>{
+    let connection;
     try{
-        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.promise().query(q, [VALUES]);
+        connection = await connPool.getConnection();
+        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.execute(q, [VALUES]);
             if(err) throw err;
             return;
     }catch(err){
         console.log(err);
+    }finally {
+        await sleep(2000);
+    
+        // Don't forget to release the connection when finished!
+        if (connection) connection.release();
     }
 }
 
 export const update = async (q: string) => {
+    let connection;
     try{
-        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.promise().query(q);
+        connection = await connPool.getConnection();
+        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.execute(q);
             if(err) throw err;
-            return;
+            return JSON.parse(JSON.stringify(rows[0]));
     }catch(err){
         console.log(err);
-    }
-}
-
-export const find = async (q:string)=>{
-    try{
-        const [rows]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.promise().query(q);
-        return JSON.parse(JSON.stringify(rows[0]));
-    }catch(err){
-        console.log(err);
+    }finally {
+        await sleep(2000);
+    
+        // Don't forget to release the connection when finished!
+        if (connection) connection.release();
     }
 }
 
 export const findMany = async (q:string)=>{
+    let connection;
     try{
-        const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.promise().query(q);
+        connection = await connPool.getConnection();
+        const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.execute(q);
         return JSON.parse(JSON.stringify(rows));
     }catch(err){
         console.log(err);
+    }finally {
+        await sleep(2000);
+    
+        // Don't forget to release the connection when finished!
+        if (connection) connection.release();
     }
 }
 
 
 export const transaction = async (q1: string , q2: string, VALUES: any[])=>{
-    connection.getConnection((err, conn)=> {
-        if (err) throw err;
-        conn.beginTransaction(async(err)=>{
-            if(err){
-                conn.rollback((err)=>{
-                    if (err) throw err;
-                })
-            }
-            else{
-                await insertUser(q1, VALUES);
-                await update(q2);
-                conn.commit((err)=>{
-                    if (err){
-                        conn.rollback((err)=>{
-                            if (err) throw err;
-                        })  
-                    }
-                });
-            }
-                
-        });
-    })
+    const connection = await connPool.getConnection();
+    try{
+        await connection.beginTransaction();
+        await insertUser(q1, VALUES);
+        await update(q2);
+        await connection.commit();
+    }catch(error){
+        if (connection) await connection.rollback();
+        throw error;
+    }finally {
+        if (connection) await connection.release();
+    }
     
 }

@@ -84,10 +84,10 @@ import {
           <div className="w-full p-2 bg-[#20211D] flex items-center justify-between">
             <div className="flex gap-4">
               {/*change*/}
-              <button onClick={() => func.handleDraw()} className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
+              {func.handleDraw && <button onClick={() => func.handleDraw()} className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
                 {<HandshakeIcon size={16} />}
                 Draw
-              </button>
+              </button>}
               {/*change*/}
               <div className="flex items-center gap-2 hover:bg-[#32302E] rounded px-2.5 py-1">
                 {<FlagIcon size={16} />}

@@ -20,7 +20,7 @@ export function Landing(){
                     <Button onClick={ () => navigate("/game/random")} content="Play Online"></Button>
                     <Button onClick={ () => navigate(`/game/computer/${gameId}`)} content="Play With Computer"></Button>
                     {getUrl() == null ? <Button onClick={ () => navigate(`/login`)} content="Login"></Button>:
-                    <Button onClick={ () => navigate(`${BACKEND_URL}/auth/logout`)} content="logout"/>}
+                    <Button onClick={ () => window.open(`${BACKEND_URL}/auth/logout`, '_self')} content="logout"/>}
                 </div>
                 <div className="flex justify-center mt-5 md:mt-20">
                     <img src="chessImage.png" className="h-96 "></img>

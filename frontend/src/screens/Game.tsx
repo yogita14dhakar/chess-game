@@ -345,6 +345,7 @@ export function Game(){
                         chess={chess}
                         setBoard={setBoard}
                         socket={socket}
+                        msg={null}
                         board={board}
                       />
                     </div>

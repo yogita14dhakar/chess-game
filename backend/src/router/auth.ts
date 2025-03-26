@@ -3,7 +3,7 @@ import passport from 'passport';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { COOKIE_MAX_AGE } from "../const";
-import { insertUser , find, connect_db, connection} from '../modules/src/db';
+import { insertUser , update} from '../modules/src/db';
 import dotenv from 'dotenv';
 
 
@@ -33,10 +33,8 @@ router.post('/guest', async (req: Request, res: Response) => {
     let guestUUID = uuidv4();
     const q = "INSERT INTO User (id, username, name, email, provider) VALUES ?" 
     const VALUES = [[guestUUID, `guest-${guestUUID}`, bodyData.name||guestUUID , guestUUID+"@playchess.com", 'GUEST']];   
-    connect_db;
     await insertUser(q, VALUES);
-    const user = await find(`SELECT * FROM User WHERE id = '${guestUUID}'`);
-    connection.end();
+    const user = await update(`SELECT * FROM User WHERE id = '${guestUUID}'`);
     const token = jwt.sign(
       { userId: user.id, name: user.name, isGuest: true },
       JWT_SECRET,
@@ -57,9 +55,7 @@ router.get('/refresh', async (req: Request, res: Response) => {
   if (req.user) {
     const user = req.user as UserDetails; 
     const q = `SELECT * FROM User WHERE id = '${user.id}'`;
-    connect_db;
-    let userDb = await find(q);
-    connection.end();
+    let userDb = await update(q);
     const token = jwt.sign({ userId: userDb.id, name: userDb.name}, JWT_SECRET);
     res.json({
       token,
