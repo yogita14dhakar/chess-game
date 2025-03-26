@@ -35,6 +35,7 @@ router.post('/guest', async (req: Request, res: Response) => {
     const VALUES = [[guestUUID, `guest-${guestUUID}`, bodyData.name||guestUUID , guestUUID+"@playchess.com", 'GUEST']];   
     await insertUser(q, VALUES);
     const user = await update(`SELECT * FROM User WHERE id = '${guestUUID}'`);
+    console.log(user);
     const token = jwt.sign(
       { userId: user.id, name: user.name, isGuest: true },
       JWT_SECRET,
