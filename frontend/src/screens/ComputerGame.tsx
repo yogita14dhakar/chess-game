@@ -62,11 +62,10 @@ export function ComputerGame(){
     }, [userSelectedMoveIndex]);
     
     useEffect(() => {
-      console.log('useeffect', user);
-        if (!user) {
-          navigate(`/login`);
-        }
-    }, []);
+      if (!user) {
+        navigate(`/login`);
+      }
+    }, [user, navigate]);
     
     //create game in database
     const createGame = async() => {

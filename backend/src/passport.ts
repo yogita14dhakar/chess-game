@@ -39,7 +39,7 @@ export function initPassport(){
             {
                 clientID: GOOGLE_CLIENT_ID,
                 clientSecret: GOOGLE_CLIENT_SECRET,
-                callbackURL: '/auth/google/callback',
+                callbackURL: 'https://chess-backend-qiwy.onrender.com/auth/google/callback',
             },
             async function (
                 accessToken: string,
@@ -63,7 +63,7 @@ export function initPassport(){
             {
                 clientID: GITHUB_CLIENT_ID,
                 clientSecret: GITHUB_CLIENT_SECRET,
-                callbackURL: '/auth/github/callback',
+                callbackURL: 'https://chess-backend-qiwy.onrender.com/auth/github/callback',
             },
             async function (
                 accessToken: string,
