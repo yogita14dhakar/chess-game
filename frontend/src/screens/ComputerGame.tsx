@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 // import { Button } from "../components/Button";
-// import { ChessBoard, isPromoting } from "../components/chessBoard";
+import { ChessBoard, isPromoting } from "../components/chessBoard";
 import { Chess , Move} from "chess.js";
 import { GameResult as Result, GAME_OVER, MOVE , USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
 from "../modules/src/Message.ts";
@@ -9,16 +9,16 @@ import { useUser } from '../modules/src/hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import { movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard.ts'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-// import MoveSound from '/move.mp3';
+import MoveSound from '/move.mp3';
 import Notify from '/notify.mp3';
-// import GameEndModal from '../components/GameEndModal.tsx';
-// import { UserAvatar } from '../components/UserAvatar.tsx';
-// import ExitGameModel from '../components/ExitGameModal.tsx';
-// import MovesTable from '../components/MovesTable.tsx';
-// import DrawModel from '../components/DrawModal.tsx';
+import GameEndModal from '../components/GameEndModal.tsx';
+import { UserAvatar } from '../components/UserAvatar.tsx';
+import ExitGameModel from '../components/ExitGameModal.tsx';
+import MovesTable from '../components/MovesTable.tsx';
+import DrawModel from '../components/DrawModal.tsx';
 import { BACKEND_URL } from '../modules/src/atoms/user.ts';
 
-// const moveAudio = new Audio(MoveSound);
+const moveAudio = new Audio(MoveSound);
 const NotifyAudio = new Audio(Notify);
 
 export interface GameResult {
@@ -198,90 +198,84 @@ export function ComputerGame(){
             navigate("/");
         };
 
-
-        return (
-          <div>
-            <h1>ComputerGame Component</h1>
-          </div>
-        );
-  //   return (
-  //       <div>
+    return (
+        <div>
           
-  //         {isDraw && (
-  //           <DrawModel onClick={() => handleExit(DRAW)}></DrawModel>
-  //         )}
+          {isDraw && (
+            <DrawModel onClick={() => handleExit(DRAW)}></DrawModel>
+          )}
             
-  //         {result && (
-  //           <GameEndModal
-  //             blackPlayer={gameMetadata?.blackPlayer}
-  //             whitePlayer={gameMetadata?.whitePlayer}
-  //             gameResult={result}
-  //           ></GameEndModal>
-  //         )}
+          {result && (
+            <GameEndModal
+              blackPlayer={gameMetadata?.blackPlayer}
+              whitePlayer={gameMetadata?.whitePlayer}
+              gameResult={result}
+            ></GameEndModal>
+          )}
       
       
-  //       <div className="justify-center flex pt-4 text-white">
-  //         {(user.id === gameMetadata?.blackPlayer?.id ? 'b' : 'w') ===
-  //         chess.turn()
-  //           ? 'Your turn'
-  //           : "Opponent's turn"}
-  //       </div>
-  //     <div className="justify-center flex">
-  //       <div className="pt-2 w-full">
-  //         <div className="flex flex-col lg:flex-row gap-8 w-full">
-  //           <div className="text-white">
-  //             <div className="flex justify-center">
-  //               <div>
+        <div className="justify-center flex pt-4 text-white">
+          {(user.id === gameMetadata?.blackPlayer?.id ? 'b' : 'w') ===
+          chess.turn()
+            ? 'Your turn'
+            : "Opponent's turn"}
+        </div>
+      <div className="justify-center flex">
+        <div className="pt-2 w-full">
+          <div className="flex flex-col lg:flex-row gap-8 w-full">
+            <div className="text-white">
+              <div className="flex justify-center">
+                <div>
                   
-  //                   <div className="mb-4">
-  //                     <div className="flex justify-between">
-  //                       <UserAvatar gameMetadata={gameMetadata} />
-  //                       {getTimer(
-  //                         player2TimeConsumed
-  //                       )}
-  //                     </div>
-  //                   </div>
+                    <div className="mb-4">
+                      <div className="flex justify-between">
+                        <UserAvatar gameMetadata={gameMetadata} />
+                        {getTimer(
+                          player2TimeConsumed
+                        )}
+                      </div>
+                    </div>
                   
-  //                 <div>
-  //                   <div className={`w-full flex justify-center text-white`}>
-  //                     <ChessBoard
-  //                       started={true}
-  //                       gameId={gameId ?? ''}
-  //                       myColor={
-  //                         user.id === gameMetadata?.blackPlayer?.id ? 'b' : 'w'
-  //                       }
-  //                       chess={chess}
-  //                       setBoard={setBoard}
-  //                       socket={null}
-  //                       msg={null}
-  //                       board={board}
-  //                     />
-  //                   </div>
-  //                 </div>
-  //                   <div className="mt-4 flex justify-between">
-  //                     <UserAvatar gameMetadata={gameMetadata} self={true} />
-  //                     {getTimer(
-  //                       player1TimeConsumed,
-  //                     )}
-  //                   </div>
-  //               </div>
-  //             </div>
-  //           </div>
-  //           <div className="rounded-md pt-2 flex-1 overflow-auto h-[95vh] overflow-y-scroll no-scrollbar bg-white">
-  //               <div>
-  //                 <div className="p-8 flex justify-center w-full">
-  //                   <ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Exit'} />
-  //                 </div>
+                  <div>
+                    <div className={`w-full flex justify-center text-white`}>
+                      <ChessBoard
+                        started={true}
+                        gameId={gameId ?? ''}
+                        myColor={
+                          user.id === gameMetadata?.blackPlayer?.id ? 'b' : 'w'
+                        }
+                        chess={chess}
+                        setBoard={setBoard}
+                        socket={null}
+                        msg={null}
+                        board={board}
+                      />
+                    </div>
+                  </div>
+                    <div className="mt-4 flex justify-between">
+                      <UserAvatar gameMetadata={gameMetadata} self={true} />
+                      {getTimer(
+                        player1TimeConsumed,
+                      )}
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-md pt-2 flex-1 overflow-auto h-[95vh] overflow-y-scroll no-scrollbar bg-white">
+                <div>
+                  <div className="p-8 flex justify-center w-full">
+                    <ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Exit'} />
+                  </div>
                 
-  //                 <MovesTable resign={<ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Resign'} />} 
-  //                 handleDraw={() => null}/>
-  //               </div>
+                  <MovesTable resign={<ExitGameModel onClick={() => handleExit(EXIT_GAME)} name={'Resign'} />} 
+                  handleDraw={() => null}/>
+                </div>
               
               
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
