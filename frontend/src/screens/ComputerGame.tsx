@@ -43,7 +43,7 @@ export function ComputerGame(){
   const user = useUser();
   const navigate = useNavigate()
     
-
+  const [added, setAdded] = useState(false);
   const [chess, _setChess] = useState(new Chess());
   const [board, setBoard] = useState(chess.board());
   const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
@@ -84,6 +84,7 @@ export function ComputerGame(){
         blackPlayer: game.payload.blackPlayer,                
         whitePlayer: game.payload.whitePlayer,
       });
+      setAdded(true);
       NotifyAudio.play();
       return;
     }
@@ -91,80 +92,80 @@ export function ComputerGame(){
     user && createGame();
 
     
-  //   const msg = function (event:any){
-  //     const message = JSON.parse(event.data);
-  //     switch (message.type) {
-  //       case MOVE:
+    const msg = function (event:any){
+      const message = JSON.parse(event.data);
+      switch (message.type) {
+        case MOVE:
          
-  //         const { move, player1TimeConsumed, player2TimeConsumed } =
-  //           message.payload;
-  //         setPlayer1TimeConsumed(player1TimeConsumed);
-  //         setPlayer2TimeConsumed(player2TimeConsumed);
-  //         if (userSelectedMoveIndexRef.current !== null) {
-  //           setMoves((moves) => [...moves, move]);
-  //           return;
-  //         }
+          const { move, player1TimeConsumed, player2TimeConsumed } =
+            message.payload;
+          setPlayer1TimeConsumed(player1TimeConsumed);
+          setPlayer2TimeConsumed(player2TimeConsumed);
+          if (userSelectedMoveIndexRef.current !== null) {
+            setMoves((moves) => [...moves, move]);
+            return;
+          }
 
-  //         try {
-  //           if (isPromoting(chess, move.from, move.to)) {
-  //             chess.move({
-  //               from: move.from,
-  //               to: move.to,
-  //               promotion: 'q',
-  //             });
-  //           } else {
-  //             chess.move({ from: move.from, to: move.to });
-  //           }
-  //           setMoves((moves) => [...moves, move]);
-  //           moveAudio.play();
+          try {
+            if (isPromoting(chess, move.from, move.to)) {
+              chess.move({
+                from: move.from,
+                to: move.to,
+                promotion: 'q',
+              });
+            } else {
+              chess.move({ from: move.from, to: move.to });
+            }
+            setMoves((moves) => [...moves, move]);
+            moveAudio.play();
             
-  //         } catch (error) {
-  //           console.log('Error', error);
-  //         }
-  //         break;
-  //       case GAME_OVER:
-  //         setResult(message.payload.result);
-  //         NotifyAudio.play();
-  //         break;
+          } catch (error) {
+            console.log('Error', error);
+          }
+          break;
+        case GAME_OVER:
+          setResult(message.payload.result);
+          NotifyAudio.play();
+          break;
 
-  //       case GAME_ENDED:
-  //         let wonBy;
-  //         switch (message.payload.status) {
-  //           case 'COMPLETED':
-  //             wonBy = message.payload.result !== 'DRAW' ? 'CheckMate' : 'Draw';
-  //             break;
-  //           case 'PLAYER_EXIT':
-  //             wonBy = 'Player Exit';
-  //             break;
-  //           default:
-  //             wonBy = 'Timeout';
-  //         }
-  //         setResult({
-  //           result: message.payload.result,
-  //           by: wonBy,
-  //         });
+        case GAME_ENDED:
+          let wonBy;
+          switch (message.payload.status) {
+            case 'COMPLETED':
+              wonBy = message.payload.result !== 'DRAW' ? 'CheckMate' : 'Draw';
+              break;
+            case 'PLAYER_EXIT':
+              wonBy = 'Player Exit';
+              break;
+            default:
+              wonBy = 'Timeout';
+          }
+          setResult({
+            result: message.payload.result,
+            by: wonBy,
+          });
           
-  //         chess.reset();
+          chess.reset();
      
-  //         localStorage.removeItem('added:');
+          localStorage.removeItem('added:');
       
-  //         NotifyAudio.play();
-  //         break;
+          NotifyAudio.play();
+          break;
 
-  //       case USER_TIMEOUT:
-  //         setResult(message.payload.win);
-  //         break;
+        case USER_TIMEOUT:
+          setResult(message.payload.win);
+          break;
           
          
-  //       case IS_DRAW:
-  //         setIsDraw(true);
-  //         break;
+        case IS_DRAW:
+          setIsDraw(true);
+          break;
 
-  //       default:
-  //         alert(message.payload.message);
-  //         break;
-  //     }
-  //   };
+        default:
+          alert(message.payload.message);
+          break;
+      }
+    };
     
     useEffect(() => {
         
@@ -193,13 +194,13 @@ export function ComputerGame(){
         };
     
         const handleExit = (msg: string) => {
-            
+            setAdded(false);
             setMoves([]);
             navigate("/");
         };
 
     return (
-        <div>
+        added ? <div>
           
           {isDraw && (
             <DrawModel onClick={() => handleExit(DRAW)}></DrawModel>
@@ -214,12 +215,12 @@ export function ComputerGame(){
           )}
       
       
-        <div className="justify-center flex pt-4 text-white">
+        {added && <div className="justify-center flex pt-4 text-white">
           {(user.id === gameMetadata?.blackPlayer?.id ? 'b' : 'w') ===
           chess.turn()
             ? 'Your turn'
             : "Opponent's turn"}
-        </div>
+        </div>}
       <div className="justify-center flex">
         <div className="pt-2 w-full">
           <div className="flex flex-col lg:flex-row gap-8 w-full">
@@ -276,6 +277,6 @@ export function ComputerGame(){
           </div>
         </div>
       </div>
-    </div>
+    </div> : <h1>welcome to the game!!!</h1>
   );
 };
