@@ -30,6 +30,7 @@ const Login = () => {
       });
       const user = await response.json();
       setUser(user);
+      navigate('/')
     }
 
   return (

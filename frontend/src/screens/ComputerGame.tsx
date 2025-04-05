@@ -39,34 +39,32 @@ export interface Metadata {
 
 export function ComputerGame(){
     
-    const { gameId } = useParams();
-    const user = useUser();
-    const navigate = useNavigate()
+  const { gameId } = useParams();
+  const user = useUser();
+  const navigate = useNavigate()
     
 
-    const [chess, _setChess] = useState(new Chess());
-    const [board, setBoard] = useState(chess.board());
-    const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
-    const [result, setResult] = useState<GameResult | null>(null);
-    const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
-    const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
-    const [isDraw, setIsDraw] = useState(false);
-    const setMoves = useSetRecoilState(movesAtom);
-    const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
-    const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
+  const [chess, _setChess] = useState(new Chess());
+  const [board, setBoard] = useState(chess.board());
+  const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
+  const [result, setResult] = useState<GameResult | null>(null);
+  const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
+  const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
+  const [isDraw, setIsDraw] = useState(false);
+  const setMoves = useSetRecoilState(movesAtom);
+  const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
+  const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
 
-    useEffect(() => {
-        userSelectedMoveIndexRef.current = userSelectedMoveIndex;
-    }, [userSelectedMoveIndex]);
+  useEffect(() => {
+      userSelectedMoveIndexRef.current = userSelectedMoveIndex;
+  }, [userSelectedMoveIndex]);
     
+  useEffect(() => {
     console.log(user);
-    useEffect(() => {
-      console.log(user);
-      if (!user) {
-        console.log(navigate);
-        navigate(`/login`);
-      }
-    }, [user, navigate]);
+    if (!user) {
+      navigate(`/login`);
+    }
+  }, [user]);
     
     //create game in database
     const createGame = async() => {
