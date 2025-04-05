@@ -60,7 +60,6 @@ export function ComputerGame(){
   }, [userSelectedMoveIndex]);
     
   useEffect(() => {
-    console.log(user);
     if (!user) {
       navigate(`/login`);
     }

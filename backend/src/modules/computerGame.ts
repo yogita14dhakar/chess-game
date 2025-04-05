@@ -16,7 +16,7 @@ router.post('/', async(req: Request, res: Response) => {
     const q = "INSERT INTO Game (id, whitePlayerId, blackPlayerId, status, currentFen, startAt, timeControl) VALUES ?";
     const VALUES = [[bodyData.gameId, bodyData.user , `computer`, 'IN_PROGRESS','rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', startTime, 'CLASSICAL']];
     await insertUser(q, VALUES);
-    const q1 = `SELECT * FROM User WHERE id = ${bodyData.user}`
+    const q1 = `SELECT * FROM User WHERE id = '${bodyData.user}'`
     let whitePlayer = await update(q1);
     res.json({
         gameId: bodyData.gameId,
