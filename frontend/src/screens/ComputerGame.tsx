@@ -59,7 +59,7 @@ export function ComputerGame(){
         userSelectedMoveIndexRef.current = userSelectedMoveIndex;
     }, [userSelectedMoveIndex]);
     
-    console.log("computer game rendering....")
+    console.log(user);
     useEffect(() => {
       console.log(user);
       if (!user) {
