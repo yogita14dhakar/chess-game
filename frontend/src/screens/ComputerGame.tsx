@@ -1,52 +1,52 @@
 import { useEffect, useRef, useState } from 'react';
 // import { Button } from "../components/Button";
 // import { ChessBoard, isPromoting } from "../components/chessBoard";
-// import { Chess , Move} from "chess.js";
-// import { GameResult as Result, GAME_OVER, MOVE , USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
-// from "../modules/src/Message.ts";
+import { Chess , Move} from "chess.js";
+import { GameResult as Result, GAME_OVER, MOVE , USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
+from "../modules/src/Message.ts";
 // import { GAME_TIME_MS } from '../modules/const';
 import { useUser } from '../modules/src/hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 // import { movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard.ts'
 // import { useRecoilValue, useSetRecoilState } from 'recoil';
 // import MoveSound from '/move.mp3';
-// import Notify from '/notify.mp3';
+import Notify from '/notify.mp3';
 // import GameEndModal from '../components/GameEndModal.tsx';
 // import { UserAvatar } from '../components/UserAvatar.tsx';
 // import ExitGameModel from '../components/ExitGameModal.tsx';
 // import MovesTable from '../components/MovesTable.tsx';
 // import DrawModel from '../components/DrawModal.tsx';
-// import { BACKEND_URL } from '../modules/src/atoms/user.ts';
+import { BACKEND_URL } from '../modules/src/atoms/user.ts';
 
 // const moveAudio = new Audio(MoveSound);
-// const NotifyAudio = new Audio(Notify);
+const NotifyAudio = new Audio(Notify);
 
-// export interface GameResult {
-//     result: Result;
-//     by: string;
-// }
+export interface GameResult {
+    result: Result;
+    by: string;
+}
 
-// export interface Player {
-//     id: string;
-//     name: string;
-//     isGuest: boolean;
-// }
+export interface Player {
+    id: string;
+    name: string;
+    isGuest: boolean;
+}
 
-// export interface Metadata {
-//     blackPlayer: Player;
-//     whitePlayer: Player;
-// }
+export interface Metadata {
+    blackPlayer: Player;
+    whitePlayer: Player;
+}
 
 export function ComputerGame(){
     
-  // const { gameId } = useParams();
+  const { gameId } = useParams();
   const user = useUser();
   const navigate = useNavigate()
     
 
-  // const [chess, _setChess] = useState(new Chess());
-  // const [board, setBoard] = useState(chess.board());
-  // const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
+  const [chess, _setChess] = useState(new Chess());
+  const [board, setBoard] = useState(chess.board());
+  const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
   // const [result, setResult] = useState<GameResult | null>(null);
   // const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
   // const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
@@ -64,37 +64,37 @@ export function ComputerGame(){
       navigate(`/login`);
     }
   }, [user]);
+    
+    //create game in database
+    const createGame = async() => {
+      const response = await fetch(`${BACKEND_URL}/computer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          gameId: gameId,
+          user: user.id
+        }),
+      });
+      const game = await response.json();
+      setBoard(chess.board());
+      setGameMetadata({
+        blackPlayer: game.payload.blackPlayer,                
+        whitePlayer: game.payload.whitePlayer,
+      });
+      NotifyAudio.play();
+      return;
+    }
+    
+    user && createGame();
 
-  return (
-    <div>
-      <h1>ComputerGame Component</h1>
-    </div>
-  );
-    
-  //   //create game in database
-  //   const createGame = async() => {
-  //     const response = await fetch(`${BACKEND_URL}/computer`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       credentials: 'include',
-  //       body: JSON.stringify({
-  //         gameId: gameId,
-  //         user: user.id
-  //       }),
-  //     });
-  //     const game = await response.json();
-  //     setBoard(chess.board());
-  //     setGameMetadata({
-  //       blackPlayer: game.payload.blackPlayer,                
-  //       whitePlayer: game.payload.whitePlayer,
-  //     });
-  //     NotifyAudio.play();
-  //     return;
-  //   }
-    
-  //   user && createGame();
+    return (
+      <div>
+        <h1>ComputerGame Component</h1>
+      </div>
+    );
   //   const msg = function (event:any){
   //     const message = JSON.parse(event.data);
   //     switch (message.type) {
