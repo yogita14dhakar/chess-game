@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from "../components/Button";
 import { ChessBoard, isPromoting } from "../components/chessBoard";
-import { useSocket } from "../hooks/useSocket";
 import { Chess , Move} from "chess.js";
-import { GameResult as Result, INIT_GAME, GAME_OVER, MOVE, JOIN_ROOM, GAME_JOINED , GAME_ADDED, USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
+import { GameResult as Result, GAME_OVER, MOVE , USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
 from "../modules/src/Message.ts";
 import { GAME_TIME_MS } from '../modules/const';
 import { useUser } from '../modules/src/hooks/useUser.ts';
@@ -51,7 +50,6 @@ export function ComputerGame(){
     const [result, setResult] = useState<GameResult | null>(null);
     const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
     const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
-    const [gameID,setGameID] = useState("");
     const [isDraw, setIsDraw] = useState(false);
     const setMoves = useSetRecoilState(movesAtom);
     const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
@@ -61,8 +59,11 @@ export function ComputerGame(){
         userSelectedMoveIndexRef.current = userSelectedMoveIndex;
     }, [userSelectedMoveIndex]);
     
+    console.log("computer game rendering....")
     useEffect(() => {
+      console.log(user);
       if (!user) {
+        console.log(navigate);
         navigate(`/login`);
       }
     }, [user, navigate]);
@@ -81,7 +82,6 @@ export function ComputerGame(){
         }),
       });
       const game = await response.json();
-      setGameID(game.gameId);
       setBoard(chess.board());
       setGameMetadata({
         blackPlayer: game.payload.blackPlayer,                
@@ -233,9 +233,7 @@ export function ComputerGame(){
                       <div className="flex justify-between">
                         <UserAvatar gameMetadata={gameMetadata} />
                         {getTimer(
-                          user.id === gameMetadata?.whitePlayer?.id
-                            ? player2TimeConsumed
-                            : player1TimeConsumed,
+                          player2TimeConsumed
                         )}
                       </div>
                     </div>
@@ -257,11 +255,9 @@ export function ComputerGame(){
                     </div>
                   </div>
                     <div className="mt-4 flex justify-between">
-                      <UserAvatar gameMetadata={gameMetadata} self />
+                      <UserAvatar gameMetadata={gameMetadata} self={true} />
                       {getTimer(
-                        user.id === gameMetadata?.blackPlayer?.id
-                          ? player2TimeConsumed
-                          : player1TimeConsumed,
+                        player1TimeConsumed,
                       )}
                     </div>
                 </div>

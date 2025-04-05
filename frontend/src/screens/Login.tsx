@@ -33,8 +33,8 @@ const Login = () => {
     }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-textMain">
-      <h1 className="text-4xl font-bold mb-8 text-center text-white drop-shadow-lg">
+    <div className="flex flex-col items-center justify-center max-w-screen-lg max-h-screen-lg text-textMain">
+      <h1 className="md:text-6xl text-3xl font-bold mb-8 text-center text-white drop-shadow-lg">
         Enter the Game World
       </h1>
       <div className="bg-bgAuxiliary2 rounded-lg shadow-lg p-8 flex flex-col md:flex-row">
