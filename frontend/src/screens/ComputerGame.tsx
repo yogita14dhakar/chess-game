@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Chess , Move} from "chess.js";
 import { GameResult as Result, GAME_OVER, MOVE , USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
 from "../modules/src/Message.ts";
-// import { GAME_TIME_MS } from '../modules/const';
+import { GAME_TIME_MS } from '../modules/const';
 import { useUser } from '../modules/src/hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
-// import { movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard.ts'
-// import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard.ts'
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 // import MoveSound from '/move.mp3';
 import Notify from '/notify.mp3';
 // import GameEndModal from '../components/GameEndModal.tsx';
@@ -47,17 +47,17 @@ export function ComputerGame(){
   const [chess, _setChess] = useState(new Chess());
   const [board, setBoard] = useState(chess.board());
   const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
-  // const [result, setResult] = useState<GameResult | null>(null);
-  // const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
-  // const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
-  // const [isDraw, setIsDraw] = useState(false);
-  // const setMoves = useSetRecoilState(movesAtom);
-  // const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
-  // const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
+  const [result, setResult] = useState<GameResult | null>(null);
+  const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
+  const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
+  const [isDraw, setIsDraw] = useState(false);
+  const setMoves = useSetRecoilState(movesAtom);
+  const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
+  const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
 
-  // useEffect(() => {
-  //     userSelectedMoveIndexRef.current = userSelectedMoveIndex;
-  // }, [userSelectedMoveIndex]);
+  useEffect(() => {
+      userSelectedMoveIndexRef.current = userSelectedMoveIndex;
+  }, [userSelectedMoveIndex]);
     
   useEffect(() => {
     if (!user) {
@@ -90,11 +90,7 @@ export function ComputerGame(){
     
     user && createGame();
 
-    return (
-      <div>
-        <h1>ComputerGame Component</h1>
-      </div>
-    );
+    
   //   const msg = function (event:any){
   //     const message = JSON.parse(event.data);
   //     switch (message.type) {
@@ -170,40 +166,44 @@ export function ComputerGame(){
   //     }
   //   };
     
-  //   useEffect(() => {
+    useEffect(() => {
         
-  //         const interval = setInterval(() => {
-  //           if (chess.turn() === 'w') {
-  //             setPlayer1TimeConsumed((p) => p + 100);
-  //           } else {
-  //             setPlayer2TimeConsumed((p) => p + 100);
-  //           }
-  //         }, 100);
-  //         return () => clearInterval(interval);
-  //   }, [gameMetadata, user]);
+          const interval = setInterval(() => {
+            if (chess.turn() === 'w') {
+              setPlayer1TimeConsumed((p) => p + 100);
+            } else {
+              setPlayer2TimeConsumed((p) => p + 100);
+            }
+          }, 100);
+          return () => clearInterval(interval);
+    }, [gameMetadata, user]);
     
-  //       const getTimer = (timeConsumed: number) => {
-  //           const timeLeftMs = GAME_TIME_MS - timeConsumed;
-  //           const minutes = Math.floor(timeLeftMs / (1000 * 60));
-  //           const remainingSeconds = Math.floor((timeLeftMs % (1000 * 60)) / 1000);
+        const getTimer = (timeConsumed: number) => {
+            const timeLeftMs = GAME_TIME_MS - timeConsumed;
+            const minutes = Math.floor(timeLeftMs / (1000 * 60));
+            const remainingSeconds = Math.floor((timeLeftMs % (1000 * 60)) / 1000);
     
-  //           return (
-  //           <div className="text-white">
-  //               Time Left: {minutes < 10 ? '0' : ''}
-  //               {minutes}:{remainingSeconds < 10 ? '0' : ''}
-  //               {remainingSeconds}
-  //           </div>
-  //           );
-  //       };
+            return (
+            <div className="text-white">
+                Time Left: {minutes < 10 ? '0' : ''}
+                {minutes}:{remainingSeconds < 10 ? '0' : ''}
+                {remainingSeconds}
+            </div>
+            );
+        };
     
-  //       const handleExit = (msg: string) => {
+        const handleExit = (msg: string) => {
             
-  //           setMoves([]);
-  //           navigate("/");
-  //       };
+            setMoves([]);
+            navigate("/");
+        };
 
 
-  
+        return (
+          <div>
+            <h1>ComputerGame Component</h1>
+          </div>
+        );
   //   return (
   //       <div>
           
