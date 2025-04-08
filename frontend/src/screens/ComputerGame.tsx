@@ -120,13 +120,16 @@ export function ComputerGame(){
           user: user.id
         }),
       });
+      console.log("fetched");
       const game = await response.json();
+      console.log(game);
       setBoard(chess.board());
       setGameMetadata({
         blackPlayer: game.payload.blackPlayer,                
         whitePlayer: game.payload.whitePlayer,
       });
       setAdded(true);
+      console.log("set true");
       NotifyAudio.play();
       return;
     }
@@ -224,6 +227,7 @@ export function ComputerGame(){
       }
 
     //create game in database
+    console.log('got multiple call to the function');
     createGame();
     //add move to database and bot move bring from backend
     if(chess.turn() === 'b'){computerMove()}
