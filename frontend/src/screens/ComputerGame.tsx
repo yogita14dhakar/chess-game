@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 // import { Button } from "../components/Button";
 import { ChessBoard, isPromoting } from "../components/chessBoard";
 import { getBestMove } from './computerMove.ts';
-import { Chess , Move} from "chess.js";
-import { GameResult as Result,  MOVE , USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT, GameStatus} 
+import { Chess } from "chess.js";
+import { GameResult as Result,  MOVE , GameStatus} 
 from "../modules/src/Message.ts";
 import { GAME_TIME_MS } from '../modules/const';
 import { useUser } from '../modules/src/hooks/useUser.ts';
@@ -72,7 +72,6 @@ export function ComputerGame(){
   const [player1TimeConsumed, setPlayer1TimeConsumed] = useState(0);
   const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
   const setMoves = useSetRecoilState(movesAtom);
-  const moves = useRecoilValue(movesAtom);
   let timer: NodeJS.Timeout | null = null;
   let moveTimer: NodeJS.Timeout | null = null;
   const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
@@ -225,7 +224,7 @@ export function ComputerGame(){
       }
 
     //create game in database
-    !added && createGame();
+    createGame();
     //add move to database and bot move bring from backend
     if(chess.turn() === 'b'){computerMove()}
 
