@@ -109,6 +109,7 @@ export function ComputerGame(){
     }, timeLeft);
   }
     const createGame = async() => {
+      setAdded(true);
       const response = await fetch(`${BACKEND_URL}/computer`, {
         method: 'POST',
         headers: {
@@ -128,7 +129,7 @@ export function ComputerGame(){
         blackPlayer: game.payload.blackPlayer,                
         whitePlayer: game.payload.whitePlayer,
       });
-      setAdded(true);
+      
       console.log("set true");
       NotifyAudio.play();
       return;
@@ -227,8 +228,7 @@ export function ComputerGame(){
       }
 
     //create game in database
-    console.log('got multiple call to the function');
-    createGame();
+    !added && createGame();
     //add move to database and bot move bring from backend
     if(chess.turn() === 'b'){computerMove()}
 
