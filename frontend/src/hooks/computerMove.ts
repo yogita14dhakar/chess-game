@@ -1,5 +1,4 @@
 import { Chess } from "chess.js";
-import { GAME_TIME_MS } from "../modules/const";
 
 const pieceValues: { [key: string]: number } = {
   p: 1, n: 3, b: 3, r: 5, q: 9, k: 10000,
@@ -12,6 +11,8 @@ const endgameTablebase: { [key: string]: number } = {
   'Kk': -10000, // Stalemate or impossible to checkmate
 };
 
+// Time Control (10 second per move)
+const TIME_LIMIT = 10000; // milliseconds
 
 // Enhanced Evaluation Function with Positional Factors
 function evaluateBoard(board: (string | null)[][]): number {
@@ -46,7 +47,7 @@ function minimax(
   maximizingPlayer: boolean,
   startTime: number
 ): number {
-  if (depth === 0 || chess.isGameOver() || Date.now() - startTime > GAME_TIME_MS) {
+  if (depth === 0 || chess.isGameOver() || Date.now() - startTime > TIME_LIMIT) {
     return evaluateBoard(chess.board() as (string | null)[][]) + checkEndgameTablebase(chess);
   }
 
@@ -60,7 +61,7 @@ function minimax(
       maxEval = Math.max(maxEval, eva);
       alpha = Math.max(alpha, eva);
       chess.undo();
-      if (beta <= alpha || Date.now() - startTime > GAME_TIME_MS) break;
+      if (beta <= alpha || Date.now() - startTime > TIME_LIMIT) break;
     }
     return maxEval;
   } else {
@@ -71,7 +72,7 @@ function minimax(
       minEval = Math.min(minEval, eva);
       beta = Math.min(beta, eva);
       chess.undo();
-      if (beta <= alpha || Date.now() - startTime > GAME_TIME_MS) break;
+      if (beta <= alpha || Date.now() - startTime > TIME_LIMIT) break;
     }
     return minEval;
   }
@@ -91,7 +92,7 @@ export function getBestMove(chess: Chess, depth: number): any {
       bestMove = move;
     }
     chess.undo();
-    if (Date.now() - startTime > GAME_TIME_MS) break;
+    if (Date.now() - startTime > TIME_LIMIT) break;
   }
 
   return bestMove;
