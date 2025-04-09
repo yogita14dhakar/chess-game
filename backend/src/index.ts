@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import authRoute from './router/auth';
-import compRoute from './modules/computerGame'
 import { COOKIE_MAX_AGE } from './const';
 const MySQLStore = require('express-mysql-session')(session);
 
@@ -56,7 +55,7 @@ app.use(
 );
 
 app.use('/auth', authRoute);
-app.use('/computer', compRoute);
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
