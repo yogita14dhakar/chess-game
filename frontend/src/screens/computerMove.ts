@@ -11,8 +11,8 @@ const endgameTablebase: { [key: string]: number } = {
   'Kk': -10000, // Stalemate or impossible to checkmate
 };
 
-// Time Control (1 second per move)
-const TIME_LIMIT = 1000; // milliseconds
+// Time Control (6 second per move)
+const TIME_LIMIT = 6000; // milliseconds
 
 // Enhanced Evaluation Function with Positional Factors
 function evaluateBoard(board: (string | null)[][]): number {
@@ -24,7 +24,7 @@ function evaluateBoard(board: (string | null)[][]): number {
         score += pieceValues[piece] || 0;
         // Center control bonus
         if (row >= 2 && row <= 5 && col >= 2 && col <= 5) {
-          score += piece === piece.toUpperCase() ? 0.5 : -0.5;
+          score += piece === piece.toUpperCase ? 0.5 : -0.5;
         }
       }
     }
@@ -85,7 +85,7 @@ export function getBestMove(chess: Chess, depth: number): any {
   const startTime = Date.now();
 
   for (const move of chess.moves({ verbose: true })) {
-    chess.move(move);;
+    chess.move(move);
     const moveValue = minimax(chess, depth - 1, -Infinity, Infinity, false, startTime);
     if (moveValue > bestValue) {
       bestValue = moveValue;

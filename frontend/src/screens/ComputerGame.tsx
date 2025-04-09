@@ -16,7 +16,8 @@ import GameEndModal from '../components/GameEndModal.tsx';
 import { UserAvatar } from '../components/UserAvatar.tsx';
 import ExitGameModel from '../components/ExitGameModal.tsx';
 import MovesTable from '../components/MovesTable.tsx';
-import { BACKEND_URL } from '../modules/src/atoms/user.ts';
+// import { BACKEND_URL } from '../modules/src/atoms/user.ts';
+import { Loader } from '../components/Loader.tsx';
 
 const moveAudio = new Audio(MoveSound);
 const NotifyAudio = new Audio(Notify);
@@ -109,28 +110,41 @@ export function ComputerGame(){
     }, timeLeft);
   }
     const createGame = async() => {
-      setAdded(true);
-      const response = await fetch(`${BACKEND_URL}/computer`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          gameId: gameId,
-          user: user.id
-        }),
-      });
-      console.log("fetched");
-      const game = await response.json();
-      console.log(game);
+      
+      // const response = await fetch(`${BACKEND_URL}/computer`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   credentials: 'include',
+      //   body: JSON.stringify({
+      //     gameId: gameId,
+      //     user: user.id
+      //   }),
+      // });
+      
+      // const game = await response.json();
+      const game = {
+        gameId:gameId,
+        payload: {
+            blackPlayer: {
+                name: `computer`,
+                id: `computer`,
+                isGuest: false
+            },
+            whitePlayer: {
+                name: user.name,
+                id: user.id,
+                isGuest: false 
+            }
+        }
+      }
+    setAdded(true);
       setBoard(chess.board());
       setGameMetadata({
         blackPlayer: game.payload.blackPlayer,                
         whitePlayer: game.payload.whitePlayer,
       });
-      
-      console.log("set true");
       NotifyAudio.play();
       return;
     }
@@ -172,6 +186,7 @@ export function ComputerGame(){
           if (timer) clearTimeout(timer);
           if(moveTimer) clearTimeout(moveTimer);
       setMoves([]);
+      if(status === 'PLAYER_EXIT') navigate('/');
     }
 
       const computerMove = async() => {
@@ -287,40 +302,6 @@ export function ComputerGame(){
             endGame(GameStatus.COMPLETED, res);
         }
         break;
-        // case GAME_OVER:
-        //   setResult(message.payload.result);
-        //   NotifyAudio.play();
-        //   break;
-
-        // case GAME_ENDED:
-        //   let wonBy;
-        //   switch (message.payload.status) {
-        //     case 'COMPLETED':
-        //       wonBy = message.payload.result !== 'DRAW' ? 'CheckMate' : 'Draw';
-        //       break;
-        //     case 'PLAYER_EXIT':
-        //       wonBy = 'Player Exit';
-        //       break;
-        //     default:
-        //       wonBy = 'Timeout';
-        //   }
-        //   setResult({
-        //     result: message.payload.result,
-        //     by: wonBy,
-        //   });
-          
-        //   chess.reset();
-        //   localStorage.removeItem('added:');
-        //   setAdded(false);
-      
-        //   NotifyAudio.play();
-        //   break;
-
-        // case USER_TIMEOUT:
-        //   setResult(message.payload.win);
-        //   break;
-          
-
         default:
           alert(message.payload.message);
           break;
@@ -428,6 +409,6 @@ export function ComputerGame(){
           </div>
         </div>
       </div>
-    </div> : <h1>welcome to the game!!!</h1>
+    </div> : <div><Loader/></div>
   );
 };

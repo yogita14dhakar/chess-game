@@ -24,7 +24,7 @@ router.post('/', async(req: Request, res: Response) => {
             blackPlayer: {
                 name: `computer`,
                 id: `computer`,
-                isGuset: false
+                isGuest: false
             },
             whitePlayer: {
                 name: whitePlayer.name,

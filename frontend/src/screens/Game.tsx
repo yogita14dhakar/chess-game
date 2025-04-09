@@ -19,6 +19,7 @@ import { Waitopponent } from '../components/ui/Waitopponent.tsx';
 import ExitGameModel from '../components/ExitGameModal.tsx';
 import MovesTable from '../components/MovesTable.tsx';
 import DrawModel from '../components/DrawModal.tsx';
+import { Loader } from 'lucide-react';
 
 const moveAudio = new Audio(MoveSound);
 const NotifyAudio = new Audio(Notify);
@@ -292,7 +293,7 @@ export function Game(){
         }
   
 
-    if(!socket) return <div className="text-white flex justify-center text-4xl pt-20">connecting...</div>
+    if(!socket) return <div className="text-white flex justify-center text-4xl pt-20"><Loader/></div>
     return (
         <div>
           
@@ -382,8 +383,7 @@ export function Game(){
                             }),
                           );
                         }} content="Play"
-                      >
-                      </Button>
+                      />
                     )
                   )}
                 </div>
