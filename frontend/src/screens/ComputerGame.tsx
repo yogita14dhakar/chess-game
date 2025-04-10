@@ -167,7 +167,7 @@ export function ComputerGame(){
   }
 
   const msg = async function (event:any){
-    const message = JSON.parse(event);
+    const message = event;
     switch (message.type) {
       case MOVE: 
         let move = message.payload.move;    
