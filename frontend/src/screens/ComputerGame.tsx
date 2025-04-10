@@ -228,19 +228,11 @@ export function ComputerGame(){
       console.log('Error', error);
     }
     msg({
-      type:MOVE, 
-      payload: {
-        move: bestMove
-      }
+      type:MOVE
     })
   }else if(chess.turn() === 'w'){
-    let history = chess.history({ verbose: true });
-    let lastMove = history[history.length - 1];
     msg({
-      type:MOVE, 
-      payload: {
-        move: lastMove 
-      }
+      type:MOVE
     })
   }
       
