@@ -211,29 +211,31 @@ export function ComputerGame(){
   !added && createGame();
 
   //bot move
-  if(chess.turn() === 'b'){
-    const bestMove = getBestMove(chess, 4);
-    try {
-      if (isPromoting(chess, bestMove.from, bestMove.to)) {
-        chess.move({
-          from: bestMove.from,
-          to: bestMove.to,
-          promotion: 'q',
-        });
-      }else {
-        chess.move({ from: bestMove.from, to: bestMove.to });
-      }
-      setMoves((moves) => [...moves, bestMove]);
-    }catch (error) {
+  if(added) {
+    if(chess.turn() === 'b'){
+      const bestMove = getBestMove(chess, 4);
+      try {
+        if (isPromoting(chess, bestMove.from, bestMove.to)) {
+          chess.move({
+            from: bestMove.from,
+            to: bestMove.to,
+            promotion: 'q',
+          });
+        }else {
+          chess.move({ from: bestMove.from, to: bestMove.to });
+        }
+        setMoves((moves) => [...moves, bestMove]);
+      }catch (error) {
       console.log('Error', error);
+      }
+      msg({
+        type:MOVE
+      })
+    }else if(chess.turn() === 'w'){
+      msg({
+        type:MOVE
+      })
     }
-    msg({
-      type:MOVE
-    })
-  }else if(chess.turn() === 'w'){
-    msg({
-      type:MOVE
-    })
   }
       
   const getTimer = (timeConsumed: number) => {
