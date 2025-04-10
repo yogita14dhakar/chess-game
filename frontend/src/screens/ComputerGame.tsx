@@ -168,7 +168,7 @@ export function ComputerGame(){
     if(status === 'PLAYER_EXIT') navigate('/');
   }
 
-  const msg = async function (event:any){
+  const msg = function (event:any){
     const message = event;
     switch (message.type) {
       case MOVE:     
@@ -211,9 +211,9 @@ export function ComputerGame(){
 
   console.log('call create game');
   //create game
-  !added && createGame();
+  !added ? createGame() : null;
 
-  
+
   //bot move
   if(added) {
     if(chess.turn() === 'b'){
