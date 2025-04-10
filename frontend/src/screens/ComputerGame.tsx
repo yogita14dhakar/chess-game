@@ -163,7 +163,7 @@ export function ComputerGame(){
     if (timer) clearTimeout(timer);
     if(moveTimer) clearTimeout(moveTimer);
     setMoves([]);
-    if(status === GameStatus.PLAYER_EXIT) navigate('/');
+    if(status === 'PLAYER_EXIT') navigate('/');
   }
 
   const msg = async function (event:any){

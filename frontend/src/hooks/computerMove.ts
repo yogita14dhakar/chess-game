@@ -11,8 +11,8 @@ const endgameTablebase: { [key: string]: number } = {
   'Kk': -10000, // Stalemate or impossible to checkmate
 };
 
-// Time Control (1 second per move)
-const TIME_LIMIT = 1000; // milliseconds
+// Time Control (10 second per move)
+const TIME_LIMIT = 10000; // milliseconds
 
 // Enhanced Evaluation Function with Positional Factors
 function evaluateBoard(board: (string | null)[][]): number {
