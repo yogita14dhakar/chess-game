@@ -211,7 +211,7 @@ export function ComputerGame(){
 
   console.log('call create game');
   //create game
-  !added ? createGame() : null;
+  added === false ? createGame() : null;
 
 
   //bot move
