@@ -47,7 +47,6 @@ export const ChessBoard = memo(
         board,
         socket,
         setBoard,
-        msg
       }: {
         myColor: Color;
         gameId: string;
