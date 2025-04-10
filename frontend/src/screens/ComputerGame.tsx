@@ -210,11 +210,7 @@ export function ComputerGame(){
   };
 
   console.log('call create game');
-  let count = 0;
-  while(count<1) {
-    createGame();
-    count++;
-  }
+  !added && createGame();
 
 
   //bot move
