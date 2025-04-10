@@ -169,8 +169,7 @@ export function ComputerGame(){
   const msg = async function (event:any){
     const message = event;
     switch (message.type) {
-      case MOVE: 
-        let move = message.payload.move;    
+      case MOVE:     
     
         if (result) {
           console.error(`User is making a move post game completion`);
@@ -234,7 +233,7 @@ export function ComputerGame(){
         move: bestMove
       }
     })
-  }else{
+  }else if(chess.turn() === 'w'){
     let history = chess.history({ verbose: true });
     let lastMove = history[history.length - 1];
     msg({
