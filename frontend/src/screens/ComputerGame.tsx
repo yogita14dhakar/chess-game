@@ -117,6 +117,7 @@ export function ComputerGame(){
   }
 
   const createGame = async() => {
+    console.log('started creating game.');
     const game = {
       gameId:gameId,
       payload: {
@@ -138,6 +139,7 @@ export function ComputerGame(){
     });
     setAdded(true);
     setBoard(chess.board());
+    console.log('game created');
     return;
   }
     
@@ -207,9 +209,11 @@ export function ComputerGame(){
     }
   };
 
+  console.log('call create game');
   //create game
   !added && createGame();
 
+  
   //bot move
   if(added) {
     if(chess.turn() === 'b'){
