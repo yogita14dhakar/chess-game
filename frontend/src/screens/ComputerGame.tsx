@@ -163,7 +163,7 @@ export function ComputerGame(){
     if (timer) clearTimeout(timer);
     if(moveTimer) clearTimeout(moveTimer);
     setMoves([]);
-    if(status === 'PLAYER_EXIT') navigate('/');
+    navigate('/');
   }
 
   const msg = async function (event:any){
@@ -172,6 +172,21 @@ export function ComputerGame(){
       case MOVE: 
         let move = message.payload.move;    
     
+        try {
+          if (isPromoting(chess, move.from, move.to)) {
+            chess.move({
+              from: move.from,
+              to: move.to,
+              promotion: 'q',
+            });
+          }else {
+            chess.move({ from: move.from, to: move.to });
+          }
+          setMoves((moves) => [...moves, move]);
+        }catch (error) {
+          console.log('Error', error);
+        }
+        
         if (result) {
           console.error(`User is making a move post game completion`);
           return;
@@ -191,21 +206,6 @@ export function ComputerGame(){
         if (userSelectedMoveIndexRef.current !== null) {
           setMoves((moves) => [...moves, ]);
           return;
-        }
-  
-        try {
-          if (isPromoting(chess, move.from, move.to)) {
-            chess.move({
-              from: move.from,
-              to: move.to,
-              promotion: 'q',
-            });
-          }else {
-            chess.move({ from: move.from, to: move.to });
-          }
-          setMoves((moves) => [...moves, move]);
-        }catch (error) {
-          console.log('Error', error);
         }
 
         if (chess.isGameOver()) {
