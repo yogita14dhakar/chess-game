@@ -192,21 +192,6 @@ export function ComputerGame(){
           setMoves((moves) => [...moves, ]);
           return;
         }
-  
-        try {
-          if (isPromoting(chess, move.from, move.to)) {
-            chess.move({
-              from: move.from,
-              to: move.to,
-              promotion: 'q',
-            });
-          }else {
-            chess.move({ from: move.from, to: move.to });
-          }
-          setMoves((moves) => [...moves, move]);
-        }catch (error) {
-          console.log('Error', error);
-        }
 
         if (chess.isGameOver()) {
           const res = chess.isDraw()
@@ -229,10 +214,33 @@ export function ComputerGame(){
   //bot move
   if(chess.turn() === 'b'){
     const bestMove = getBestMove(chess, 4);
+    try {
+      if (isPromoting(chess, bestMove.from, bestMove.to)) {
+        chess.move({
+          from: bestMove.from,
+          to: bestMove.to,
+          promotion: 'q',
+        });
+      }else {
+        chess.move({ from: bestMove.from, to: bestMove.to });
+      }
+      setMoves((moves) => [...moves, bestMove]);
+    }catch (error) {
+      console.log('Error', error);
+    }
     msg({
       type:MOVE, 
       payload: {
         move: bestMove
+      }
+    })
+  }else{
+    let history = chess.history({ verbose: true });
+    let lastMove = history[history.length - 1];
+    msg({
+      type:MOVE, 
+      payload: {
+        move: lastMove 
       }
     })
   }

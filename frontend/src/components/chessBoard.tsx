@@ -271,9 +271,7 @@ export const ChessBoard = memo(
                                     },
                                   })
                                 ):
-                                msg && msg({type: MOVE, payload: {
-                                  move: moveResult
-                                }})
+                                null
 
                               }
                             } catch (e) {
