@@ -1,4 +1,8 @@
 import { Chess } from "chess.js";
+import { useRecoilState } from "recoil";
+import { movesAtom } from "../atoms/chessBoard";
+
+const [moves] = useRecoilState(movesAtom);
 
 const pieceValues: { [key: string]: number } = {
   p: 1, n: 3, b: 3, r: 5, q: 9, k: 10000,
@@ -84,7 +88,7 @@ export function getBestMove(chess: Chess, depth: number): any {
   let bestValue = -Infinity;
   const startTime = Date.now();
 
-  for (const move of chess.moves({ verbose: true })) {
+  for (const move of moves) {
     chess.move(move);
     const moveValue = minimax(chess, depth - 1, -Infinity, Infinity, false, startTime);
     if (moveValue > bestValue) {

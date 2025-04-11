@@ -1,5 +1,5 @@
 import { Chess, Color, Move, PieceSymbol, Square } from 'chess.js';
-import { MouseEvent, memo, useEffect, useState } from 'react';
+import { MouseEvent, memo, useEffect, useMemo, useRef, useState } from 'react';
 import  { MOVE }  from "../lib/Message";
 import { useRecoilState } from 'recoil';
 import { isBoardFlippedAtom, movesAtom, userSelectedMoveIndexAtom } from '../atoms/chessBoard';
@@ -13,7 +13,7 @@ import Confetti from 'react-confetti';
 
 
 export function isPromoting(chess: Chess, from: Square, to: Square) {
-    if (!from) {
+    if (!from || !to) {
       return false;
     }
   
@@ -31,10 +31,15 @@ export function isPromoting(chess: Chess, from: Square, to: Square) {
       return false;
     }
   
-    return chess
-      .history({ verbose: true })
-      .map((it) => it.to)
-      .includes(to);
+    const toRank = to[to.length - 1];
+    return (
+      (piece.color === 'w' && toRank === '8') ||
+      (piece.color === 'b' && toRank === '1')
+    );
+    // return chess
+    //   .history({ verbose: true })
+    //   .map((it) => it.to)
+    //   .includes(to);
 }
   
 
@@ -80,13 +85,14 @@ export const ChessBoard = memo(
     const [arrowStart, setArrowStart] = useState<string | null>(null);
     const [from, setFrom] = useState<null | Square>(null);
     const isMyTurn = myColor === chess.turn();
-    const [legalMoves, setLegalMoves] = useState<string[]>([]);
+    // const [legalMoves, setLegalMoves] = useState<string[]>([]);
 
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const boxSize = 80;
     const [gameOver, setGameOver] = useState(false);
-    const moveAudio = new Audio(MoveSound);
-    const captureAudio = new Audio(CaptureSound);
+    const moveAudio = useRef(new Audio(MoveSound));
+    const captureAudio = useRef(new Audio(CaptureSound));
+    
     
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
         e.preventDefault();
@@ -161,7 +167,20 @@ export const ChessBoard = memo(
           setBoard(chess.board());
         }
       }, [moves]);
-
+      const legalMoves = useMemo(() => {
+        if (!from) return [];
+        try {
+          return chess
+            .moves({
+              verbose: true,
+              square: from,
+            })
+            .map((move) => move.to);
+        } catch {
+          return [];
+        }
+      }, [from, chess]);
+      
       
     return (
         
@@ -209,32 +228,32 @@ export const ChessBoard = memo(
                           if (from != squareRepresentation) {
                             setFrom(squareRepresentation);
                             if (isPiece) {
-                              setLegalMoves(
-                                chess
-                                  .moves({
-                                    verbose: true,
-                                    square: square?.square,
-                                  })
-                                  .map((move) => move.to)
-                              );
+                              // setLegalMoves(
+                              //   chess
+                              //     .moves({
+                              //       verbose: true,
+                              //       square: square?.square,
+                              //     })
+                              //     .map((move) => move.to)
+                              // );
                             }
                           } else {
                             setFrom(null);
                           }
                           if (!isPiece) {
-                            setLegalMoves([]);
+                            // setLegalMoves([]);
                           }
 
                           if (!from) {
                             setFrom(squareRepresentation);
-                            setLegalMoves(
-                              chess
-                                .moves({
-                                  verbose: true,
-                                  square: square?.square,
-                                })
-                                .map((move) => move.to)
-                            );
+                            // setLegalMoves(
+                            //   chess
+                            //     .moves({
+                            //       verbose: true,
+                            //       square: square?.square,
+                            //     })
+                            //     .map((move) => move.to)
+                            // );
                           } else {
                             try {
                               let moveResult: Move;
@@ -251,14 +270,14 @@ export const ChessBoard = memo(
                                 });
                               }
                               if (moveResult) {
-                                moveAudio.play();
+                                moveAudio.current.play();
 
                                 if (moveResult?.captured) {
-                                  captureAudio.play();
+                                  captureAudio.current.play();
                                 }
                                 setMoves((prev) => [...prev, moveResult]);
                                 setFrom(null);
-                                setLegalMoves([]);
+                                // setLegalMoves([]);
                                 if (moveResult.san.includes('#')) {
                                   setGameOver(true);
                                 }
