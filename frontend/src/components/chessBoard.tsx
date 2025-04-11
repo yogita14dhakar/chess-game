@@ -90,8 +90,8 @@ export const ChessBoard = memo(
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const boxSize = 80;
     const [gameOver, setGameOver] = useState(false);
-    // const moveAudio = useRef(new Audio(MoveSound));
-    // const captureAudio = useRef(new Audio(CaptureSound));
+    const moveAudio = useRef(new Audio(MoveSound));
+    const captureAudio = useRef(new Audio(CaptureSound));
     
     
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
@@ -270,11 +270,11 @@ export const ChessBoard = memo(
                                 });
                               }
                               if (moveResult) {
-                                // moveAudio.current.play();
+                                moveAudio.current.play();
 
-                                // if (moveResult?.captured) {
-                                //   captureAudio.current.play();
-                                // }
+                                if (moveResult?.captured) {
+                                  captureAudio.current.play();
+                                }
                                 setMoves((prev) => [...prev, moveResult]);
                                 setFrom(null);
                                 // setLegalMoves([]);
