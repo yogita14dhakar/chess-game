@@ -194,8 +194,7 @@ export function ComputerGame(){
   };
 
   //bot move
-  useEffect(() => {
-    if (added && chess.turn() === 'b' && !result) {
+    if (chess.turn() === 'b' && !result) {
       const bestMove = getBestMove(chess, 4);
       try {
         if (isPromoting(chess, bestMove.from, bestMove.to)) {
@@ -218,7 +217,6 @@ export function ComputerGame(){
         }
       })
     }
-  }, [chess, added, result]);
       
   const getTimer = (timeConsumed: number) => {
     const timeLeftMs = GAME_TIME_MS - timeConsumed;
