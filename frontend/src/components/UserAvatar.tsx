@@ -1,4 +1,4 @@
-import { useUser } from '../modules/src/hooks/useUser';
+import { useUser } from '../hooks/useUser';
 import { Metadata, Player } from '../screens/Game';
 
 interface UserAvatarProps {

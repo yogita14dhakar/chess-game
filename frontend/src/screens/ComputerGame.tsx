@@ -1,19 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ChessBoard, isPromoting } from "../components/chessBoard";
 import { getBestMove } from '../hooks/computerMove.ts';
 import { Chess } from "chess.js";
 import { GameResult as Result,  MOVE , GameStatus} 
-from "../modules/src/Message.ts";
-import { GAME_TIME_MS } from '../modules/const';
-import { useUser } from '../modules/src/hooks/useUser.ts';
+from "../lib/Message.ts";
+import { GAME_TIME_MS } from '../lib/const.ts';
+import { useUser } from '../hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
-import { movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard.ts'
+import { movesAtom, userSelectedMoveIndexAtom } from '../atoms/chessBoard.ts'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import GameEndModal from '../components/GameEndModal.tsx';
 import { UserAvatar } from '../components/UserAvatar.tsx';
 import ExitGameModel from '../components/ExitGameModal.tsx';
 import MovesTable from '../components/MovesTable.tsx';
 import { Loader } from '../components/Loader.tsx';
+import { usePersistance } from '../hooks/usePersistance.ts';
 
 
 export interface GameResult {
@@ -38,28 +39,7 @@ export function ComputerGame(){
   const user = useUser();
   const navigate = useNavigate();
     
-  function usePersistance(init_val:boolean) {
-    // Set initial value
-    const initial_value = useMemo(() => {
-      const local_storage_value = localStorage.getItem('added:');
-      // If there is a value stored in localStorage, use that
-      if(local_storage_value) {
-        return JSON.parse(local_storage_value);
-      } 
-      // Otherwise use initial_value that was passed to the function
-      return init_val;
-    },[]);
-  
-    const [added, setAdded] = useState(initial_value);
-  
-    useEffect(() => {
-      const state_str = JSON.stringify(added); // Stringified state
-      localStorage.setItem('added:', state_str) // Set stringified state as item in localStorage
-    }, [added]);
-  
-    return [added, setAdded];
-  }
-  const [added, setAdded] = usePersistance(false);
+  const [added, setAdded] = usePersistance(false,gameId);
   const [chess, _setChess] = useState(new Chess());
   const [board, setBoard] = useState(chess.board());
   const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
@@ -69,8 +49,8 @@ export function ComputerGame(){
   const setMoves = useSetRecoilState(movesAtom);
   const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
   const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
-  let timer: NodeJS.Timeout | null = null;
-  let moveTimer: NodeJS.Timeout | null = null;
+  const timer = useRef<NodeJS.Timeout | null> (null);
+  let moveTimer = useRef<NodeJS.Timeout | null> (null);
   let lastMoveTime = new Date(Date.now());
 
   useEffect(() => {
@@ -79,7 +59,7 @@ export function ComputerGame(){
     
   useEffect(() => {
     if (!user) {
-      localStorage.removeItem('added:');
+      localStorage.removeItem(`added:${gameId}`);
       navigate(`/login`);
     }
   }, [user]);
@@ -95,23 +75,29 @@ export function ComputerGame(){
     return () => clearInterval(interval);
   }, [gameMetadata, user]);
 
-  async function resetAbandonTimer() {
-    if (timer) {
-      clearTimeout(timer);
+  useEffect(() => {
+    if (!added) {
+      createGame();
     }
-    timer = setTimeout(() => {
+  }, [added]);
+
+  async function resetAbandonTimer() {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    timer.current = setTimeout(() => {
       endGame(GameStatus.ABANDONED, chess.turn() === 'b' ? Result.WHITE_WINS : Result.BLACK_WINS);
     }, 60 * 1000);
   }
 
   async function resetMoveTimer() {
-    if (moveTimer) {
-      clearTimeout(moveTimer)
+    if (moveTimer.current) {
+      clearTimeout(moveTimer.current)
     }
     const turn =chess.turn();
     const timeLeft = GAME_TIME_MS - (turn === 'w' ? player1TimeConsumed : player2TimeConsumed);
 
-    moveTimer = setTimeout(() => {
+    moveTimer.current = setTimeout(() => {
       endGame(GameStatus.TIME_UP, turn === 'b' ? Result.WHITE_WINS : Result.BLACK_WINS);
     }, timeLeft);
   }
@@ -160,10 +146,10 @@ export function ComputerGame(){
       by: wonBy,
     });
     chess.reset();
-    localStorage.removeItem('added:');
+    localStorage.removeItem(`added:${gameId}`);
     setAdded(false);
-    if (timer) clearTimeout(timer);
-    if(moveTimer) clearTimeout(moveTimer);
+    if (timer.current) clearTimeout(timer.current);
+    if(moveTimer.current) clearTimeout(moveTimer.current);
     setMoves([]);
     if(status === 'PLAYER_EXIT') navigate('/');
   }
@@ -172,7 +158,7 @@ export function ComputerGame(){
     const message = event;
     switch (message.type) {
       case MOVE:     
-    
+        const move = message.payload.move;
         if (result) {
           console.error(`User is making a move post game completion`);
           return;
@@ -190,7 +176,7 @@ export function ComputerGame(){
         resetMoveTimer();
         lastMoveTime = moveTimestamp;
         if (userSelectedMoveIndexRef.current !== null) {
-          setMoves((moves) => [...moves, ]);
+          setMoves((moves) => [...moves, move]);
           return;
         }
 
@@ -208,10 +194,6 @@ export function ComputerGame(){
       break;
     }
   };
-
-  console.log('call create game');
-  !added && createGame();
-
 
   //bot move
   if(added) {
@@ -232,11 +214,18 @@ export function ComputerGame(){
       console.log('Error', error);
       }
       msg({
-        type:MOVE
+        type:MOVE,
+        payload: {
+          move: bestMove
+        }
       })
     }else if(chess.turn() === 'w'){
+      const lastMove = chess.history({verbose:true}).slice(-1)[0];
       msg({
-        type:MOVE
+        type:MOVE,
+        payload: {
+          move: lastMove
+        }
       })
     }
   }

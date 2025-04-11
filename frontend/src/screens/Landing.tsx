@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { Button } from "../components/Button";
-import { BACKEND_URL } from "../modules/src/atoms/user";
-import { useUser } from "../modules/src/hooks/useUser";
+import { BACKEND_URL } from "../atoms/user";
+import { useUser } from "../hooks/useUser";
 import { v4 as uuidv4 } from 'uuid';
 
 const gameId = uuidv4();

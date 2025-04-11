@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from "../components/Button";
 import { ChessBoard, isPromoting } from "../components/chessBoard";
 import { useSocket } from "../hooks/useSocket";
 import { Chess , Move} from "chess.js";
 import { GameResult as Result, INIT_GAME, GAME_OVER, MOVE, JOIN_ROOM, GAME_JOINED , GAME_ADDED, USER_TIMEOUT, GAME_TIME, GAME_ENDED, EXIT_GAME, DRAW, IS_DRAW, DO_DRAW, EXIT} 
-from "../modules/src/Message.ts";
-import { GAME_TIME_MS } from '../modules/const';
-import { useUser } from '../modules/src/hooks/useUser.ts';
+from "../lib/Message.ts";
+import { GAME_TIME_MS } from '../lib/const.ts';
+import { useUser } from '../hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
-import { movesAtom, userSelectedMoveIndexAtom } from '../modules/src/atoms/chessBoard.ts'
+import { movesAtom, userSelectedMoveIndexAtom } from '../atoms/chessBoard.ts'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import MoveSound from '/move.mp3';
 import Notify from '/notify.mp3';
 import GameEndModal from '../components/GameEndModal.tsx';
 import { UserAvatar } from '../components/UserAvatar.tsx';
@@ -20,8 +19,8 @@ import ExitGameModel from '../components/ExitGameModal.tsx';
 import MovesTable from '../components/MovesTable.tsx';
 import DrawModel from '../components/DrawModal.tsx';
 import { Loader } from 'lucide-react';
+import { usePersistance } from '../hooks/usePersistance.ts';
 
-const moveAudio = new Audio(MoveSound);
 const NotifyAudio = new Audio(Notify);
 
 export interface GameResult {
@@ -47,32 +46,9 @@ export function Game(){
 
     const navigate = useNavigate()
     
-    function usePersistance(init_val:boolean) {
-      // Set initial value
-      const initial_value = useMemo(() => {
-        const local_storage_value = localStorage.getItem('added:');
-        // If there is a value stored in localStorage, use that
-        if(local_storage_value) {
-          return JSON.parse(local_storage_value);
-        } 
-        // Otherwise use initial_value that was passed to the function
-        return init_val;
-      },[]);
-
-      const [added, setAdded] = useState(initial_value);
-
-      useEffect(() => {
-        const state_str = JSON.stringify(added); // Stringified state
-        localStorage.setItem('added:', state_str) // Set stringified state as item in localStorage
-      }, [added]);
-
-      return [added, setAdded];
-    }
-    
-
     const [chess, _setChess] = useState(new Chess());
     const [board, setBoard] = useState(chess.board());
-    const [added, setAdded] = usePersistance(false);
+    const [added, setAdded] = usePersistance(false, gameId);
     const [started, setStarted] = useState(false);
     const [gameMetadata, setGameMetadata] = useState<Metadata | null>(null);
     const [result, setResult] = useState<GameResult | null>(null);
@@ -91,7 +67,7 @@ export function Game(){
     useEffect(() => {
         if (!user) {
           cancelGame();
-          localStorage.removeItem('added:');
+          localStorage.removeItem(`added:${gameId}`);
           navigate(`/login`);
         }
     }, [user]);
@@ -139,7 +115,6 @@ export function Game(){
                   chess.move({ from: move.from, to: move.to });
                 }
                 setMoves((moves) => [...moves, move]);
-                moveAudio.play();
                 
               } catch (error) {
                 console.log('Error', error);
@@ -169,7 +144,7 @@ export function Game(){
               
               chess.reset();
               setStarted(false);
-              localStorage.removeItem('added:');
+              localStorage.removeItem(`added:${gameId}`);
               setAdded(false);
               NotifyAudio.play();
               break;

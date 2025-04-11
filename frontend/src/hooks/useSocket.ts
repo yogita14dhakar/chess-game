@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser } from "../modules/src/hooks/useUser";
+import { useUser } from "./useUser";
 
 const ws_URL = "https://chess-ws-5iv3.onrender.com";
 
