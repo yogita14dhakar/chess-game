@@ -103,7 +103,6 @@ export function ComputerGame(){
   }
 
   const createGame = async() => {
-    console.log('started creating game.');
     const game = {
       gameId:gameId,
       payload: {
@@ -125,7 +124,6 @@ export function ComputerGame(){
     });
     setAdded(true);
     setBoard(chess.board());
-    console.log('game created');
     return;
   }
     
@@ -196,8 +194,8 @@ export function ComputerGame(){
   };
 
   //bot move
-  if(added) {
-    if(chess.turn() === 'b'){
+  useEffect(() => {
+    if (added && chess.turn() === 'b' && !result) {
       const bestMove = getBestMove(chess, 4);
       try {
         if (isPromoting(chess, bestMove.from, bestMove.to)) {
@@ -206,12 +204,12 @@ export function ComputerGame(){
             to: bestMove.to,
             promotion: 'q',
           });
-        }else {
+        } else {
           chess.move({ from: bestMove.from, to: bestMove.to });
         }
         setMoves((moves) => [...moves, bestMove]);
-      }catch (error) {
-      console.log('Error', error);
+      } catch (error) {
+        console.log('Error', error);
       }
       msg({
         type:MOVE,
@@ -219,16 +217,8 @@ export function ComputerGame(){
           move: bestMove
         }
       })
-    }else if(chess.turn() === 'w'){
-      const lastMove = chess.history({verbose:true}).slice(-1)[0];
-      msg({
-        type:MOVE,
-        payload: {
-          move: lastMove
-        }
-      })
     }
-  }
+  }, [chess, added, result]);
       
   const getTimer = (timeConsumed: number) => {
     const timeLeftMs = GAME_TIME_MS - timeConsumed;
