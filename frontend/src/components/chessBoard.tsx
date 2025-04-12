@@ -227,22 +227,22 @@ export const ChessBoard = memo(
                           if (!isMyTurn) return;
                           if (from != squareRepresentation) {
                             setFrom(squareRepresentation);
-                            if (isPiece) {
-                              // setLegalMoves(
-                              //   chess
-                              //     .moves({
-                              //       verbose: true,
-                              //       square: square?.square,
-                              //     })
-                              //     .map((move) => move.to)
-                              // );
-                            }
+                            // if (isPiece) {
+                            //   // setLegalMoves(
+                            //   //   chess
+                            //   //     .moves({
+                            //   //       verbose: true,
+                            //   //       square: square?.square,
+                            //   //     })
+                            //   //     .map((move) => move.to)
+                            //   // );
+                            // }
                           } else {
                             setFrom(null);
                           }
-                          if (!isPiece) {
-                            // setLegalMoves([]);
-                          }
+                          // if (!isPiece) {
+                          //   // setLegalMoves([]);
+                          // }
 
                           if (!from) {
                             setFrom(squareRepresentation);
@@ -271,9 +271,10 @@ export const ChessBoard = memo(
                               }
                               if (moveResult) {
                                 moveAudio.current.play();
-
+                                setTimeout( () => moveAudio.current.pause(), 2000)
                                 if (moveResult?.captured) {
                                   captureAudio.current.play();
+                                  setTimeout( () => captureAudio.current.pause(), 2000)
                                 }
                                 setMoves((prev) => [...prev, moveResult]);
                                 setFrom(null);

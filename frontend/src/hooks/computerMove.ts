@@ -1,4 +1,9 @@
-import { Chess } from "chess.js";
+import { Chess, Move } from "chess.js";
+
+interface EvalResult {
+  move: Move | null;
+  value: number;
+}
 
 const pieceValues: { [key: string]: number } = {
   p: 1, n: 3, b: 3, r: 5, q: 9, k: 10000,
@@ -45,56 +50,70 @@ function minimax(
   alpha: number,
   beta: number,
   maximizingPlayer: boolean,
-  startTime: number
-): number {
-  if (depth === 0 || chess.isGameOver() || Date.now() - startTime > TIME_LIMIT) {
-    return evaluateBoard(chess.board() as (string | null)[][]) + checkEndgameTablebase(chess);
+  startTime: number,
+  transpositionTable: Map<string, number>
+): EvalResult {
+
+  const key = chess.fen();
+
+  // Check memoized result
+  if (transpositionTable.has(key)) {
+    return { move: null, value: transpositionTable.get(key)! };
   }
+
+  if (depth === 0 || chess.isGameOver() || Date.now() - startTime > TIME_LIMIT) {
+    const evalScore = evaluateBoard(chess.board() as (string | null)[][]) + checkEndgameTablebase(chess);
+    transpositionTable.set(key, evalScore);
+    return { move: null, value: evalScore };
+  }
+
+  let bestMove: Move | null = null;
 
   const moves = chess.moves({ verbose: true }).sort((a, b) => (pieceValues[b.captured || ''] || 0) - (pieceValues[a.captured || ''] || 0));
 
   if (maximizingPlayer) {
     let maxEval = -Infinity;
+
     for (const move of moves) {
       chess.move(move);;
-      const eva = minimax(chess, depth - 1, alpha, beta, false, startTime);
-      maxEval = Math.max(maxEval, eva);
-      alpha = Math.max(alpha, eva);
+      const result = minimax(chess, depth - 1, alpha, beta, false, startTime, transpositionTable);
       chess.undo();
+      if (result.value > maxEval) {
+        maxEval = result.value;
+        bestMove = move;
+      }
+      alpha = Math.max(alpha, result.value);
+      
       if (beta <= alpha || Date.now() - startTime > TIME_LIMIT) break;
     }
-    return maxEval;
+    transpositionTable.set(key, maxEval);
+    return { move: bestMove, value: maxEval };
   } else {
     let minEval = Infinity;
+
     for (const move of moves) {
       chess.move(move);;
-      const eva = minimax(chess, depth - 1, alpha, beta, true, startTime);
-      minEval = Math.min(minEval, eva);
-      beta = Math.min(beta, eva);
+      const result = minimax(chess, depth - 1, alpha, beta, true, startTime, transpositionTable);
       chess.undo();
+      if (result.value < minEval) {
+        minEval = result.value;
+        bestMove = move;
+      }
+
+      beta = Math.min(beta, result.value);
+      
       if (beta <= alpha || Date.now() - startTime > TIME_LIMIT) break;
     }
-    return minEval;
+    transpositionTable.set(key, minEval);
+    return { move: bestMove, value: minEval };
   }
 }
 
 // Best Move Selection with Time Management
 export function getBestMove(chess: Chess, depth: number): any {
-  let bestMove = null;
-  let bestValue = -Infinity;
   const startTime = Date.now();
-
-  for (const move of chess.moves({ verbose: true })) {
-    chess.move(move);
-    const moveValue = minimax(chess, depth - 1, -Infinity, Infinity, false, startTime);
-    if (moveValue > bestValue) {
-      bestValue = moveValue;
-      bestMove = move;
-    }
-    chess.undo();
-    if (Date.now() - startTime > TIME_LIMIT) break;
-  }
-
-  return bestMove;
+  const cache = new Map<string, number>();
+  const { move , value } = minimax(chess, depth - 1, -Infinity, Infinity, false, startTime, cache);
+  return move;
 }
 
