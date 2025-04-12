@@ -1,10 +1,8 @@
 import { Chess, Color, Move, PieceSymbol, Square } from 'chess.js';
-import { MouseEvent, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent, memo, useEffect, useMemo, useState } from 'react';
 import  { MOVE }  from "../lib/Message";
 import { useRecoilState } from 'recoil';
 import { isBoardFlippedAtom, movesAtom, userSelectedMoveIndexAtom } from '../atoms/chessBoard';
-import MoveSound from '/move.mp3';
-import CaptureSound from '/capture.mp3';
 import ChessSquare from './chess-board/ChessSquare';
 import LetterNotation from './chess-board/LetterNotation';
 import LegalMoveIndicator from './chess-board/LegalMoveIndicator';
@@ -90,9 +88,6 @@ export const ChessBoard = memo(
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const boxSize = 80;
     const [gameOver, setGameOver] = useState(false);
-    const moveAudio = useRef(new Audio(MoveSound));
-    const captureAudio = useRef(new Audio(CaptureSound));
-    
     
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
         e.preventDefault();
@@ -227,22 +222,22 @@ export const ChessBoard = memo(
                           if (!isMyTurn) return;
                           if (from != squareRepresentation) {
                             setFrom(squareRepresentation);
-                            // if (isPiece) {
-                            //   // setLegalMoves(
-                            //   //   chess
-                            //   //     .moves({
-                            //   //       verbose: true,
-                            //   //       square: square?.square,
-                            //   //     })
-                            //   //     .map((move) => move.to)
-                            //   // );
-                            // }
+                            if (isPiece) {
+                              // setLegalMoves(
+                              //   chess
+                              //     .moves({
+                              //       verbose: true,
+                              //       square: square?.square,
+                              //     })
+                              //     .map((move) => move.to)
+                              // );
+                            }
                           } else {
                             setFrom(null);
                           }
-                          // if (!isPiece) {
-                          //   // setLegalMoves([]);
-                          // }
+                          if (!isPiece) {
+                            // setLegalMoves([]);
+                          }
 
                           if (!from) {
                             setFrom(squareRepresentation);
@@ -270,12 +265,7 @@ export const ChessBoard = memo(
                                 });
                               }
                               if (moveResult) {
-                                moveAudio.current.play();
-                                setTimeout( () => moveAudio.current.pause(), 2000)
-                                if (moveResult?.captured) {
-                                  captureAudio.current.play();
-                                  setTimeout( () => captureAudio.current.pause(), 2000)
-                                }
+                            
                                 setMoves((prev) => [...prev, moveResult]);
                                 setFrom(null);
                                 // setLegalMoves([]);
