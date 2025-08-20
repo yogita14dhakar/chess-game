@@ -8,17 +8,13 @@ const Login = () => {
   const guestName = useRef<HTMLInputElement>(null);
   const [_, setUser] = useRecoilState(userAtom);
     const google = () => {
-        fetch(`${BACKEND_URL}/auth/google`,{
-          method: "GET",
-          credentials: "include" 
-        });
+        console.log("google");
+        window.open(`${BACKEND_URL}/auth/google`, '_self');
     }
 
     const github = () => {
-        fetch(`${BACKEND_URL}/auth/github`,{
-          method: "GET",
-          credentials: "include" 
-        });
+        console.log("github");
+        window.open(`${BACKEND_URL}/auth/github`, '_self');
     }
 
     const loginAsGuest = async() => {
@@ -65,13 +61,11 @@ const Login = () => {
             <span className="text-white">OR</span>
             <div className="bg-white h-1 w-12 ml-2"></div>
           </div>
-          <form>
           <input
             type="text"
             ref={guestName}
             placeholder="Username"
             className="border px-4 py-2 rounded-md mb-4 w-full md:w-64"
-            required
           />
           <button
             className="bg-[#e64833]/80 text-[#d1e8e2] px-4 py-2 rounded-md hover:bg-[#e64833] transition-colors duration-300"
@@ -79,7 +73,6 @@ const Login = () => {
           >
             Enter as guest
           </button>
-          </form>
         </div>
       </div>
 
