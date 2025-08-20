@@ -32,6 +32,7 @@ app.use(cookieParser());
   app.use(session({
     cookie:{
       secure: true,
+      sameSite: 'none',
       maxAge:COOKIE_MAX_AGE,
     },
     store: sessionStore,

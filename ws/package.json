@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@types/ws": "^8.5.12",
+    "bullmq": "^5.48.1",
     "chess.js": "^1.0.0-beta.8",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
