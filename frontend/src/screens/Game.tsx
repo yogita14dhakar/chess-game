@@ -10,7 +10,6 @@ import { useUser } from '../hooks/useUser.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import { movesAtom, userSelectedMoveIndexAtom } from '../atoms/chessBoard.ts'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import Notify from '/notify.mp3';
 import GameEndModal from '../components/GameEndModal.tsx';
 import { UserAvatar } from '../components/UserAvatar.tsx';
 import { ShareGame } from '../components/ShareGame.tsx';
@@ -20,8 +19,6 @@ import MovesTable from '../components/MovesTable.tsx';
 import DrawModel from '../components/DrawModal.tsx';
 import { Loader } from 'lucide-react';
 import { usePersistance } from '../hooks/usePersistance.ts';
-
-const NotifyAudio = new Audio(Notify);
 
 export interface GameResult {
     result: Result;
@@ -91,7 +88,7 @@ export function Game(){
                 whitePlayer: message.payload.whitePlayer,
               });
               navigate(`/game/${message.payload.gameId}`);
-              NotifyAudio.play();
+              
               break;
             case MOVE:
              
@@ -122,7 +119,6 @@ export function Game(){
               break;
             case GAME_OVER:
               setResult(message.payload.result);
-              NotifyAudio.play();
               break;
     
             case GAME_ENDED:
@@ -146,7 +142,7 @@ export function Game(){
               setStarted(false);
               localStorage.removeItem(`added:${gameId}`);
               setAdded(false);
-              NotifyAudio.play();
+              
               break;
     
             case USER_TIMEOUT:
