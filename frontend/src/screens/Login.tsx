@@ -17,7 +17,7 @@ const Login = () => {
 
     useEffect(() => {
       console.log("entered");
-      fetch(`${BACKEND_URL}/user`, { 
+      fetch(`${BACKEND_URL}/auth/user`, { 
         method: 'GET',
         credentials: "include" 
       })
