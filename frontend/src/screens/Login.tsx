@@ -9,10 +9,12 @@ const Login = () => {
   const [_, setUser] = useRecoilState(userAtom);
     const google = async() => {
       window.open(`${BACKEND_URL}/auth/google`, '_self');
+      console.log('google');
       const res = await fetch(`${BACKEND_URL}/user`, {
         method: "GET",
         credentials: "include",
       });
+      console.log('done');
       const user = await res.json();
       console.log('google', user);
       setUser(user);
