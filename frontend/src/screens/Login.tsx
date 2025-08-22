@@ -15,12 +15,14 @@ const Login = () => {
         console.log("github");
         window.open(`${BACKEND_URL}/auth/github`, '_parent');
     }
-    
+
     useEffect(() => {
+      console.log("entered");
       fetch(`${BACKEND_URL}/user`, { credentials: "include" })
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          console.log("data:", data.user);
           setUser(data.user);
         }
       });
