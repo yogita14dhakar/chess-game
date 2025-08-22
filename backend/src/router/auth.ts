@@ -110,7 +110,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successRedirect: CLIENT_URL,
+    successRedirect: `${CLIENT_URL}/login`,
     failureRedirect: '/auth/login/failed',
   }),
 );
@@ -132,7 +132,7 @@ router.get(
 
 router.get("/user", (req: Request, res: Response) => {
   if (req.user) {
-    console.log(req.user);
+    console.log('req.user:',req.user);
     res.json({
       success: true,
       user: req.user,  // comes from deserializeUser

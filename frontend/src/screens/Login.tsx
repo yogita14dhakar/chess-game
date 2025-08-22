@@ -25,7 +25,7 @@ const Login = () => {
       .then(data => {
         if (data.success) {
           console.log("data:", data.user);
-          setUser(data.user);
+          // setUser(data.user);
         }
       });
     }, []);
