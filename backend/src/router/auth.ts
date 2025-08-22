@@ -110,9 +110,14 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successRedirect: `${CLIENT_URL}/login`,
+    // successRedirect: `${CLIENT_URL}/login`,
     failureRedirect: '/auth/login/failed',
   }),
+  (req, res) => {
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+  res.redirect(CLIENT_URL);
+  }
 );
 
 
