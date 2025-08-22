@@ -23,7 +23,7 @@ const sessionStore = new MySQLStore({
 
 
 const app = express();
-
+initPassport();
 
 dotenv.config();
 app.use(express.json());
@@ -37,11 +37,11 @@ app.use(cookieParser());
     },
     store: sessionStore,
     secret: process.env.COOKIE_SECRET || 'keyboard cat',
-    saveUninitialized: true,
+    saveUninitialized: false,
     resave: false
-    }));
+  }));
 
-initPassport();
+
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -7,14 +7,27 @@ const Login = () => {
   const navigate = useNavigate();
   const guestName = useRef<HTMLInputElement>(null);
   const [_, setUser] = useRecoilState(userAtom);
-    const google = () => {
-        console.log("google");
-        window.open(`${BACKEND_URL}/auth/google`, '_self');
+    const google = async() => {
+      window.open(`${BACKEND_URL}/auth/google`, '_self');
+      const res = await fetch(`${BACKEND_URL}/user`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const user = await res.json();
+      setUser(user);
+      navigate('/');
     }
 
-    const github = () => {
+    const github = async() => {
         console.log("github");
         window.open(`${BACKEND_URL}/auth/github`, '_self');
+        const res = await fetch(`${BACKEND_URL}/user`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const user = await res.json();
+      setUser(user);
+      navigate('/');
     }
 
     const loginAsGuest = async() => {

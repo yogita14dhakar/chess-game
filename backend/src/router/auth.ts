@@ -35,7 +35,7 @@ router.post('/guest', async (req: Request, res: Response) => {
     const VALUES = [[guestUUID, `guest-${guestUUID}`, bodyData.name||guestUUID , guestUUID+"@playchess.com", 'GUEST']];   
     await insertUser(q, VALUES);
     const user = await update(`SELECT * FROM User WHERE id = '${guestUUID}'`);
-    console.log(user);
+    
     const token = jwt.sign(
       { userId: user.id, name: user.name, isGuest: true },
       JWT_SECRET,
@@ -115,6 +115,7 @@ router.get(
   }),
 );
 
+
 //github
 router.get(
   '/github',
@@ -129,5 +130,17 @@ router.get(
   }),
 );
 
-
+router.get("/user", (req, res) => {
+  if (req.user) {
+    res.json({
+      success: true,
+      user: req.user,  // comes from deserializeUser
+    });
+  } else {
+    res.json({
+      success: false,
+      user: null,
+    });
+  }
+});
 export default router;
