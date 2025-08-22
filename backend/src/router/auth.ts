@@ -130,7 +130,7 @@ router.get(
   }),
 );
 
-router.get("/user", (req, res) => {
+router.get("/user", (req: Request, res: Response) => {
   if (req.user) {
     res.json({
       success: true,

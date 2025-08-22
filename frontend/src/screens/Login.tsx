@@ -14,6 +14,7 @@ const Login = () => {
         credentials: "include",
       });
       const user = await res.json();
+      console.log('google', user);
       setUser(user);
       navigate('/');
     }
@@ -26,6 +27,7 @@ const Login = () => {
         credentials: "include",
       });
       const user = await res.json();
+      console.log('github', user);
       setUser(user);
       navigate('/');
     }
