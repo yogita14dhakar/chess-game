@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { BACKEND_URL, userAtom } from '../atoms/user';
 
@@ -8,31 +8,23 @@ const Login = () => {
   const guestName = useRef<HTMLInputElement>(null);
   const [_, setUser] = useRecoilState(userAtom);
     const google = async() => {
-      window.open(`${BACKEND_URL}/auth/google`, '_self');
-      console.log('google');
-      const res = await fetch(`${BACKEND_URL}/user`, {
-        method: "GET",
-        credentials: "include",
-      });
-      console.log('done');
-      const user = await res.json();
-      console.log('google', user);
-      setUser(user);
-      navigate('/');
+      window.open(`${BACKEND_URL}/auth/google`, '_parent');
     }
 
     const github = async() => {
         console.log("github");
-        window.open(`${BACKEND_URL}/auth/github`, '_self');
-        const res = await fetch(`${BACKEND_URL}/user`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const user = await res.json();
-      console.log('github', user);
-      setUser(user);
-      navigate('/');
+        window.open(`${BACKEND_URL}/auth/github`, '_parent');
     }
+    
+    useEffect(() => {
+      fetch(`${BACKEND_URL}/user`, { credentials: "include" })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setUser(data.user);
+        }
+      });
+    }, []);
 
     const loginAsGuest = async() => {
       const response = await fetch(`${BACKEND_URL}/auth/guest`, {
