@@ -131,8 +131,9 @@ router.get(
 );
 
 router.get("/user", (req: Request, res: Response) => {
+  console.log('req.user:',req.user);
   if (req.user) {
-    console.log('req.user:',req.user);
+    
     res.json({
       success: true,
       user: req.user,  // comes from deserializeUser
