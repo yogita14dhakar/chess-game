@@ -21,56 +21,59 @@ export const connPool = createPool({
   idleTimeout           : 60000, // idle connections timeout, in milliseconds, the default value 60000
   queueLimit            : 0,
   enableKeepAlive       : true,
-  keepAliveInitialDelay : 0,
+  connectTimeout        : 10000, // 10s
 });
 
 export const insertUser = async (q:string, VALUES: any[][])=>{
-    let connection;
+    // let connection;
     try{
-        connection = await connPool.getConnection();
-        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.query(q, [VALUES]);
+        // connection = await connPool.getConnection();
+        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q, [VALUES]);
             if(err) throw err;
             return;
     }catch(err){
         console.log(err);
-    }finally {
-        await sleep(2000);
-    
-        // Don't forget to release the connection when finished!
-        if (connection) connection.release();
     }
+    // finally {
+    //     await sleep(2000);
+    
+    //     // Don't forget to release the connection when finished!
+    //     if (connection) connection.release();
+    // }
 }
 
 export const update = async (q: string) => {
-    let connection;
+    // let connection;
     try{
-        connection = await connPool.getConnection();
-        const [rows]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.query(q);
+        // connection = await connPool.getConnection();
+        const [rows]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q);
             return JSON.parse(JSON.stringify(rows[0]));
     }catch(err){
         console.log(err);
-    }finally {
-        await sleep(2000);
-    
-        // Don't forget to release the connection when finished!
-        if (connection) connection.release();
     }
+    // finally {
+    //     await sleep(2000);
+    
+    //     // Don't forget to release the connection when finished!
+    //     if (connection) connection.release();
+    // }
 }
 
 export const findMany = async (q:string)=>{
-    let connection;
+    // let connection;
     try{
-        connection = await connPool.getConnection();
-        const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(q);
+        // connection = await connPool.getConnection();
+        const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connPool.query(q);
         return JSON.parse(JSON.stringify(rows));
     }catch(err){
         console.log(err);
-    }finally {
-        await sleep(2000);
-    
-        // Don't forget to release the connection when finished!
-        if (connection) connection.release();
     }
+    // finally {
+    //     await sleep(2000);
+    
+    //     // Don't forget to release the connection when finished!
+    //     if (connection) connection.release();
+    // }
 }
 
 
@@ -85,7 +88,8 @@ export const transaction = async (q1: string , q2: string, VALUES: any[])=>{
         if (connection) await connection.rollback();
         throw error;
     }finally {
-        if (connection) await connection.release();
+        await sleep(2000);
+        if (connection) connection.release();
     }
     
 }

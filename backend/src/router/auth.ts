@@ -110,8 +110,8 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successRedirect: `${CLIENT_URL}/login`,
     failureRedirect: '/auth/login/failed',
+    successRedirect: `${CLIENT_URL}/login`,
   }),
 );
 
@@ -131,6 +131,7 @@ router.get(
 );
 
 router.get("/user", (req: Request, res: Response) => {
+  try {
   console.log('req.user:',req.user);
   if (req.user) {
     const user = req.user as UserDetails; 
@@ -148,6 +149,10 @@ router.get("/user", (req: Request, res: Response) => {
       success: false,
       user: null,
     });
+  }
+  } catch (err) {
+    console.error("Error in /auth/user:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 export default router;
