@@ -28,7 +28,7 @@ const Login = () => {
           // setUser(data.user);
         }
       });
-    }, [google,github]);
+    }, []);
 
     const loginAsGuest = async() => {
       const response = await fetch(`${BACKEND_URL}/auth/guest`, {
