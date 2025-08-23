@@ -113,10 +113,10 @@ router.get(
     // successRedirect: `${CLIENT_URL}/login`,
     failureRedirect: '/auth/login/failed',
   }),
-  (req, res) => {
+  (req: Request, res: Response) => {
   console.log("Session:", req.session);
   console.log("User:", req.user);
-  res.redirect(`${CLIENT_URL}/login`);
+  // res.redirect(`${CLIENT_URL}/login`);
   }
 );
 
