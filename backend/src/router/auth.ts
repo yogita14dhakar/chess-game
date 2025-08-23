@@ -132,14 +132,13 @@ router.get(
 
 router.get("/user", (req: Request, res: Response) => {
   console.log('req.user:',req.user);
-  const user = req.user as UserDetails; 
-  const UserDetails: UserDetails = {
+  if (req.user) {
+    const user = req.user as UserDetails; 
+    const UserDetails: UserDetails = {
       id: user?.id,
       name: user.name,
       isGuest: false,
     };
-  if (req.user) {
-    
     res.json({
       success: true,
       user: UserDetails,  // comes from deserializeUser

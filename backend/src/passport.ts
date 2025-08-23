@@ -48,7 +48,7 @@ export function initPassport(){
                 done: (error: any, user?: any) => void,
             ){
                 const q1 = `INSERT INTO User (id, email, name, username, provider, lastLogin) 
-                VALUES ? ON DUPLICATE KEY UPDATE name = '${profile.displayName}', username = '${profile.displayName}' provider = 'GOOGLE', lastLogin = CURRENT_TIMESTAMP()`;
+                VALUES ? ON DUPLICATE KEY UPDATE name = '${profile.displayName}', username = '${profile.displayName}', provider = 'GOOGLE', lastLogin = CURRENT_TIMESTAMP()`;
                 const VALUES = [[uuidv4(), `${profile.emails[0].value}`, `${profile.displayName}`, `${profile.displayName}`, 'GOOGLE', new Date().toISOString().slice(0, 19).replace('T', ' ')]];
                 await insertUser(q1, VALUES); // if user exist it will update the nameor else it will insert in table
                 const user = await update(`SELECT * FROM User WHERE email = '${profile.emails[0].value}'`);
