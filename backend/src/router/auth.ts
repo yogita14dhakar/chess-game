@@ -116,7 +116,7 @@ router.get(
   (req, res) => {
   console.log("Session:", req.session);
   console.log("User:", req.user);
-  res.redirect(CLIENT_URL);
+  res.redirect(`${CLIENT_URL}/login`);
   }
 );
 
