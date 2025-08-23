@@ -123,7 +123,7 @@ router.get(
       console.log("✅ Session saved for user:", req.user);
 
       // Now redirect to frontend
-      res.redirect(CLIENT_URL);
+      res.redirect(`${CLIENT_URL}/login`);
     });
   }
 );
