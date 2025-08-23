@@ -110,14 +110,9 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    // successRedirect: `${CLIENT_URL}/login`,
+    successRedirect: `${CLIENT_URL}/login`,
     failureRedirect: '/auth/login/failed',
   }),
-  (req: Request, res: Response) => {
-  console.log("Session:", req.session);
-  console.log("User:", req.user);
-  // res.redirect(`${CLIENT_URL}/login`);
-  }
 );
 
 
@@ -137,11 +132,17 @@ router.get(
 
 router.get("/user", (req: Request, res: Response) => {
   console.log('req.user:',req.user);
+  const user = req.user as UserDetails; 
+  const UserDetails: UserDetails = {
+      id: user?.id,
+      name: user.name,
+      isGuest: false,
+    };
   if (req.user) {
     
     res.json({
       success: true,
-      user: req.user,  // comes from deserializeUser
+      user: UserDetails,  // comes from deserializeUser
     });
   } else {
     res.json({
