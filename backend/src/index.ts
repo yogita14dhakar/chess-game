@@ -28,20 +28,20 @@ initPassport();
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
+app.set('trust proxy', 1);
 
   app.use(session({
+    store: sessionStore,
+    secret: process.env.COOKIE_SECRET || 'keyboard cat',
+    saveUninitialized: false,
+    resave: false,
     cookie:{
       secure: true,
       httpOnly: true,
       sameSite: 'none',
       maxAge:COOKIE_MAX_AGE,
     },
-    store: sessionStore,
-    secret: process.env.COOKIE_SECRET || 'keyboard cat',
-    saveUninitialized: false,
-    resave: false
   }));
-
 
 app.use(passport.initialize());
 app.use(passport.session());

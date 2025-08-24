@@ -111,21 +111,8 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/auth/login/failed',
-    // successRedirect: `${CLIENT_URL}/login`,
-  }),
-   (req, res) => {
-    if (!req.user) {
-      return res.redirect(`${CLIENT_URL}/login?error=login_failed`);
-    }
-
-    // Force session to be saved
-    req.session.save(() => {
-      console.log("✅ Session saved for user:", req.user);
-
-      // Now redirect to frontend
-      res.redirect(`${CLIENT_URL}/login`);
-    });
-  }
+    successRedirect: `${CLIENT_URL}/login`,
+  })
 );
 
 
@@ -138,7 +125,7 @@ router.get(
 router.get(
   '/github/callback',
   passport.authenticate('github', {
-    successRedirect: CLIENT_URL,
+    successRedirect: `${CLIENT_URL}/login`,
     failureRedirect: '/auth/login/failed',
   }),
 );

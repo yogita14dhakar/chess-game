@@ -8,11 +8,11 @@ const Login = () => {
   const guestName = useRef<HTMLInputElement>(null);
   const [_, setUser] = useRecoilState(userAtom);
     const google = async() => {
-      window.open(`${BACKEND_URL}/auth/google`, '_parent');
+      window.location.href = `${BACKEND_URL}/auth/google`;
     }
 
     const github = async() => {
-        window.open(`${BACKEND_URL}/auth/github`, '_parent');
+      window.location.href = `${BACKEND_URL}/auth/github`;
     }
 
     useEffect(() => {
