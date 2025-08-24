@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { BACKEND_URL, userAtom } from '../atoms/user';
 
@@ -14,19 +14,6 @@ const Login = () => {
     const github = async() => {
       window.location.href = `${BACKEND_URL}/auth/github`;
     }
-
-    // useEffect(() => {
-    //   fetch(`${BACKEND_URL}/auth/user`, { 
-    //     method: 'GET',
-    //     credentials: "include" 
-    //   })
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     if (data.success) {
-    //       navigate('/')
-    //     }
-    //   });
-    // }, []);
 
     const loginAsGuest = async() => {
       const response = await fetch(`${BACKEND_URL}/auth/guest`, {

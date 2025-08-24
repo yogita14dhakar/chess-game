@@ -111,10 +111,9 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/auth/login/failed',
-    successRedirect: `${CLIENT_URL}/login`,
+    successRedirect: `${CLIENT_URL}`,
   })
 );
-
 
 //github
 router.get(
@@ -125,34 +124,9 @@ router.get(
 router.get(
   '/github/callback',
   passport.authenticate('github', {
-    successRedirect: `${CLIENT_URL}/login`,
+    successRedirect: `${CLIENT_URL}`,
     failureRedirect: '/auth/login/failed',
   }),
 );
 
-router.get("/user", (req: Request, res: Response) => {
-  try {
-  console.log('req.user:',req.user);
-  if (req.user) {
-    const user = req.user as UserDetails; 
-    const UserDetails: UserDetails = {
-      id: user?.id,
-      name: user.name,
-      isGuest: false,
-    };
-    res.json({
-      success: true,
-      user: UserDetails,  // comes from deserializeUser
-    });
-  } else {
-    res.json({
-      success: false,
-      user: null,
-    });
-  }
-  } catch (err) {
-    console.error("Error in /auth/user:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 export default router;

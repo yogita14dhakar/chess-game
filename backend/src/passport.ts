@@ -98,7 +98,6 @@ export function initPassport(){
           return cb(null, {
             id: user.id,
             username: user.username,
-            picture: user.picture,
           });
         });
       });
