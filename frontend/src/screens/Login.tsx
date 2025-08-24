@@ -15,20 +15,18 @@ const Login = () => {
       window.location.href = `${BACKEND_URL}/auth/github`;
     }
 
-    useEffect(() => {
-      console.log("entered");
-      fetch(`${BACKEND_URL}/auth/user`, { 
-        method: 'GET',
-        credentials: "include" 
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          console.log("data:", data.user);
-          // setUser(data.user);
-        }
-      });
-    }, []);
+    // useEffect(() => {
+    //   fetch(`${BACKEND_URL}/auth/user`, { 
+    //     method: 'GET',
+    //     credentials: "include" 
+    //   })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (data.success) {
+    //       navigate('/')
+    //     }
+    //   });
+    // }, []);
 
     const loginAsGuest = async() => {
       const response = await fetch(`${BACKEND_URL}/auth/guest`, {
