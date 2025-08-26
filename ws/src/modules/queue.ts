@@ -5,7 +5,12 @@ import dotenv from 'dotenv';
 import { transaction } from './src/db';
 dotenv.config();
 
-const connection = new IORedis(Number(process.env.REDIS_PORT),process.env.REDIS_HOST||'redis_host',{maxRetriesPerRequest: null} );
+const connection = new IORedis(  Number(process.env.REDIS_PORT), process.env.REDIS_HOST || '',
+  {
+    username: process.env.REDIS_USERNAME,
+    password: process.env.REDIS_PASSWORD,
+    maxRetriesPerRequest: null
+  });
 
 export const addMoveToDb = async(VALUES: (string | number | Date)[][], q2: string) => {
     //querry to save move in database
