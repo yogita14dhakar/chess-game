@@ -1,10 +1,11 @@
 import { Chess, Move, Square } from 'chess.js';
 import { INIT_GAME, MOVE, AuthProvider, GAME_ENDED} from "./modules/src/Message";
-import { findMany, insertUser, transaction,  update} from "./modules/src/db";
+import { findMany, insertUser, update} from "./modules/src/db";
 import { randomUUID } from 'crypto';
 import { socketManager, User } from './SocketManager';
 import { GameResult, GameStatus } from './modules/src/Message';
 import { GAME_TIME_MS } from './modules/const';
+import { addMoveToDb } from './modules/queue';
 
 export function isPromoting(chess: Chess, from: Square, to: Square) {
     if (!from) {
@@ -66,7 +67,6 @@ export class Game{
         timeTaken: number | null;
         createdAt: Date;
       }[]) {
-        console.log(moves);
         moves.forEach((move) => {
           if (
             isPromoting(this.board, move.from as Square, move.to as Square)
@@ -146,13 +146,6 @@ export class Game{
     await insertUser(q, VALUES); 
   }
 
-  async addMoveToDb(move: Move, moveTimestamp: Date) {
-    const q1 = "INSERT INTO Move (id, gameId, moveNumber, `from`, `to`, `before`, `after`, createdAt, timeTaken, san) VALUES ?";
-    const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp, moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime(), move.san]];
-    const q2 = `UPDATE Game SET currentFen = '${move.after}' WHERE id = '${this.gameId}'`;
-    await transaction(q1, q2, VALUES);
-  }
-
   async makeMove(
     user: User,
     move: Move
@@ -201,7 +194,10 @@ export class Game{
       this.player2TimeConsumed = this.player2TimeConsumed + (moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime());
     }
 
-    await this.addMoveToDb(move, moveTimestamp);
+    const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp, moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime(), move.san]];
+    const q2 = `UPDATE Game SET currentFen = '${move.after}' WHERE id = '${this.gameId}'`;
+    await addMoveToDb(VALUES, q2);
+    
     this.resetAbandonTimer()
     this.resetMoveTimer();
 
