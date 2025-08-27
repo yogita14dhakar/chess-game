@@ -35,7 +35,7 @@ router.post('/guest', async (req: Request, res: Response) => {
     const VALUES = [[guestUUID, `guest-${guestUUID}`, bodyData.name||guestUUID , guestUUID+"@playchess.com", 'GUEST']];   
     await insertUser(q, VALUES);
     const user = await update(`SELECT * FROM User WHERE id = '${guestUUID}'`);
-    
+    console.log(user.name)
     const token = jwt.sign(
       { userId: user.id, name: user.name, isGuest: true },
       JWT_SECRET,
@@ -46,6 +46,7 @@ router.post('/guest', async (req: Request, res: Response) => {
       token: token,
       isGuest: true,
     };
+    console.log(UserDetails);
     res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, secure: true, sameSite: 'none'});
     res.json(UserDetails);
 });
@@ -56,6 +57,7 @@ router.get('/refresh', async (req: Request, res: Response) => {
     // const q = `SELECT * FROM User WHERE id = '${user.id}'`;
     // let userDb = await update(q);
     const token = jwt.sign({ userId: user.id, name: user.name}, JWT_SECRET);
+    console.log(user);
     res.json({
       token,
       id: user.id,
