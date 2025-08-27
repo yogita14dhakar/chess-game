@@ -7,6 +7,7 @@ dotenv.config();
 
 const connection = new IORedis(  Number(process.env.REDIS_PORT), process.env.REDIS_HOST || '',
   {
+   
     username: process.env.REDIS_USERNAME,
     password: process.env.REDIS_PASSWORD,
     maxRetriesPerRequest: null
@@ -26,7 +27,6 @@ const worker = new Worker(
   async job => {
     //will add move to database
     await transaction(job.data.q1, job.data.q2, job.data.VALUES);
-    console.log(job.data);
   },
   { connection },
 );

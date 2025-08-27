@@ -94,7 +94,7 @@ router.get('/logout', (req: Request, res: Response) => {
       console.error('Error logging out:', err);
       res.status(500).json({ error: 'Failed to log out' });
     } else {
-      res.clearCookie('jwt');
+      res.clearCookie('connect.sid');
       res.clearCookie('guest');
       res.redirect('https://lets-play-2fi3.onrender.com');
     }

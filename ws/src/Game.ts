@@ -194,7 +194,7 @@ export class Game{
       this.player2TimeConsumed = this.player2TimeConsumed + (moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime());
     }
 
-    const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp, moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime(), move.san]];
+    const VALUES = [[randomUUID(), this.gameId, this.moveCount+1, move.from, move.to, move.before, move.after, moveTimestamp.toISOString().slice(0, 19).replace('T', ' '), moveTimestamp.getTime() - new Date(this.lastMoveTime).getTime(), move.san]];
     const q2 = `UPDATE Game SET currentFen = '${move.after}' WHERE id = '${this.gameId}'`;
     await addMoveToDb(VALUES, q2);
     

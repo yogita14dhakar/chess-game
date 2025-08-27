@@ -66,6 +66,8 @@ export function Game(){
           cancelGame();
           localStorage.removeItem(`added:${gameId}`);
           navigate(`/login`);
+        }else {
+          console.log(user);
         }
     }, [user]);
     
