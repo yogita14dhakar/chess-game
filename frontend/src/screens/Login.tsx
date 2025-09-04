@@ -23,7 +23,7 @@ const Login = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          name: (guestName.current && guestName.current.value) || '',
+          name: (guestName.current && guestName.current.value) || 'Guest',
         }),
       });
       const user = await response.json();

@@ -251,7 +251,7 @@ export function ComputerGame(){
       </div>
       <div className="justify-center flex">
         <div className="pt-2 w-full">
-          <div className="flex flex-col lg:flex-row gap-8 w-full">
+          <div className="flex flex-row gap-8 w-full">
             <div className="text-white">
               <div className="flex justify-center">
                 <div>

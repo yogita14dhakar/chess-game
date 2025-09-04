@@ -17,7 +17,7 @@ import { Waitopponent } from '../components/ui/Waitopponent.tsx';
 import ExitGameModel from '../components/ExitGameModal.tsx';
 import MovesTable from '../components/MovesTable.tsx';
 import DrawModel from '../components/DrawModal.tsx';
-import { Loader } from 'lucide-react';
+import { Fullscreen, Loader, Minimize } from 'lucide-react';
 import { usePersistance } from '../hooks/usePersistance.ts';
 
 export interface GameResult {
@@ -42,7 +42,7 @@ export function Game(){
     const user = useUser();
 
     const navigate = useNavigate()
-    
+
     const [chess, _setChess] = useState(new Chess());
     const [board, setBoard] = useState(chess.board());
     const [added, setAdded] = usePersistance(false, gameId);
@@ -53,6 +53,7 @@ export function Game(){
     const [player2TimeConsumed, setPlayer2TimeConsumed] = useState(0);
     const [gameID,setGameID] = useState("");
     const [isDraw, setIsDraw] = useState(false);
+    const [forceLandscape, setForceLandscape] = useState(window.screen.width>=1224 ? false : true);
     const setMoves = useSetRecoilState(movesAtom);
     const userSelectedMoveIndex = useRecoilValue(userSelectedMoveIndexAtom);
     const userSelectedMoveIndexRef = useRef(userSelectedMoveIndex);
@@ -268,8 +269,9 @@ export function Game(){
 
     if(!socket) return <div className="text-white flex justify-center text-4xl pt-20"><Loader/></div>
     return (
-        <div>
-          
+        <div className={`flex-1 flex items-center justify-center transition-transform duration-500 ${
+          forceLandscape ? "landscape-mode" : ""
+        }`}>
           {isDraw && (
             <DrawModel onClick={() => handleExit(DRAW)}></DrawModel>
           )}
@@ -292,7 +294,7 @@ export function Game(){
       )}
       <div className="justify-center flex">
         <div className="pt-2 w-full">
-          <div className="flex flex-col lg:flex-row gap-8 w-full">
+          <div className="flex flex-row gap-8 w-full">
             <div className="text-white">
               <div className="flex justify-center">
                 <div>
@@ -337,7 +339,7 @@ export function Game(){
                 </div>
               </div>
             </div>
-            <div className="rounded-md pt-2 flex-1 overflow-auto h-[95vh] overflow-y-scroll no-scrollbar bg-white">
+            <div className="rounded-md pt-2 flex-1 overflow-auto overflow-y-scroll no-scrollbar bg-white">
               {!started ? (
                 <div className="pt-8 flex justify-center w-full">
                   {added ? (
@@ -373,6 +375,15 @@ export function Game(){
               
             </div>
           </div>
+          {window.screen.width < 1224 ?
+          (<div className="p-2 bg-gray-800 text-white flex justify-end">
+                <button
+                  onClick={() => setForceLandscape(!forceLandscape)}
+                  className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600 transition"
+                >
+                  {forceLandscape ? <Minimize/> : <Fullscreen/>}
+                </button>
+          </div>):''}
         </div>
       </div>
     </div>
