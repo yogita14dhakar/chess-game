@@ -300,6 +300,18 @@ export const ChessBoard = memo(
                         }}
                         key={j}
                         className={`${isRightClickedSquare ? (isMainBoxColor ? 'bg-[#CF664E]' : 'bg-[#E87764]') : isKingInCheckSquare ? 'bg-[#FF6347]' : isHighlightedSquare ? `${isMainBoxColor ? 'bg-[#BBCB45]' : 'bg-[#F4F687]'}` : isMainBoxColor ? 'bg-[#d9b08c]' : 'bg-[#ffffff]'} ${''}`}
+                        // drag and drop
+                        draggable='true'
+                        onDragStart={(e)=> {
+                          handleMouseDown(e, squareRepresentation)
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                        }}
+                        onDrop={(e) => {
+                          handleMouseUp(e, squareRepresentation);
+                        }}
+                       
                         onContextMenu={(e) => {
                           e.preventDefault();
                         }}
@@ -309,6 +321,7 @@ export const ChessBoard = memo(
                         onMouseUp={(e) => {
                           handleMouseUp(e, squareRepresentation);
                         }}
+                        
                       >
                         <div className="w-full justify-center flex h-full relative">
                           {square && <ChessSquare square={square} />}

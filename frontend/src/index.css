@@ -1,12 +1,11 @@
 .landscape-mode {
-  transform: rotate(90deg);
-  transform-origin: left top;
-  width: 100vh;
-  height: 100vw;
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: auto;
+   -webkit-transform: rotate(90deg);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 @tailwind base;
