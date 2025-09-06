@@ -16,7 +16,7 @@ export function Landing(){
         <div className="max-w-screen-lg max-h-screen-lg">
         <h1 className="md:text-6xl text-4xl font-bold text-white text-center">Let's Play Chess Together</h1>
             <div className="flex justify-center gap-4">
-                {screen.orientation.type === 'landscape-primary' || 'landscape-secondary' ? 
+                {screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary' ? 
                     (<div className="flex justify-center mt-5 md:mt-20 ms:hidden">
                         <img src="chessImage.png" className="h-96 "></img>
                     </div>)
