@@ -334,7 +334,7 @@ export function Game(){
                 </div>
               </div>
             </div>
-            <div className="rounded-md pt-2 flex-1 overflow-auto h-[95vh] overflow-y-scroll no-scrollbar bg-white">
+            <div className="rounded-md pt-2 flex-1 overflow-auto overflow-y-scroll no-scrollbar bg-white">
               {!started ? (
                 <div className="pt-8 flex justify-center w-full">
                   {added ? (

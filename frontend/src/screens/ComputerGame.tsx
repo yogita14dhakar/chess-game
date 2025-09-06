@@ -289,7 +289,7 @@ export function ComputerGame(){
                 </div>
               </div>
             </div>
-            <div className="rounded-md pt-2 flex-1 overflow-auto h-[95vh] overflow-y-scroll no-scrollbar bg-white">
+            <div className="rounded-md pt-2 flex-1 overflow-auto overflow-y-scroll no-scrollbar bg-white">
               <div>
                 <div className="p-8 flex justify-center w-full">
                   <ExitGameModel onClick={() => endGame(GameStatus.PLAYER_EXIT, chess.turn() === 'w' ? Result.BLACK_WINS : Result.WHITE_WINS)} name={'Exit'} />

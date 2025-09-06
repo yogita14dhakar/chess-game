@@ -86,7 +86,7 @@ export const ChessBoard = memo(
     // const [legalMoves, setLegalMoves] = useState<string[]>([]);
 
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const boxSize = 80;
+    const boxSize = screen.width > 540 || screen.height > 600 ? 80 : 60;
     const [gameOver, setGameOver] = useState(false);
     
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
@@ -300,18 +300,6 @@ export const ChessBoard = memo(
                         }}
                         key={j}
                         className={`${isRightClickedSquare ? (isMainBoxColor ? 'bg-[#CF664E]' : 'bg-[#E87764]') : isKingInCheckSquare ? 'bg-[#FF6347]' : isHighlightedSquare ? `${isMainBoxColor ? 'bg-[#BBCB45]' : 'bg-[#F4F687]'}` : isMainBoxColor ? 'bg-[#d9b08c]' : 'bg-[#ffffff]'} ${''}`}
-                        // drag and drop
-                        draggable='true'
-                        onDragStart={(e)=> {
-                          handleMouseDown(e, squareRepresentation)
-                        }}
-                        onDragOver={(e) => {
-                          e.preventDefault();
-                        }}
-                        onDrop={(e) => {
-                          handleMouseUp(e, squareRepresentation);
-                        }}
-                       
                         onContextMenu={(e) => {
                           e.preventDefault();
                         }}
@@ -323,8 +311,20 @@ export const ChessBoard = memo(
                         }}
                         
                       >
-                        <div className="w-full justify-center flex h-full relative">
-                          {square && <ChessSquare square={square} />}
+                        <div className="w-full justify-center flex h-full relative"
+                        // drag and drop
+                        draggable='true'
+                        onDragStart={(e)=> {
+                          handleMouseDown(e, squareRepresentation)
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                        }}
+                        onDrop={(e) => {
+                          handleMouseUp(e, squareRepresentation);
+                        }}
+                        >
+                          {square && <ChessSquare square={square}/>}
                           {isFlipped
                             ? i === 8 && <LetterNotation label={labels[j]} isMainBoxColor={j % 2 === 0} />
                             : i === 1 && <LetterNotation label={labels[j]} isMainBoxColor={j % 2 !== 0} />}
