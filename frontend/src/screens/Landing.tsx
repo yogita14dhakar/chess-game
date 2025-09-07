@@ -3,27 +3,23 @@ import { Button } from "../components/Button";
 import { BACKEND_URL } from "../atoms/user";
 import { useUser } from "../hooks/useUser";
 import { v4 as uuidv4 } from 'uuid';
-import { useState } from "react";
 
 const gameId = uuidv4();
 function getUrl(){
     const user = useUser();
     return user;
 }
-const getOrientation = () => window.screen.orientation.type;
-const [isLandscape, setIsLandscape] = useState(getOrientation());
-
-screen.orientation.onchange = function() {
-  setIsLandscape(getOrientation());
-};
-
+let type = window.screen.orientation.type;
+screen.orientation.onchange = () => {
+ type = window.screen.orientation.type;
+}
 export function Landing(){
     const navigate = useNavigate();
     return (<div className="flex justify-center pt-20">
         <div className="max-w-screen-lg max-h-screen-lg">
         <h1 className="md:text-6xl text-4xl font-bold text-white text-center">Let's Play Chess Together</h1>
             <div className="flex justify-center gap-4">
-                {isLandscape === 'landscape-primary' || isLandscape === 'landscape-secondary' ? (<div className="flex justify-center mt-5 md:mt-20"><img src="chessImage.png" className="h-96 "></img></div>) :''}            
+                {type === 'landscape-primary' || type === 'landscape-secondary' ? (<div className="flex justify-center mt-5 md:mt-20"><img src="chessImage.png" className="h-96 "></img></div>) :''}            
                 <div className="flex flex-col justify-center mt-20 gap-4">
                         {getUrl() == null ? <Button onClick={ () => navigate(`/login`)} content="Login"></Button>:
                         <Button onClick={ () => window.open(`${BACKEND_URL}/auth/logout`, '_self')} content="logout"/>}
