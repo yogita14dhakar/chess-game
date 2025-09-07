@@ -10,11 +10,11 @@ function getUrl(){
     const user = useUser();
     return user;
 }
-const type = window.screen.orientation.type;
-
-const [isLandscape, setIsLandscape] = useState(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary' ? true : false);
+console.log('isLandscape');
+const [isLandscape, setIsLandscape] = useState((screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary') ? true : false);
+console.log(isLandscape);
 useEffect(()=>{
-    setIsLandscape(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary' ? true : false);
+    setIsLandscape((screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary') ? true : false);
 },[window.screen.orientation.type]);
 
 export function Landing(){
