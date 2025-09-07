@@ -10,7 +10,7 @@ function getUrl(){
     const user = useUser();
     return user;
 }
-console.log('isLandscape');
+console.log(screen.orientation.type);
 const [isLandscape, setIsLandscape] = useState((screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary') ? true : false);
 console.log(isLandscape);
 useEffect(()=>{
