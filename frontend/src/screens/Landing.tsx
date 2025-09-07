@@ -10,15 +10,15 @@ function getUrl(){
     const user = useUser();
     return user;
 }
-console.log(screen.orientation.type);
-const [isLandscape, setIsLandscape] = useState((screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary') ? true : false);
-console.log(isLandscape);
-useEffect(()=>{
-    setIsLandscape((screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary') ? true : false);
-},[window.screen.orientation.type]);
 
 export function Landing(){
     const navigate = useNavigate();
+    const [isLandscape, setIsLandscape] = useState(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary');
+
+    useEffect(()=>{
+        setIsLandscape(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary');
+    },[window.screen.orientation.type]);
+    
     return (<div className="flex justify-center pt-20">
         <div className="max-w-screen-lg max-h-screen-lg">
         <h1 className="md:text-6xl text-4xl font-bold text-white text-center">Let's Play Chess Together</h1>
