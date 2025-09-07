@@ -13,9 +13,9 @@ function getUrl(){
 
 const [isLandscape, setIsLandscape] = useState(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary');
 
-useEffect(() => {
-        setIsLandscape(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary');
-}, [screen.orientation.type]);
+screen.orientation.onchange = function() {
+  setIsLandscape(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary');
+};
 
 export function Landing(){
     const navigate = useNavigate();
