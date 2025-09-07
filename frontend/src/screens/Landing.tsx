@@ -15,7 +15,7 @@ const [isLandscape, setIsLandscape] = useState(screen.orientation.type === 'land
 
 useEffect(() => {
         setIsLandscape(screen.orientation.type === 'landscape-primary' || screen.orientation.type === 'landscape-secondary');
-}, [screen.orientation]);
+}, [screen.orientation.type]);
 
 export function Landing(){
     const navigate = useNavigate();
