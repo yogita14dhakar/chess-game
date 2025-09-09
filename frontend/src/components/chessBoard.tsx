@@ -310,6 +310,12 @@ export const ChessBoard = memo(
                           handleMouseUp(e, squareRepresentation);
                         }}
                         
+                        onDragOver={(e) => {
+                            e.preventDefault();
+                        }}
+                        onDrop={(e) => {
+                            handleMouseUp(e, squareRepresentation);
+                        }}
                       >
                         <div className="w-full justify-center flex h-full relative">
                           {square && 
@@ -318,12 +324,8 @@ export const ChessBoard = memo(
                           onDragStart={(e)=> {
                             handleMouseDown(e, squareRepresentation)
                           }}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                          }}
-                          onDrop={(e) => {
-                            handleMouseUp(e, squareRepresentation);
-                          }}><ChessSquare square={square}/></div>}
+                          
+                          ><ChessSquare square={square}/></div>}
                           {isFlipped
                             ? i === 8 && <LetterNotation label={labels[j]} isMainBoxColor={j % 2 === 0} />
                             : i === 1 && <LetterNotation label={labels[j]} isMainBoxColor={j % 2 !== 0} />}
