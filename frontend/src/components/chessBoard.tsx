@@ -309,23 +309,9 @@ export const ChessBoard = memo(
                         onMouseUp={(e) => {
                           handleMouseUp(e, squareRepresentation);
                         }}
-                        
-                        onDragOver={(e) => {
-                            e.preventDefault();
-                        }}
-                        onDrop={(e) => {
-                            handleMouseUp(e, squareRepresentation);
-                        }}
                       >
                         <div className="w-full justify-center flex h-full relative">
-                          {square && 
-                          <div // drag and drop
-                          draggable='true'
-                          onDragStart={(e)=> {
-                            handleMouseDown(e, squareRepresentation)
-                          }}
-                          
-                          ><ChessSquare square={square}/></div>}
+                          {square && <ChessSquare square={square}/>}
                           {isFlipped
                             ? i === 8 && <LetterNotation label={labels[j]} isMainBoxColor={j % 2 === 0} />
                             : i === 1 && <LetterNotation label={labels[j]} isMainBoxColor={j % 2 !== 0} />}
