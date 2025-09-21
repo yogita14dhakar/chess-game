@@ -1,4 +1,4 @@
-frontend/public/chessImage.png
+public/chessImage.png
 # 🚀 Play Chess
 
 *real‑time free chess web app supporting multiplayer matches you can also share the link with your friends
@@ -39,16 +39,16 @@ frontend/public/chessImage.png
 ---
 
 ## 🎮 Usage
-** Home Page **
+__Home Page__
 ![Capture](https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b)
 
-** Login Page **
+__Login Page__ 
 ![Capture2](https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e)
 
-** user v/s Machine **
+__user v/s Machine__
 ![Capture3](https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c)
 
-** Real time Game between to Players **
+__Real time Game between to Players__
 
 
 ---
