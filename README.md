@@ -18,7 +18,7 @@
 
 * 🧠 Move legality & check/checkmate validation using a chess rules engine
 
-* 💾 Persistent games (resume unfinished matches, store move histor
+* 💾 Persistent games (resume unfinished matches, store move history)
 
 ---
 
