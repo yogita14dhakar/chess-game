@@ -1,6 +1,6 @@
 import { Chess, Move, Square } from 'chess.js';
 import { INIT_GAME, MOVE, AuthProvider, GAME_ENDED} from "./modules/src/Message";
-import { insertUser, update} from "./modules/src/db";
+import { insertUser, update, findMany} from "./modules/src/db";
 import { randomUUID } from 'crypto';
 import { socketManager, User } from './SocketManager';
 import { GameResult, GameStatus } from './modules/src/Message';
@@ -104,7 +104,7 @@ export class Game{
     async updateSecondPlayer(player2UserId: string) {
     this.player2UserId = player2UserId;
     const q = `SELECT * FROM User WHERE id IN ('${this.player1UserId}', '${this.player2UserId}')`
-    let users = await update(q);
+    let users = await findMany(q);
     try {
       await this.createGameInDb();
     } catch (e) {
@@ -272,7 +272,7 @@ export class Game{
   async endGame(status: GameStatus, result: GameResult) {
     await update(`UPDATE Game SET status = '${status}', result = '${result}', endAt = CURRENT_TIMESTAMP() WHERE id = '${this.gameId}'`);
     const updatedGame = await update(`SELECT * FROM Game WHERE id = '${this.gameId}'`);
-    const allMoves = await update(`SELECT * FROM Move WHERE gameId = '${updatedGame?.id}' ORDER BY moveNumber ASC`);
+    const allMoves = await findMany(`SELECT * FROM Move WHERE gameId = '${updatedGame?.id}' ORDER BY moveNumber ASC`);
     const whitePlayer = await update(`SELECT * FROM User WHERE id = '${updatedGame?.whitePlayerId}'`);
     const blackPlayer = await update(`SELECT * FROM User WHERE id = '${updatedGame?.blackPlayerId}'`);
     socketManager.broadcast(
