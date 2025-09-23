@@ -1,4 +1,4 @@
-public/chessImage.png
+https://github.com/yogita14dhakar/chess-game/tree/master/frontend/public/chessImage.png
 # 🚀 Play Chess
 
 *real‑time free chess web app supporting multiplayer matches you can also share the link with your friends
@@ -25,6 +25,7 @@ public/chessImage.png
 ## 🛠 Tech Stack
 
 * **Frontend:** React + Vite, Tailwind CSS
+* **Libraries:** recoil, dotenv, cookie-parser, cors
 * **Realtime:** Socket.IO
 * **Backend:** Node.js, Express
 * **Auth:** Passport.js (Google + GitHub strategies), jwt
@@ -39,13 +40,17 @@ public/chessImage.png
 ---
 
 ## 🎮 Usage
+
 __Home Page__
+
 ![Capture](https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b)
 
 __Login Page__ 
+
 ![Capture2](https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e)
 
 __user v/s Machine__
+
 ![Capture3](https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c)
 
 __Real time Game between to Players__
@@ -53,18 +58,21 @@ __Real time Game between to Players__
 
 ---
 
-## 🗺 Roadmap / Future Improvements
+## 🗺 Future Improvements
 
-* [ ] Add charts for expense categories
-* [ ] Multi-user login
-* [ ] Export data as PDF/CSV
+* [ ] Add inChat option in live game
+* [ ] user dashboard to view previous games history
+* [ ] imporving moves in chess with machine 
 
 ---
 
 ## 💡 What I Learned
 
 * Learned how to manage state using React hooks
-* Gained experience with authentication 
+* Gained experience with authentication using oauth and jwt
+* Learned how to work with websockets
+* worked with MySQL connection pool and queries and storing session data on server
+* Learned about CORS policy and how to work with it
 * Improved my understanding of REST APIs
 
 ---
