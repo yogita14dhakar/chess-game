@@ -1,4 +1,4 @@
-<a href="url"><img src="frontend/public/chessImage.png" align="center" height="50%" width="50%" ></a>
+<a href="url"><img src="frontend/public/chessImage.png" height="50%" width="50%" ></a>
 # 🚀 Play Chess
 
 *real‑time free chess web app supporting multiplayer matches you can also share the link with your friends
@@ -42,19 +42,16 @@
 ## 🎮 Usage
 
 __Home Page__
-
-![Capture](https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b)
+<a href="url"><img src="(https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b)" height="50%" width="50%" ></a>
 
 __Login Page__ 
-
-![Capture2](https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e)
+<a href="url"><img src="(https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e)" height="50%" width="50%" ></a>
 
 __user v/s Machine__
-
-![Capture3](https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c)
+<a href="url"><img src="(https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c)" height="50%" width="50%" ></a>
 
 __Real time Game between to Players__
-
+<a href="url"><img src="frontend/public/chessImage.png" height="50%" width="50%" ></a>
 
 ---
 
