@@ -1,4 +1,4 @@
-![chess_image](https://github.com/yogita14dhakar/chess-game/tree/master/frontend/public/chessImage.png?raw=true)
+![chess_image](frontend/public/chessImage.png?raw=true)
 # 🚀 Play Chess
 
 *real‑time free chess web app supporting multiplayer matches you can also share the link with your friends
