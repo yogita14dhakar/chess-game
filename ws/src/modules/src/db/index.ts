@@ -58,12 +58,12 @@ export const update = async (q: string) => {
     }
 }
 
-export const findMany = async (q:string)=>{
+export const transcationUpdate = async (q:string)=>{
     let connection;
     try{
         connection = await connPool.getConnection();
         const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(q);
-        return JSON.parse(JSON.stringify(rows));
+        if (err) throw err;
     }catch(err){
         console.log(err);
     }finally {
@@ -80,7 +80,7 @@ export const transaction = async (q1: string , q2: string, VALUES: any[])=>{
     try{
         await connection.beginTransaction();
         await insertUser(q1, VALUES);
-        await update(q2);
+        await transcationUpdate(q2);
         await connection.commit();
     }catch(error){
         if (connection) await connection.rollback();
