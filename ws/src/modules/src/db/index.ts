@@ -64,7 +64,7 @@ export const findMany = async (q: string) => {
         connection = await connPool.getConnection();
         const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.query(q);
             if(err) throw err;
-            return JSON.parse(JSON.stringify(rows[]));
+            return JSON.parse(JSON.stringify(rows));
     }catch(err){
         console.log(err);
     }finally {
