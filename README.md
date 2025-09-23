@@ -42,13 +42,13 @@
 ## 🎮 Usage
 
 __Home Page__
-<a href="url"><img src="(https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b)" height="50%" width="50%" ></a>
+<a href="url"><img src="![home_page](https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b)" height="50%" width="50%" ></a>
 
 __Login Page__ 
-<a href="url"><img src="(https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e)" height="50%" width="50%" ></a>
+<a href="url"><img src="![login_page](https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e)" height="50%" width="50%" ></a>
 
 __user v/s Machine__
-<a href="url"><img src="(https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c)" height="50%" width="50%" ></a>
+<a href="url"><img src="![user v/s machine](https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c)" height="50%" width="50%" ></a>
 
 __Real time Game between to Players__
 <a href="url"><img src="frontend/public/chessImage.png" height="50%" width="50%" ></a>
