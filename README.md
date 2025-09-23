@@ -1,4 +1,4 @@
-![chess_image](frontend/public/chessImage.png?raw=true)
+<a href="url"><img src="frontend/public/chessImage.png" align="left" height="48" width="48" ></a>
 # 🚀 Play Chess
 
 *real‑time free chess web app supporting multiplayer matches you can also share the link with your friends
