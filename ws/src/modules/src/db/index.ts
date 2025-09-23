@@ -58,6 +58,23 @@ export const update = async (q: string) => {
     }
 }
 
+export const findMany = async (q: string) => {
+    let connection;
+    try{
+        connection = await connPool.getConnection();
+        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.query(q);
+            if(err) throw err;
+            return JSON.parse(JSON.stringify(rows));
+    }catch(err){
+        console.log(err);
+    }finally {
+        await sleep(2000);
+    
+        // Don't forget to release the connection when finished!
+        if (connection) connection.release();
+    }
+}
+
 export const transcationUpdate = async (q:string)=>{
     let connection;
     try{
