@@ -66,7 +66,7 @@ export const findMany = async (q: string) => {
       
             if(err) throw err;
       console.log(JSON.parse(JSON.stringify(rows)));
-            return JSON.parse(JSON.stringify(rows[][]));
+            return JSON.parse(JSON.stringify(rows));
     }catch(err){
         console.log(err);
     }finally {
