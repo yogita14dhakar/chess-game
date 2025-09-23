@@ -21,7 +21,6 @@ export const connPool = createPool({
   idleTimeout           : 60000, // idle connections timeout, in milliseconds, the default value 60000
   queueLimit            : 0,
   enableKeepAlive       : true,
-  connectTimeout        : 10000, // 10s
 });
 
 export const insertUser = async (q:string, VALUES: any[][])=>{
