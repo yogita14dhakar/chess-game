@@ -63,7 +63,6 @@ export const transcationUpdate = async (q:string)=>{
     try{
         connection = await connPool.getConnection();
         const [rows]: [mysql.RowDataPacket[], mysql.FieldPacket[]] = await connection.query(q);
-        if (err) throw err;
     }catch(err){
         console.log(err);
     }finally {
