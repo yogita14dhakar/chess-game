@@ -105,6 +105,7 @@ export class Game{
     this.player2UserId = player2UserId;
     const q = `SELECT * FROM User WHERE id IN ('${this.player1UserId}', '${this.player2UserId}')`
     let users = await findMany(q);
+        console.log(users);
     try {
       await this.createGameInDb();
     } catch (e) {
