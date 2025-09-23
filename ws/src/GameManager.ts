@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import { Game } from "./Game";
 import { socketManager, User } from './SocketManager';
-import { update, findMany } from './modules/src/db';
+import { update } from './modules/src/db';
 import { 
     INIT_GAME,
     MOVE,
@@ -150,7 +150,7 @@ export class GameManager{
                 const gameFromDb = await update(`SELECT * FROM Game WHERE id = '${gameId}'`); 
                 const whitePlayer = await update(`SELECT * FROM User WHERE id = '${gameFromDb.whitePlayerId}'`);
                 const blackPlayer = await update(`SELECT * FROM User WHERE id = '${gameFromDb.blackPlayerId}'`);
-                const moves = await findMany(`SELECT * FROM Move WHERE gameId = '${gameFromDb?.id}' ORDER BY moveNumber ASC`);
+                const moves = await update(`SELECT * FROM Move WHERE gameId = '${gameFromDb?.id}' ORDER BY moveNumber ASC`);
                 // There is a game created but no second player available
         
                 if (availableGame && !availableGame.player2UserId) {
