@@ -36,7 +36,30 @@
 ---
 
 ## ⚡ Getting Started
-
+**Prerequisites:**
+ node v20.13.1
+ npm 10.5.2
+ MySQL Workbench 8.0 CE
+  
+* Open a command shell/window:
+   * git clone https://github.com/yogita14dhakar/chess-game.git <repo_name>
+   
+* cd <repo_name> to change directory to where you cloned the repo
+  
+* create database in mysql workbench in your local machine ![schema](Schema.sql)
+  
+* frontend: npm install and npm run dev in terminal (git bash)
+  
+* backend:
+  * npm install to install dependencies
+  * npx tsc (to compile)
+  * node dist/src/index.js
+    
+* websockets:
+  * npm install to install dependencies
+  * npx tsc (to compile)
+  * node dist/src/index.js
+    
 ---
 
 ## 🎮 Usage
