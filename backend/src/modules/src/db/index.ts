@@ -1,5 +1,6 @@
 import mysql, { FieldPacket } from 'mysql2';
 import dotenv from 'dotenv';
+import { createPool } from 'mysql2/promise';
 
 dotenv.config();
 
@@ -8,7 +9,7 @@ function sleep(ms:number) {
 }
 
 // Create the connection pool. The pool-specific settings are the defaults
-export const connPool = mysql.createPool({
+export const connPool = createPool({
   host                  : process.env.HOST,
   user                  : process.env.USER,
   password              : process.env.PASSWORD,
@@ -23,36 +24,36 @@ export const connPool = mysql.createPool({
 });
 
 export const insertUser = async (q:string, VALUES: any[][])=>{
-    // let connection;
+    let connection;
     try{
-        // connection = await connPool.getConnection();
-        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q, [VALUES]);
+        connection = await connPool.getConnection();
+        const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.execute(q, [VALUES]);
             if(err) throw err;
             return;
     }catch(err){
         console.log(err);
     }
-    // finally {
-    //     await sleep(2000);
+    finally {
+        await sleep(2000);
     
-    //     // Don't forget to release the connection when finished!
-    //     if (connection) connection.release();
-    // }
+        // Don't forget to release the connection when finished!
+        if (connection) connection.release();
+    }
 }
 
 export const update = async (q: string) => {
-    // let connection;
+    let connection;
     try{
-        // connection = await connPool.getConnection();
-        const [rows]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q);
+        connection = await connPool.getConnection();
+        const [rows]: [mysql.RowDataPacket[], FieldPacket[]] = await connection.execute(q);
             return JSON.parse(JSON.stringify(rows[0]));
     }catch(err){
         console.log(err);
     }
-    // finally {
-    //     await sleep(2000);
+    finally {
+        await sleep(2000);
     
-    //     // Don't forget to release the connection when finished!
-    //     if (connection) connection.release();
-    // }
+        // Don't forget to release the connection when finished!
+        if (connection) connection.release();
+    }
 }
