@@ -1,8 +1,6 @@
 import mysql, { FieldPacket } from 'mysql2';
 import dotenv from 'dotenv';
 
-import { createPool } from 'mysql2/promise';
-
 dotenv.config();
 
 function sleep(ms:number) {
@@ -10,11 +8,12 @@ function sleep(ms:number) {
 }
 
 // Create the connection pool. The pool-specific settings are the defaults
-export const connPool = createPool({
+export const connPool = mysql.createPool({
   host                  : process.env.HOST,
   user                  : process.env.USER,
   password              : process.env.PASSWORD,
   database              : process.env.DATABASE,
+  port                  : 3306,
   waitForConnections    : true,
   connectionLimit       : 3,
   maxIdle               : 3, // max idle connections, the default value is the same as `connectionLimit`
