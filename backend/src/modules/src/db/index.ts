@@ -28,6 +28,7 @@ export const insertUser = async (q:string, VALUES: any[][])=>{
     try{
         const connection = await connPool.getConnection();
         if(connection) console.log("Connected to database");
+      else console.log("not connected to database");
         const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q, [VALUES]);
             if(err) throw err;
             return;
@@ -47,6 +48,7 @@ export const update = async (q: string) => {
     try{
         const connection = await connPool.getConnection();
         if(connection) console.log("Connected to database");
+      else console.log("not connected to database");
         const [rows]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q);
             return JSON.parse(JSON.stringify(rows[0]));
     }catch(err){
