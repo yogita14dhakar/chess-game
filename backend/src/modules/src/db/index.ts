@@ -1,4 +1,5 @@
 import { FieldPacket } from 'mysql2';
+import fs from 'fs';
 import dotenv from 'dotenv';
 
 import mysql from 'mysql2/promise';
@@ -10,20 +11,13 @@ function sleep(ms:number) {
 }
 
 // Create the connection pool. The pool-specific settings are the defaults
-export const connPool = mysql.createPool(`${process.env.DATABASE_URL}`
-//   {
-//   host                  : process.env.HOST,
-//   user                  : process.env.USER,
-//   password              : process.env.PASSWORD,
-//   database              : process.env.DATABASE,
-//   waitForConnections    : true,
-//   connectionLimit       : 3,
-//   maxIdle               : 3, // max idle connections, the default value is the same as `connectionLimit`
-//   idleTimeout           : 60000, // idle connections timeout, in milliseconds, the default value 60000
-//   queueLimit            : 0,
-//   enableKeepAlive       : true,
-// }
-                                  );
+export const connPool = mysql.createPool(
+  `${process.env.DATABASE_URL}`,
+  ssl: {
+    // Read the certificate file from your project directory
+    ca: fs.readFileSync('./ca-cert.pem'),
+  }
+   );
 
 export const insertUser = async (q:string, VALUES: any[][])=>{
     // let connection;
