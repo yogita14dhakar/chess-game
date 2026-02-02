@@ -1,5 +1,4 @@
 import { FieldPacket } from 'mysql2';
-import fs from 'fs';
 import dotenv from 'dotenv';
 
 import mysql from 'mysql2/promise';
@@ -15,7 +14,7 @@ export const connPool = mysql.createPool({
     uri                 :  `${process.env.DATABASE_URL}`,
     ssl                 :  {
                             // Read the certificate file
-                            ca: fs.readFileSync('/backend/ca.pem'),
+                            ca: process.env.DB_SSL_CA,
                             rejectUnauthorized: true,
                            },
     waitForConnections  :  true,
