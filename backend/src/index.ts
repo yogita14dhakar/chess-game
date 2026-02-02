@@ -53,6 +53,7 @@ app.use(
       origin: allowedHosts,
       methods: 'GET,POST,PUT,DELETE',
       credentials: true,
+      allowedHeaders: ['Content-Type', 'Authorization']
     }),
 );
 
