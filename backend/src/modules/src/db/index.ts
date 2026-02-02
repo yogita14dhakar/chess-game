@@ -10,7 +10,7 @@ function sleep(ms:number) {
 }
 
 // Create the connection pool. The pool-specific settings are the defaults
-export const connPool = mysql.createPool('process.env.DATABASE_URL'
+export const connPool = mysql.createPool(`${process.env.DATABASE_URL}`
 //   {
 //   host                  : process.env.HOST,
 //   user                  : process.env.USER,
