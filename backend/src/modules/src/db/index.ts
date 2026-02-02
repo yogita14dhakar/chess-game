@@ -1,7 +1,7 @@
-import mysql, { FieldPacket } from 'mysql2';
+import { FieldPacket } from 'mysql2';
 import dotenv from 'dotenv';
 
-import { createPool } from 'mysql2/promise';
+import { mysql } from 'mysql2/promise';
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ function sleep(ms:number) {
 }
 
 // Create the connection pool. The pool-specific settings are the defaults
-export const connPool = createPool('process.env.DATABASE_URL'
+export const connPool = mysql.createPool('process.env.DATABASE_URL'
 //   {
 //   host                  : process.env.HOST,
 //   user                  : process.env.USER,
