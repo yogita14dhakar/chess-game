@@ -11,10 +11,11 @@ function sleep(ms:number) {
 
 // Create the connection pool. The pool-specific settings are the defaults
 export const connPool = createPool({
-  host                  : process.env.HOST,
-  user                  : process.env.USER,
-  password              : process.env.PASSWORD,
-  database              : process.env.DATABASE,
+  // host                  : process.env.HOST,
+  // user                  : process.env.USER,
+  // password              : process.env.PASSWORD,
+  // database              : process.env.DATABASE,
+  connectionString      : process.env.DATABASE_URL,
   waitForConnections    : true,
   connectionLimit       : 3,
   maxIdle               : 3, // max idle connections, the default value is the same as `connectionLimit`
