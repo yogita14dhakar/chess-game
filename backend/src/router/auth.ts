@@ -54,14 +54,14 @@ router.post('/guest', async (req: Request, res: Response) => {
 router.get('/refresh', async (req: Request, res: Response) => {
   if (req.user) {
     const user = req.user as UserDetails; 
-    // const q = `SELECT * FROM User WHERE id = '${user.id}'`;
-    // let userDb = await update(q);
-    const token = jwt.sign({ userId: user.id, name: user.name}, JWT_SECRET);
-    console.log(user);
+    const q = `SELECT * FROM User WHERE id = '${user.id}'`;
+    let userDb = await update(q);
+    // const token = jwt.sign({ userId: user.id, name: user.name}, JWT_SECRET);
+    console.log(userDb);
     res.json({
-      token,
-      id: user.id,
-      name: user.name,
+      id: userDb.id,
+      name: userDb.name,
+      isGuest: false,
     }); 
   }
   else if (req.cookies && req.cookies.guest) {
