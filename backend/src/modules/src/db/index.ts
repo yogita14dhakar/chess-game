@@ -11,13 +11,16 @@ function sleep(ms:number) {
 }
 
 // Create the connection pool. The pool-specific settings are the defaults
-export const connPool = mysql.createPool(
-  `${process.env.DATABASE_URL}`,
-  ssl: {
-    // Read the certificate file from your project directory
-    ca: fs.readFileSync('/backend/ca.pem'),
-  }
-   );
+export const connPool = mysql.createPool({
+    uri                 :  `${process.env.DATABASE_URL}`,
+    ssl                 :  {
+                            // Read the certificate file
+                            ca: fs.readFileSync('/backend/ca.pem'),
+                            rejectUnauthorized: true,
+                           },
+    waitForConnections  :  true,
+    connectionLimit     :  10,
+});
 
 export const insertUser = async (q:string, VALUES: any[][])=>{
     // let connection;
