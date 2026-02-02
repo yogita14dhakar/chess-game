@@ -15,7 +15,7 @@ export const connPool = mysql.createPool(
   `${process.env.DATABASE_URL}`,
   ssl: {
     // Read the certificate file from your project directory
-    ca: fs.readFileSync('...../ca.pem'),
+    ca: fs.readFileSync('/ca.pem'),
   }
    );
 
