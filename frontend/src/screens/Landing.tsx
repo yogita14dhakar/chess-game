@@ -4,12 +4,18 @@ import { BACKEND_URL } from "../atoms/user";
 import { useUser } from "../hooks/useUser";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
+import { fetchUserProfile } from "./login.tsx";
 
 const gameId = uuidv4();
 function getUrl(){
     const user = useUser();
     return user;
 }
+
+window.onload = async () => {
+    // This runs AFTER the user is redirected back from the login flow
+    const user = await fetchUserProfile();
+};
 
 export function Landing(){
     const navigate = useNavigate();
