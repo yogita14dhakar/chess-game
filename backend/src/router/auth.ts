@@ -51,10 +51,10 @@ router.post('/guest', async (req: Request, res: Response) => {
   
 router.get('/refresh', async (req: Request, res: Response) => {
   if (req.user) {
-    // const user = req.user as UserDetails; 
+    const user = req.user as UserDetails; 
     res.json({
-      id: req.user.id,
-      name: req.user.name,
+      id: user.id,
+      name: user.name,
       isGuest: false,
     }); 
   }
