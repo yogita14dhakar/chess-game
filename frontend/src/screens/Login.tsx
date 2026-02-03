@@ -15,7 +15,7 @@ const Login = () => {
       window.location.href = `${BACKEND_URL}/auth/github`;
     }
 
-    const fetchUserProfile = async() => {
+    export const fetchUserProfile = async() => {
       try {
         const response = await fetch(`${BACKEND_URL}/auth/refresh`, {
             method: 'GET',
