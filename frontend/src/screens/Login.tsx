@@ -14,31 +14,6 @@ const Login = () => {
     const github = async() => {
       window.location.href = `${BACKEND_URL}/auth/github`;
     }
-
-    export const fetchUserProfile = async() => {
-      try {
-        const response = await fetch(`${BACKEND_URL}/auth/refresh`, {
-            method: 'GET',
-            credentials: 'include', 
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.status === 401) {
-            console.warn('User is not authenticated');
-            return null;
-        }
-
-        const user = await response.json();
-        // setUser(user);
-        // navigate('/');
-
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-      }
-    }
   
     const loginAsGuest = async() => {
       try{
