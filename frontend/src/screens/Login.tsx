@@ -15,20 +15,49 @@ const Login = () => {
       window.location.href = `${BACKEND_URL}/auth/github`;
     }
 
+    const fetchUserProfile = async() => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/auth/profile`, {
+            method: 'GET',
+            credentials: 'include', 
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 401) {
+            console.warn('User is not authenticated');
+            return null;
+        }
+
+        const user = await response.json();
+        setUser(user);
+        navigate('/');
+
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    }
+  
     const loginAsGuest = async() => {
-      const response = await fetch(`${BACKEND_URL}/auth/guest`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: (guestName.current && guestName.current.value) || 'Guest',
-        }),
-      });
-      const user = await response.json();
-      setUser(user);
-      navigate('/')
+      try{
+        const response = await fetch(`${BACKEND_URL}/auth/guest`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            name: (guestName.current && guestName.current.value) || 'Guest',
+          }),
+        });
+        const user = await response.json();
+        setUser(user);
+        navigate('/');
+      }catch(error){
+        console.error('Error in login as guest', error);
+      }
     }
 
   return (
@@ -40,14 +69,20 @@ const Login = () => {
         <div className="mb-8 md:mb-0 md:mr-8 justify-center flex flex-col">
           <div
             className="flex items-center justify-center px-4 py-2 rounded-md mb-4 cursor-pointer bg-white transition-colors hover:bg-gray-300 duration-300"
-            onClick={google}
+            onClick={()=> {
+              google; 
+              fetchUserProfile;
+            }}
           >
             <img src="google.svg" alt="" className="w-6 h-6 mr-2" />
             Sign in with Google
           </div>
           <div
             className="flex items-center justify-center px-4 py-2 rounded-md cursor-pointer bg-white hover:bg-gray-300 transition-colors duration-300"
-            onClick={github}
+            onClick={()=> {
+              github; 
+              fetchUserProfile;
+            }}
           >
             <img src="github.svg" alt="" className="w-6 h-6 mr-2" />
             Sign in with Github
