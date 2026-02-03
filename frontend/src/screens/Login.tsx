@@ -32,8 +32,8 @@ const Login = () => {
         }
 
         const user = await response.json();
-        setUser(user);
-        navigate('/');
+        // setUser(user);
+        // navigate('/');
 
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -69,20 +69,14 @@ const Login = () => {
         <div className="mb-8 md:mb-0 md:mr-8 justify-center flex flex-col">
           <div
             className="flex items-center justify-center px-4 py-2 rounded-md mb-4 cursor-pointer bg-white transition-colors hover:bg-gray-300 duration-300"
-            onClick={()=> {
-              google; 
-              fetchUserProfile;
-            }}
+            onClick={google}
           >
             <img src="google.svg" alt="" className="w-6 h-6 mr-2" />
             Sign in with Google
           </div>
           <div
             className="flex items-center justify-center px-4 py-2 rounded-md cursor-pointer bg-white hover:bg-gray-300 transition-colors duration-300"
-            onClick={()=> {
-              github; 
-              fetchUserProfile;
-            }}
+            onClick={github}
           >
             <img src="github.svg" alt="" className="w-6 h-6 mr-2" />
             Sign in with Github
