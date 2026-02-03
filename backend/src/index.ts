@@ -28,7 +28,7 @@ initPassport();
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
-// app.set('trust proxy', 1);
+app.set('trust proxy', 1);
 
   app.use(session({
     store: sessionStore,
