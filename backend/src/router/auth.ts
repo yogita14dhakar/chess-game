@@ -35,7 +35,6 @@ router.post('/guest', async (req: Request, res: Response) => {
     const VALUES = [[guestUUID, `guest-${guestUUID}`, bodyData.name||guestUUID , guestUUID+"@playchess.com", 'GUEST']];   
     await insertUser(q, VALUES);
     const user = await update(`SELECT * FROM User WHERE id = '${guestUUID}'`);
-    console.log(user.name)
     const token = jwt.sign(
       { userId: user.id, name: user.name, isGuest: true },
       JWT_SECRET,
@@ -46,24 +45,20 @@ router.post('/guest', async (req: Request, res: Response) => {
       token: token,
       isGuest: true,
     };
-    console.log(UserDetails);
     res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, secure: true, sameSite: 'none'});
     res.json(UserDetails);
 });
   
 router.get('/refresh', async (req: Request, res: Response) => {
   if (req.user) {
-    const user = req.user as UserDetails; 
-    const q = `SELECT * FROM User WHERE id = '${user.id}'`;
-    let userDb = await update(q);
-    // const token = jwt.sign({ userId: user.id, name: user.name}, JWT_SECRET);
-    console.log(userDb);
+    // const user = req.user as UserDetails; 
     res.json({
-      id: userDb.id,
-      name: userDb.name,
+      id: req.user.id,
+      name: req.user.name,
       isGuest: false,
     }); 
   }
+      
   else if (req.cookies && req.cookies.guest) {
     const decoded = jwt.verify(req.cookies.guest, JWT_SECRET) as userJwtClaims;
     const token = jwt.sign(
@@ -76,7 +71,6 @@ router.get('/refresh', async (req: Request, res: Response) => {
       token: token,
       isGuest: true,
     };
-    console.log(User);
     res.cookie('guest', token, { maxAge: COOKIE_MAX_AGE, secure: true, sameSite: 'none' });
     res.json(User);
   } 
