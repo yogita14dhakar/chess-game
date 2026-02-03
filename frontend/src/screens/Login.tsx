@@ -17,7 +17,7 @@ const Login = () => {
 
     const fetchUserProfile = async() => {
       try {
-        const response = await fetch(`${BACKEND_URL}/auth/profile`, {
+        const response = await fetch(`${BACKEND_URL}/auth/refresh`, {
             method: 'GET',
             credentials: 'include', 
             headers: {
