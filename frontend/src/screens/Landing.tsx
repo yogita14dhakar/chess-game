@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../atoms/user";
 import { useUser } from "../hooks/useUser";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
-import { fetchUserProfile } from "./login.tsx";
+import { fetchUserProfile } from "./Login";
 
 const gameId = uuidv4();
 function getUrl(){
