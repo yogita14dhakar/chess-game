@@ -4,11 +4,15 @@
 
 ## 📌 Project Description
 
-**Let's Play** is a real-time, free chess web application that allows players to compete in multiplayer matches online. Users can create and share game links with friends for instant gameplay. The platform also supports solo play against an AI-powered chess engine.
+**Let's Play** is a real-time, free chess web application that allows players to compete 
+in multiplayer matches online.Users can create and share game links with friends for 
+instant gameplay.The platform also supports solo play against an AI-powered chess engine.
 
-The application provides flexible authentication options including Google login, GitHub login, or guest access, making it easy for users to start playing quickly.
+The application provides flexible authentication options including Google login,
+GitHub login, or guest access, making it easy for users to start playing quickly.
 
-The system leverages real-time communication using Socket.IO and integrates a custom AI engine built using Mini-Max with Alpha-Beta pruning for efficient decision making.
+The system leverages real-time communication using Socket.IO and integrates a custom
+AI engine built using Mini-Max with Alpha-Beta pruning for efficient decision making.
 
 ---
 
