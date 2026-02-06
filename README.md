@@ -1,5 +1,3 @@
----
-
 # ♟️ Let's Play
 
 ## 📌 Project Description
