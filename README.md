@@ -1,77 +1,291 @@
-<a href="url"><img src="frontend/public/chessImage.png" height="30%" width="30%" ></a>
-# 🚀 Play Chess
-
-*real‑time free chess web app supporting multiplayer matches you can also share the link with your friends
-*can also play solo (play vs. machine)
-*Supports login through google/github account or as a guest
-
 ---
 
+# ♟️ Let's Play
+
+## 📌 Project Description
+
+**Let's Play** is a real-time, free chess web application that allows players to compete in multiplayer matches online. Users can create and share game links with friends for instant gameplay. The platform also supports solo play against an AI-powered chess engine.
+
+The application provides flexible authentication options including Google login, GitHub login, or guest access, making it easy for users to start playing quickly.
+
+The system leverages real-time communication using Socket.IO and integrates a custom AI engine built using Mini-Max with Alpha-Beta pruning for efficient decision making.
+
+---
 
 ## ✨ Features
 
-* ♟️ Realtime multiplayer chess with rooms via Socket.IO
+* ♟️ Real-time multiplayer chess matches
+* 🔗 Shareable game links for inviting friends
+* 🤖 Play vs Machine (AI opponent)
+* 🔐 Authentication via:
 
-* 🤖 Play vs. Machine using Mini‑Max + Alpha‑Beta pruning (adjustable depth & heuristics)
- 
-* 🔐 OAuth login with Google and GitHub using Passport.js
+  * Google OAuth
+  * GitHub OAuth
+  * Guest Login
+* ⚡ Real-time game synchronization using Socket.IO
+* 🧠 Chess engine powered by:
 
-* 🧠 Move legality & check/checkmate validation using a chess rules engine
-
-* 💾 Persistent games (resume unfinished matches, store move history)
-
----
-
-## 🛠 Tech Stack
-
-* **Frontend:** React + Vite, Tailwind CSS
-* **Libraries:** recoil, dotenv, cookie-parser, cors
-* **Realtime:** Socket.IO
-* **Backend:** Node.js, Express
-* **Auth:** Passport.js (Google + GitHub strategies), jwt
-* **Database:** MySQL
-* **Cache / Sessions:** bullMQ / express-session, mysql-express-session
-* **Rules/Engine:** chess.js (rules & FEN helpers) + custom Mini‑Max with alpha-beta prunning AI module
+  * chess.js (rules, FEN handling)
+  * Custom Mini-Max + Alpha-Beta Pruning AI
+* 🗄️ MySQL database for persistent storage
+* 📦 Session & queue management using BullMQ and Express Session
 
 ---
 
-## ⚡ Getting Started
-**Prerequisites:**
- node v20.13.1
- npm 10.5.2
- MySQL Workbench 8.0 CE
-  
-* Open a command shell/window:
-   * git clone https://github.com/yogita14dhakar/chess-game.git <repo_name>
-   
-* cd <repo_name> to change directory to where you cloned the repo
-  
-* create database in mysql workbench in your local machine ![schema](Schema.sql)
-  
-* frontend: npm install and npm run dev in terminal (git bash)
-  
-* backend:
-  * npm install to install dependencies
-  * npx tsc (to compile)
-  * node dist/src/index.js
-    
-* websockets:
-  * npm install to install dependencies
-  * npx tsc (to compile)
-  * node dist/src/index.js
-    
+## 🛠️ Tech Stack
+
+### **Frontend**
+
+* React + Vite
+* Tailwind CSS
+
+### **Libraries**
+
+* Recoil (State Management)
+* dotenv
+* cookie-parser
+* cors
+
+### **Backend**
+
+* Node.js
+* Express.js
+
+### **Realtime Communication**
+
+* Socket.IO
+
+### **Authentication**
+
+* Passport.js
+
+  * Google Strategy
+  * GitHub Strategy
+* JWT (JSON Web Tokens)
+
+### **Database**
+
+* MySQL
+
+### **Cache / Session**
+
+* BullMQ
+* express-session
+* mysql-express-session
+
+### **Chess Rules & AI**
+
+* chess.js
+* Custom Mini-Max AI with Alpha-Beta Pruning
+
 ---
 
-## 🎮 Usage
+## 🚀 Installation Steps
 
-__Home_Page__
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/your-username/lets-play.git
+cd lets-play
+```
+
+### 2️⃣ Install Dependencies
+
+#### Frontend
+
+```bash
+cd client
+npm install
+```
+
+#### Backend
+
+```bash
+cd server
+npm install
+```
+
+---
+
+### 3️⃣ Environment Setup
+
+Create `.env` files in both **client** and **server** directories.
+
+#### Example Backend `.env`
+
+```env
+PORT=5000
+
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=letsplay_db
+
+JWT_SECRET=your_secret
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_secret
+
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_secret
+```
+
+---
+
+### 4️⃣ Start Development Servers
+
+#### Start Backend
+
+```bash
+cd server
+npm run dev
+```
+
+#### Start Frontend
+
+```bash
+cd client
+npm run dev
+```
+
+---
+
+## ▶️ Usage Instructions
+
+1. Open the frontend URL (usually `http://localhost:5173`)
+2. Login using:
+
+   * Google
+   * GitHub
+   * Guest Mode
+3. Choose game mode:
+
+   * Multiplayer (Create / Join via link)
+   * Play vs AI
+4. Start playing chess in real-time
+
+---
+
+## 📂 Project Structure
+
+```
+lets-play/
+│
+├── backend/                 
+│   ├── module/
+│   │   ├── components/       
+│   │   ├── pages/            
+│   │   ├── recoil/           
+│   │   ├── socket/           
+│   │   ├── hooks/           
+│   │   ├── utils/           
+│   │   └── assets/         
+│   ├── public/
+│   └── vite.config.js
+│
+├── frontend/                 
+│   ├── config/               
+│   ├── controllers/       
+│   ├── routes/            
+│   ├── middleware/    
+│   ├── models/              
+│   ├── services/           
+│   ├── sessions/      
+│   └── server.js          
+│
+├── ws/                    
+│   ├── events/        
+│   ├── rooms/              
+│   ├── game/               
+│   ├── middleware/          
+│   ├── adapters/             
+│   └── socketServer.js    
+│
+├── .env
+├── package.json
+└── README.md
+
+```
+
+---
+
+## 📸 Screenshots
+
+### Home Page
+
 <a href="url"><img src="https://github.com/user-attachments/assets/9a7a7a92-7b21-4ad3-b046-56c073ba191b" height="50%" width="50%" ></a>
 
-__Login_Page__ 
+### Multiplayer Game Board
+
+<a href="url"><img src="https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c" height="50%" width="50%" ></a>
+
+### Login Page
+
 <a href="url"><img src="https://github.com/user-attachments/assets/97bc48dc-3970-4747-ae73-58ec002fa70e" height="50%" width="50%" ></a>
 
-__Game_Page__
-<a href="url"><img src="https://github.com/user-attachments/assets/b94bceb0-e0af-4ec0-bfa4-f5b6c17cff7c" height="50%" width="50%" ></a>
+---
+
+## 🔌 API Endpoints
+
+### Auth Routes
+
+```
+GET    /auth/google
+GET    /auth/github
+GET    /auth/logout
+GET    /auth/login/failed
+GET    /auth/refresh
+POST   /auth/guest
+```
+
+---
+
+### Game Routes
+
+```
+POST   /api/game/create
+POST   /api/game/join
+GET    /game/:gameId
+POST   /game/computer/:gameId
+```
+
+---
+
+### User Routes
+
+```
+GET    /api/user/profile
+POST   /api/user/guest
+```
+
+---
+
+## 🤝 Contributing Guidelines
+
+Contributions are welcome!
+
+### Steps:
+
+1. Fork the repository
+2. Create a new branch
+
+```bash
+git checkout -b feature/your-feature-name
+```
+
+3. Commit changes
+
+```bash
+git commit -m "Add your message"
+```
+
+4. Push branch
+
+```bash
+git push origin feature/your-feature-name
+```
+
+5. Open Pull Request
 
 ---
 
@@ -91,5 +305,21 @@ __Game_Page__
 * worked with MySQL connection pool and queries and storing session data on server
 * Learned about CORS policy and how to work with it
 * Improved my understanding of REST APIs
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 👩‍💻 Author / Contact
+
+**Project Name:** Let's Play
+**Developer:** Yogita Dhakar
+
+📧 Email: [your-email@example.com](mailto:your-email@example.com)
+🐙 GitHub: [https://github.com/your-username](https://github.com/your-username)
 
 ---
