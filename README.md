@@ -46,12 +46,12 @@ The system leverages real-time communication using Socket.IO and integrates a cu
 
 ### **Backend**
 
-* Node.js
+* Node.js  (v20.13.1)
 * Express.js
 
 ### **Realtime Communication**
 
-* Socket.IO
+* Web Sockets
 
 ### **Authentication**
 
@@ -83,8 +83,8 @@ The system leverages real-time communication using Socket.IO and integrates a cu
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/lets-play.git
-cd lets-play
+git clone https://github.com/yogita14dhakar/chess-game.git
+cd chess-game
 ```
 
 ### 2️⃣ Install Dependencies
@@ -92,14 +92,21 @@ cd lets-play
 #### Frontend
 
 ```bash
-cd client
+cd frontend
 npm install
 ```
 
 #### Backend
 
 ```bash
-cd server
+cd backend
+npm install
+```
+
+#### WS
+
+```bash
+cd ws
 npm install
 ```
 
@@ -112,20 +119,37 @@ Create `.env` files in both **client** and **server** directories.
 #### Example Backend `.env`
 
 ```env
-PORT=5000
+ALLOWED_HOSTS=your_frontend_url
+AUTH_REDIRECT_URL=your_redirect_url
 
-MYSQL_HOST=localhost
-MYSQL_USER=root
-MYSQL_PASSWORD=your_password
-MYSQL_DATABASE=letsplay_db
+DATABASE_URL
+DB_SSL_CA
 
 JWT_SECRET=your_secret
+COOKIE_SECRET=your_secret
 
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_secret
 
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_secret
+```
+
+#### Example ws `.env`
+
+```env
+BACKEND_URL=your_backend_url
+
+DATABASE_URL
+DB_SSL_CA
+
+JWT_SECRET=your_secret
+
+REDIS_DATABASE_NAME=
+REDIS_HOST=
+REDIS_PASSWORD=
+REDIS_PORT=
+REDIS_USERNAME=
 ```
 
 ---
@@ -135,17 +159,22 @@ GITHUB_CLIENT_SECRET=your_github_secret
 #### Start Backend
 
 ```bash
-cd server
+cd backend
 npm run dev
 ```
 
 #### Start Frontend
 
 ```bash
-cd client
+cd frontend
 npm run dev
 ```
+#### Start WS
 
+```bash
+cd ws
+npm run dev
+```
 ---
 
 ## ▶️ Usage Instructions
@@ -167,43 +196,131 @@ npm run dev
 ## 📂 Project Structure
 
 ```
-lets-play/
+chess-game/
 │
-├── backend/                 
-│   ├── module/
-│   │   ├── components/       
-│   │   ├── pages/            
-│   │   ├── recoil/           
-│   │   ├── socket/           
-│   │   ├── hooks/           
-│   │   ├── utils/           
-│   │   └── assets/         
-│   ├── public/
-│   └── vite.config.js
+├── backend/                         # REST API Server (Node.js + Express + TypeScript)
+│   ├── src/
+│   │   ├── modules/                 
+│   │   │   ├── src/
+│   │   │   |    ├── db/              # Database access layer
+│   │   │   |    │   └── index.ts
+│   │   │   |    └── Message.ts      
+│   │   │   └── const.ts        
+│   │   ├── router/          # API routers
+│   │   │   └── auth.ts              
+│   │   ├── const.ts          
+│   │   ├── index.ts             
+│   │   └── passport.ts
 │
-├── frontend/                 
-│   ├── config/               
-│   ├── controllers/       
-│   ├── routes/            
-│   ├── middleware/    
-│   ├── models/              
-│   ├── services/           
-│   ├── sessions/      
-│   └── server.js          
+├── frontend/                        # React + Vite + Tailwind Client
+│   ├── public/                      # Static assets (pieces, icons, audio)
+│   │   ├── chess pieces images
+│   │   ├── oauth icons (google, github)
+│   │   └── audio assets
+│   │
+│   ├── src/
+│   │   ├── atoms/                  
+│   │   │   ├── chessBoard.ts
+│   │   │   └── user.ts
+│   │   │
+│   │   ├── components/
+│   │   │   ├── chess-board/         # Board rendering components
+│   │   │   │   ├── ChessSquare.tsx
+│   │   │   │   ├── LegalMoveIndicator.tsx
+│   │   │   │   ├── LetterNotation.tsx
+│   │   │   │   └── NumberNotation.tsx
+│   │   │   │
+│   │   │   ├── ui/                  # UI reusable components
+│   │   │   │   ├── WaitOpponent.tsx
+│   │   │   │   ├── alert-dialog.tsx
+│   │   │   │   └── button.tsx
+│   │   │   ├── Button.tsx
+│   │   │   ├── DrawModal.tsx
+│   │   │   ├── ExitGameModal.tsx
+│   │   │   ├── GameEndModal.tsx
+│   │   │   ├── Loader.tsx
+│   │   │   ├── MovesTable.tsx
+│   │   │   ├── ShareGame.tsx
+│   │   │   ├── UserAvatar.tsx
+│   │   │   └── chessBoard.tsx
+│   │   │
+│   │   ├── hooks/                   # Custom React hooks
+│   │   │   ├── computerMove.ts
+│   │   │   ├── usePersistence.ts
+│   │   │   ├── useSocket.ts
+│   │   │   └── useUser.ts
+│   │   │
+│   │   ├── lib/                     
+│   │   │   ├── Message.ts
+│   │   │   ├── const.ts
+│   │   │   └── utils.ts
+│   │   │
+│   │   ├── screens/                 # App screens / routes
+│   │   │   ├── ComputerGame.tsx
+│   │   │   ├── Game.tsx
+│   │   │   ├── Landing.tsx
+│   │   │   ├── Login.tsx
+│   │   │   └── Others.tsx
+│   │   │
+│   │   ├── App.tsx
+│   │   ├── index.css
+│   │   └── main.tsx
 │
-├── ws/                    
-│   ├── events/        
-│   ├── rooms/              
-│   ├── game/               
-│   ├── middleware/          
-│   ├── adapters/             
-│   └── socketServer.js    
+├── ws/                              # WebSocket Server (Socket.IO + Game Engine)
+│   ├── src/
+│   │   ├── auth/                    
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── modules/
+│   │   │   └── src/
+│   │   │   |    ├── db/              
+│   │   │   |    │   └── index.ts
+│   │   │   |    ├── Message.ts       
+│   │   │   ├── const.ts          
+│   │   │   └── queue.ts
+│   │   │
+│   │   ├── Game.ts
+│   │   ├── GameManager.ts
+│   │   ├── SocketManager.ts
+│   │   └── index.ts                
 │
-├── .env
-├── package.json
-└── README.md
-
+├── .gitignore
+├── README.md
+└── Schema.sql 
 ```
+🧠 Architecture Explanation
+
+project follows a 3-layer service architecture:
+
+🎨 Frontend
+
+*UI rendering
+
+*Socket client
+
+*Game interaction
+
+*Local state via Recoil
+
+🧩 Backend (REST API)
+
+*Authentication (Passport + JWT)
+
+*User management
+
+*Game metadata storage
+
+*Session handling
+
+⚡ WS Server (Realtime Engine)
+
+*Multiplayer realtime communication
+
+*Active game state management
+
+*Move validation sync
+
+*Queue + matchmaking handling
 
 ---
 
@@ -241,49 +358,9 @@ POST   /auth/guest
 ### Game Routes
 
 ```
-POST   /api/game/create
-POST   /api/game/join
 GET    /game/:gameId
 POST   /game/computer/:gameId
 ```
-
----
-
-### User Routes
-
-```
-GET    /api/user/profile
-POST   /api/user/guest
-```
-
----
-
-## 🤝 Contributing Guidelines
-
-Contributions are welcome!
-
-### Steps:
-
-1. Fork the repository
-2. Create a new branch
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-3. Commit changes
-
-```bash
-git commit -m "Add your message"
-```
-
-4. Push branch
-
-```bash
-git push origin feature/your-feature-name
-```
-
-5. Open Pull Request
 
 ---
 
@@ -306,18 +383,12 @@ git push origin feature/your-feature-name
 
 ---
 
-## 📜 License
-
-This project is licensed under the **MIT License**.
-
----
-
 ## 👩‍💻 Author / Contact
 
 **Project Name:** Let's Play
 **Developer:** Yogita Dhakar
 
-📧 Email: [your-email@example.com](mailto:your-email@example.com)
-🐙 GitHub: [https://github.com/your-username](https://github.com/your-username)
+📧 Email: [yogitadhakar5@gmail.com](mailto:yogitadhakar5@gmail.com)
+🐙 GitHub: [https://github.com/yogita14dhakar](https://github.com/yogita14dhakar)
 
 ---
