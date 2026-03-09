@@ -52,9 +52,14 @@ router.post('/guest', async (req: Request, res: Response) => {
 router.get('/refresh', async (req: Request, res: Response) => {
   if (req.user) {
     const user = req.user as UserDetails; 
+    const token = jwt.sign(
+        { userId: user.id, name: user.name, isGuest: false },
+        JWT_SECRET
+    );
     res.json({
       id: user.id,
       name: user.name,
+      token: token,
       isGuest: false,
     }); 
   }
