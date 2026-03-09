@@ -12,7 +12,8 @@ export interface userJwtClaims {
   isGuest?: boolean;
 }
 
-export const extractAuthUser = (token: string, ws: WebSocket): User => {
+export const extractAuthUser = (token: string, ws: WebSocket): User => 
+  console.log(token);
   const decoded = jwt.verify(token, JWT_SECRET) as userJwtClaims;
   return new User(ws, decoded);
 };
