@@ -9,7 +9,7 @@ const gameManager = new GameManager();
 
 wss.on("connection", function connection(ws, req){
     //@ts-ignore
-    const query = url.parse(req.url, true).query;
+    const query = url.parse(req.url);
     const link = url.parse(req.url, true);
     const token: string = url.parse(req.url, true).query.token;
     console.log("token", token);
