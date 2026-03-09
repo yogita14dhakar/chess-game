@@ -6,6 +6,7 @@ const ws_URL = "https://chess-ws-5iv3.onrender.com";
 export const useSocket = () => {
     const [socket, setSocket] = useState<WebSocket | null>(null);
     const user = useUser();
+    console.log(user);
     useEffect(()=>{
         if(!user) return;
         const ws = new WebSocket(`${ws_URL}?token=${user.token}`);
