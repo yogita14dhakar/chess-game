@@ -18,11 +18,7 @@ const ChessSquare = ({
     
     <div className="h-full justify-center flex flex-col ">
       {square ? (
-        <img
-          className={w}
-          alt='chess pieces'
-          src={image}
-        />
+        <AdvancedImage cldImg={image} />
       ) : null}
     </div>
   );
