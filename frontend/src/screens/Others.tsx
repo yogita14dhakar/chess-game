@@ -1,4 +1,9 @@
+import { Cloudinary } from 'https://cdn.jsdelivr.net/npm/@cloudinary/url-gen/+esm';
+import { AdvancedImage } from 'https://cdn.jsdelivr.net/npm/@cloudinary/react/+esm';
+
 export function Others(){
+    const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
+    const img = cld.image("sorry");
 return(
     <div className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center">
@@ -10,7 +15,7 @@ return(
     </div>
     </div>
         <div className="flex justify-center mt-5 md:mt-20">
-            <img src="/sorry.png" className="h-40 md:h-80"></img>
+            <AdvancedImage cldImg={img}/>
         </div>
     </div>
 )
