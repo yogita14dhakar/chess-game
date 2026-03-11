@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
 import { Landing } from './screens/Landing';
 import { Game } from './screens/Game';
 import Login from './screens/Login';
