@@ -4,6 +4,8 @@ import { BACKEND_URL } from "../atoms/user";
 import { useUser } from "../hooks/useUser";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
+import { Cloudinary } from 'https://cdn.jsdelivr.net/npm/@cloudinary/url-gen/+esm';
+import { AdvancedImage } from 'https://cdn.jsdelivr.net/npm/@cloudinary/react/+esm';
 
 const gameId = uuidv4();
 function getUrl(){
@@ -14,6 +16,8 @@ function getUrl(){
 export function Landing(){
     const navigate = useNavigate();
     const [isLandscape, setIsLandscape] = useState(screen.orientation.type);
+    const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
+    const img = cld.image("chessImage");
 
     useEffect(()=>{
         const handleOrientation = () => {
@@ -29,7 +33,7 @@ export function Landing(){
         <div className="max-w-screen-lg max-h-screen-lg">
         <h1 className="md:text-6xl text-4xl font-bold text-white text-center">Let's Play Chess Together</h1>
             <div className="flex justify-center gap-4">
-                {isLandscape.includes('landscape') ? (<div className="flex justify-center mt-5 md:mt-20"><img src="chessImage.png" className="h-96 "></img></div>) :''}            
+                {isLandscape.includes('landscape') ? (<div className="flex justify-center mt-5 md:mt-20 "><AdvancedImage cldImg={img}/></div>) :''}            
                 <div className="flex flex-col justify-center mt-20 gap-4">
                         {getUrl() == null ? <Button onClick={ () => navigate(`/login`)} content="Login"></Button>:
                         <Button onClick={ () => window.open(`${BACKEND_URL}/auth/logout`, '_self')} content="logout"/>}
