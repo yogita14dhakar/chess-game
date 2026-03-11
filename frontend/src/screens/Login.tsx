@@ -2,11 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { BACKEND_URL, userAtom } from '../atoms/user';
+import { Cloudinary } from 'https://cdn.jsdelivr.net/npm/@cloudinary/url-gen/+esm';
+import { AdvancedImage } from 'https://cdn.jsdelivr.net/npm/@cloudinary/react/+esm';
 
 const Login = () => {
   const navigate = useNavigate();
   const guestName = useRef<HTMLInputElement>(null);
   const [_, setUser] = useRecoilState(userAtom);
+  const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
+
+    const googleImg = cld.image("google");
+    const githubImg = cld.image("github");
+    const chessImage = cld.image("chessImage");
+
     const google = async() => {
       window.location.href = `${BACKEND_URL}/auth/google`;
     }
@@ -46,14 +54,14 @@ const Login = () => {
             className="flex items-center justify-center px-4 py-2 rounded-md mb-4 cursor-pointer bg-white transition-colors hover:bg-gray-300 duration-300"
             onClick={google}
           >
-            <img src="google.svg" alt="" className="w-6 h-6 mr-2" />
+            <div className="w-6 h-6 mr-2"> <AdvancedImage cldImg={googleImg}/> </div>
             Sign in with Google
           </div>
           <div
             className="flex items-center justify-center px-4 py-2 rounded-md cursor-pointer bg-white hover:bg-gray-300 transition-colors duration-300"
             onClick={github}
           >
-            <img src="github.svg" alt="" className="w-6 h-6 mr-2" />
+            <div className="w-6 h-6 mr-2"> <AdvancedImage cldImg={img}/> </div>
             Sign in with Github
           </div>
         </div>
@@ -79,7 +87,7 @@ const Login = () => {
       </div>
 
       <div className="flex justify-center mt-5 md:mt-20">
-        <img src="/chessImage.png" className="h-96"></img>
+        <AdvancedImage cldImg={chessImage}/>
       </div>
     </div>
   );
