@@ -20,6 +20,7 @@ const ChessSquare = ({
       {square ? (
         <img
           className={w}
+          alt='chess pieces'
           src={image}
         />
       ) : null}
