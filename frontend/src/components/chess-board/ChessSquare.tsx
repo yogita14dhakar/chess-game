@@ -1,4 +1,6 @@
 import { Color, PieceSymbol, Square } from 'chess.js';
+import { Cloudinary } from 'https://cdn.jsdelivr.net/npm/@cloudinary/url-gen/+esm';
+import { AdvancedImage } from 'https://cdn.jsdelivr.net/npm/@cloudinary/react/+esm';
 
 const ChessSquare = ({
   square,
@@ -9,6 +11,8 @@ const ChessSquare = ({
     color: Color;
   };
 }) => {
+  const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
+  const image = cld.image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
   const w = screen.width > 540 && screen.height > 600 ? 'w-[2rem]' : 'w-[1rem]';
   return (
     
@@ -16,7 +20,7 @@ const ChessSquare = ({
       {square ? (
         <img
           className={w}
-          src={`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()} copy`}.png`}
+          src={image}
         />
       ) : null}
     </div>
