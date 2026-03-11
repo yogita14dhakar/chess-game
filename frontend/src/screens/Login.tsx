@@ -61,7 +61,7 @@ const Login = () => {
             className="flex items-center justify-center px-4 py-2 rounded-md cursor-pointer bg-white hover:bg-gray-300 transition-colors duration-300"
             onClick={github}
           >
-            <div className="w-6 h-6 mr-2"> <AdvancedImage cldImg={img}/> </div>
+            <div className="w-6 h-6 mr-2"> <AdvancedImage cldImg={githubImg}/> </div>
             Sign in with Github
           </div>
         </div>
