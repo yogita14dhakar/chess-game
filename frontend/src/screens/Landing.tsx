@@ -15,25 +15,14 @@ function getUrl(){
 
 export function Landing(){
     const navigate = useNavigate();
-    const [isLandscape, setIsLandscape] = useState(screen.orientation.type);
     const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
     const img = cld.image("chessImage");
-
-    useEffect(()=>{
-        const handleOrientation = () => {
-            setIsLandscape(screen.orientation.type);
-        }
-        screen.orientation.addEventListener('change',handleOrientation) 
-        return () => {
-        screen.orientation.removeEventListener('change', handleOrientation);
-    };
-    },[]);
 
     return (<div className="flex justify-center pt-20">
         <div className="max-w-screen-lg max-h-screen-lg">
         <h1 className="md:text-6xl text-4xl font-bold text-white text-center">Let's Play Chess Together</h1>
             <div className="flex justify-center gap-4">
-                {isLandscape.includes('landscape') ? (<div className="flex justify-center mt-5 md:mt-20 "><AdvancedImage cldImg={img}/></div>) :''}            
+                <div className="flex justify-center mt-5 md:mt-20 w-50 h-50"><AdvancedImage cldImg={img}/></div>           
                 <div className="flex flex-col justify-center mt-20 gap-4">
                         {getUrl() == null ? <Button onClick={ () => navigate(`/login`)} content="Login"></Button>:
                         <Button onClick={ () => window.open(`${BACKEND_URL}/auth/logout`, '_self')} content="logout"/>}
