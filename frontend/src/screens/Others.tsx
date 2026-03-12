@@ -15,7 +15,7 @@ return(
     </div>
     </div>
         <div className="flex justify-center mt-5 md:mt-20">
-            <AdvancedImage cldImg={img}/>
+            <AdvancedImage cldImg={img} plugins={[responsive()]}/>
         </div>
     </div>
 )
