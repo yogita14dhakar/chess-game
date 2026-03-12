@@ -2,7 +2,7 @@ import { Color, PieceSymbol, Square } from 'chess.js';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
-import { AdvancedImage , responsive, lazyload } from '@cloudinary/react';
+import { AdvancedImage , responsive } from '@cloudinary/react';
 import { fit } from '@cloudinary/url-gen/actions/resize';
 
 const ChessSquare = ({
