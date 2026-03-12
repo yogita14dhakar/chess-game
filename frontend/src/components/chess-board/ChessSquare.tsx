@@ -25,7 +25,7 @@ const ChessSquare = ({
     
     <div className="h-full justify-center flex flex-col ">
       {square ? (
-        <AdvancedImage cldImg={image} plugins={[responsive(), lazyload()]}/>
+        <AdvancedImage cldImg={image} plugins={[responsive()]}/>
       ) : null}
     </div>
   );
