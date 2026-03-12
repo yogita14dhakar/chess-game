@@ -13,13 +13,12 @@ const ChessSquare = ({
     color: Color;
   };
 }) => {
-  const w = screen.width > 540 && screen.height > 600 ? '32' : '16';
   const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
   const image = cld
       .image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
       .format('auto') 
       .quality('auto')
-      .resize(auto().gravity(autoGravity()).width(w).height(w));
+      .resize(auto().gravity(autoGravity()).width(400).height(400));
  
   return (
     
