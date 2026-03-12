@@ -5,7 +5,7 @@ import { BACKEND_URL, userAtom } from '../atoms/user';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
-import { AdvancedImage , responsive, lazyload } from '@cloudinary/react';
+import { AdvancedImage , responsive } from '@cloudinary/react';
 
 
 const Login = () => {
@@ -94,7 +94,7 @@ const Login = () => {
       </div>
 
       <div className="flex justify-center mt-5 md:mt-20">
-        <AdvancedImage cldImg={chessImage} plugins={[responsive(), lazyload()]}/>
+        <AdvancedImage cldImg={chessImage} plugins={[responsive()]}/>
       </div>
     </div>
   );
