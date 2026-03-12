@@ -22,7 +22,9 @@
     "react-router-dom": "^6.27.0",
     "recoil": "^0.7.7",
     "tailwind-merge": "^2.5.5",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "@cloudinary/url-gen": "^1.22.0", 
+    "@cloudinary/react": "^1.14.4",
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
