@@ -1,6 +1,6 @@
 import { Color, PieceSymbol, Square } from 'chess.js';
-import { Cloudinary } from 'https://cdn.jsdelivr.net/npm/@cloudinary/url-gen/+esm';
-import { AdvancedImage } from 'https://cdn.jsdelivr.net/npm/@cloudinary/react/+esm';
+import {AdvancedImage} from '@cloudinary/react';
+import {Cloudinary} from "@cloudinary/url-gen";
 
 const ChessSquare = ({
   square,
