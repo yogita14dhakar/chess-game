@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
-import { AdvancedImage , responsive, lazyload } from '@cloudinary/react';
+import { AdvancedImage , responsive } from '@cloudinary/react';
 
 
 const gameId = uuidv4();
@@ -29,7 +29,7 @@ export function Landing(){
         <div className="max-w-screen-lg max-h-screen-lg">
         <h1 className="md:text-6xl text-4xl font-bold text-white text-center">Let's Play Chess Together</h1>
             <div className="flex justify-center gap-4">
-                <div className="flex justify-center mt-5 md:mt-20"><AdvancedImage cldImg={img} plugins={[responsive(), lazyload()]}/></div>           
+                <div className="flex justify-center mt-5 md:mt-20"><AdvancedImage cldImg={img} plugins={[responsive()]}/></div>           
                 <div className="flex flex-col justify-center mt-20 gap-4">
                         {getUrl() == null ? <Button onClick={ () => navigate(`/login`)} content="Login"></Button>:
                         <Button onClick={ () => window.open(`${BACKEND_URL}/auth/logout`, '_self')} content="logout"/>}
