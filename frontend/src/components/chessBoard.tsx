@@ -86,7 +86,8 @@ export const ChessBoard = memo(
     // const [legalMoves, setLegalMoves] = useState<string[]>([]);
 
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const [boxSize, setBoxSize] = useRecoilState(screen.width > 649 ? 80 : 50);
+    const pixels = screen.width > 649 ? 80 : 50;
+    const [boxSize, setBoxSize] = useState(pixels);
     const [gameOver, setGameOver] = useState(false);
 
         useEffect(() => {
