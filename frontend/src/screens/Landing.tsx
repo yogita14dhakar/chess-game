@@ -4,8 +4,9 @@ import { BACKEND_URL } from "../atoms/user";
 import { useUser } from "../hooks/useUser";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
-import { Cloudinary } from 'https://cdn.jsdelivr.net/npm/@cloudinary/url-gen/+esm';
-import { AdvancedImage } from 'https://cdn.jsdelivr.net/npm/@cloudinary/react/+esm';
+import {AdvancedImage} from '@cloudinary/react';
+import {Cloudinary} from "@cloudinary/url-gen";
+
 
 const gameId = uuidv4();
 function getUrl(){
