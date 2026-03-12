@@ -86,9 +86,12 @@ export const ChessBoard = memo(
     // const [legalMoves, setLegalMoves] = useState<string[]>([]);
 
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const boxSize = screen.width > 649 ? 80 : 50;
-    const [gameOver, setGameOver] = useState(false);
     
+    const [gameOver, setGameOver] = useState(false);
+
+        useEffect(() => {
+            const boxSize = screen.width > 649 ? 80 : 50;
+        },[]);
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
         e.preventDefault();
         if (e.button === 2) {
