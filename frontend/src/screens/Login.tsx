@@ -88,7 +88,7 @@ const Login = () => {
       </div>
 
       <div className="flex justify-center mt-5 md:mt-20">
-        <AdvancedImage cldImg={chessImage}/>
+        <AdvancedImage cldImg={chessImage} plugins={[responsive()]}/>
       </div>
     </div>
   );
