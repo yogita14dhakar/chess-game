@@ -18,7 +18,7 @@ const ChessSquare = ({
       .image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
       .format('auto') 
       .quality('auto')
-      .resize(auto().gravity(autoGravity()).width(400).height(400));
+      .resize(auto().gravity(autoGravity()).width(50).height(50));
  
   return (
     
