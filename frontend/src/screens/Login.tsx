@@ -2,8 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { BACKEND_URL, userAtom } from '../atoms/user';
-import {AdvancedImage} from '@cloudinary/react';
-import {Cloudinary} from "@cloudinary/url-gen";
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
 
 
 const Login = () => {
@@ -14,7 +16,11 @@ const Login = () => {
 
     const googleImg = cld.image("google");
     const githubImg = cld.image("github");
-    const chessImage = cld.image("chessImage");
+    const chessImage = cld
+      .image("chessImage")
+      .format('auto')
+      .quality('auto')
+      .resize(auto().gravity(autoGravity()).width(500).height(500)); ;
 
     const google = async() => {
       window.location.href = `${BACKEND_URL}/auth/google`;
