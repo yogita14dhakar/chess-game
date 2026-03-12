@@ -3,6 +3,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage , responsive, lazyload } from '@cloudinary/react';
+import { fit } from '@cloudinary/url-gen/actions/resize';
 
 const ChessSquare = ({
   square,
@@ -18,7 +19,7 @@ const ChessSquare = ({
       .image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
       .format('auto') 
       .quality('auto')
-      .resize(auto().gravity(autoGravity()).width(50).height(50));
+      .resize(fit().width(34).height(34));
  
   return (
     
