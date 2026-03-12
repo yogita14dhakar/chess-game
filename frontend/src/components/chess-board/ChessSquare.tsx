@@ -2,7 +2,7 @@ import { Color, PieceSymbol, Square } from 'chess.js';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
-import { AdvancedImage } from '@cloudinary/react';
+import { AdvancedImage , responsive, lazyload } from '@cloudinary/react';
 
 const ChessSquare = ({
   square,
@@ -25,7 +25,7 @@ const ChessSquare = ({
     
     <div className="h-full justify-center flex flex-col ">
       {square ? (
-        <AdvancedImage cldImg={image} plugins={[responsive()]}/>
+        <AdvancedImage cldImg={image} plugins={[responsive(), lazyload()]}/>
       ) : null}
     </div>
   );
