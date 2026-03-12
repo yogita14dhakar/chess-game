@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
-import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage } from '@cloudinary/react';
 
 
@@ -22,8 +21,7 @@ export function Landing(){
     const img = cld
         .image('chessImage')
         .format('auto') // Optimize delivery by resizing and applying auto-format and auto-quality
-        .quality('auto')
-        .resize(auto().gravity(autoGravity()).width(500).height(500));
+        .quality('auto');
 
     return (<div className="flex justify-center pt-20">
         <div className="max-w-screen-lg max-h-screen-lg">
