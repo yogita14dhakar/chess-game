@@ -13,7 +13,7 @@ const ChessSquare = ({
     color: Color;
   };
 }) => {
-  const w = screen.width > 540 && screen.height > 600 ? 'w-[2rem]' : 'w-[1rem]';
+  const w = screen.width > 540 && screen.height > 600 ? '32' : '16';
   const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
   const image = cld
       .image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
