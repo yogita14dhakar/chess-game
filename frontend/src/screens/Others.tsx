@@ -1,4 +1,4 @@
-import {AdvancedImage} from '@cloudinary/react';
+import {AdvancedImage, responsive, lazyload } from '@cloudinary/react';
 import {Cloudinary} from "@cloudinary/url-gen";
 
 export function Others(){
@@ -15,7 +15,7 @@ return(
     </div>
     </div>
         <div className="flex justify-center mt-5 md:mt-20">
-            <AdvancedImage cldImg={img} plugins={[responsive()]}/>
+            <AdvancedImage cldImg={img} plugins={[responsive(), lazyload()]}/>
         </div>
     </div>
 )
