@@ -1,6 +1,8 @@
 import { Color, PieceSymbol, Square } from 'chess.js';
-import {AdvancedImage} from '@cloudinary/react';
-import {Cloudinary} from "@cloudinary/url-gen";
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
 
 const ChessSquare = ({
   square,
@@ -11,14 +13,19 @@ const ChessSquare = ({
     color: Color;
   };
 }) => {
-  const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
-  const image = cld.image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
   const w = screen.width > 540 && screen.height > 600 ? 'w-[2rem]' : 'w-[1rem]';
+  const cld = new Cloudinary({ cloud: { cloudName: 'dcbp4dscm' } });
+  const image = cld
+      .image(`/${square?.color === 'b' ? `${square.type}` : `${square.type.toUpperCase()}_copy`}`)
+      .format('auto') 
+      .quality('auto')
+      .resize(auto().gravity(autoGravity()).width(w).height(w));
+ 
   return (
     
     <div className="h-full justify-center flex flex-col ">
       {square ? (
-        <AdvancedImage cldImg={image} />
+        <AdvancedImage cldImg={image} plugins={[responsive()]}/>
       ) : null}
     </div>
   );
