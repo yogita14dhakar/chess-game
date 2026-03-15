@@ -86,12 +86,12 @@ export const ChessBoard = memo(
     // const [legalMoves, setLegalMoves] = useState<string[]>([]);
 
     const labels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const pixels = screen.width > 649 ? 80 : 50;
+    const pixels = screen.width > 649 ? 80 : 45;
     const [boxSize, setBoxSize] = useState(pixels);
     const [gameOver, setGameOver] = useState(false);
 
         useEffect(() => {
-            const size = screen.width > 649 ? 80 : 50;
+            const size = screen.width > 649 ? 80 : 45;
             setBoxSize(size);
         },[]);
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>, squareRep: string) => {
