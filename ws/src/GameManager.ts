@@ -148,9 +148,8 @@ export class GameManager{
         
                 let availableGame = this.games.find((game) => game.gameId === gameId);
                 const gameFromDb = await findMany(`SELECT * FROM Game WHERE id = '${gameId}'`); 
-                console.log(gameId, gameFromDb);
-                const whitePlayer = await update(`SELECT * FROM User WHERE id = '${gameFromDb.whitePlayerId}'`);
-                const blackPlayer = await update(`SELECT * FROM User WHERE id = '${gameFromDb.blackPlayerId}'`);
+                const whitePlayer = await findMany(`SELECT * FROM User WHERE id = '${gameFromDb.whitePlayerId}'`);
+                const blackPlayer = await findMany(`SELECT * FROM User WHERE id = '${gameFromDb.blackPlayerId}'`);
                 const moves = await findMany(`SELECT * FROM Move WHERE gameId = '${gameFromDb?.id}' ORDER BY moveNumber ASC`);
                 // There is a game created but no second player available
         
