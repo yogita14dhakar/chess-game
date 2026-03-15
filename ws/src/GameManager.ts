@@ -147,7 +147,7 @@ export class GameManager{
                 }
         
                 let availableGame = this.games.find((game) => game.gameId === gameId);
-                const gameFromDb = await update(`SELECT * FROM Game WHERE id = '${gameId}'`); 
+                const gameFromDb = await findMany(`SELECT * FROM Game WHERE id = '${gameId}'`); 
                 console.log(gameId, gameFromDb);
                 const whitePlayer = await update(`SELECT * FROM User WHERE id = '${gameFromDb.whitePlayerId}'`);
                 const blackPlayer = await update(`SELECT * FROM User WHERE id = '${gameFromDb.blackPlayerId}'`);
