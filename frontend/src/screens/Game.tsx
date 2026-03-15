@@ -233,6 +233,7 @@ export function Game(){
                     },
                 }),
             );
+            localStorage.removeItem(`added:${gameId}`);
             setMoves([]);
             navigate("/");
         };
