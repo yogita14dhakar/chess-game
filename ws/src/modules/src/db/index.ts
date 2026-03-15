@@ -45,7 +45,6 @@ export const update = async (q: string) => {
         // connection = await connPool.getConnection();
         const [rows, err]: [mysql.RowDataPacket[], FieldPacket[]] = await connPool.query(q);
             if(err) throw err;
-      console.log(rows[0]);
             return JSON.parse(JSON.stringify(rows[0]));
     }catch(err){
         console.log(err);
