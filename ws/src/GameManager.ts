@@ -151,6 +151,7 @@ export class GameManager{
                 const whitePlayer = await findMany(`SELECT * FROM User WHERE id = '${gameFromDb.whitePlayerId}'`);
                 const blackPlayer = await findMany(`SELECT * FROM User WHERE id = '${gameFromDb.blackPlayerId}'`);
                 const moves = await findMany(`SELECT * FROM Move WHERE gameId = '${gameFromDb?.id}' ORDER BY moveNumber ASC`);
+                console.log(gameFromDb, whitePlayer, blackPlayer);
                 // There is a game created but no second player available
         
                 if (availableGame && !availableGame.player2UserId) {
@@ -170,6 +171,7 @@ export class GameManager{
                   }
 
                   if(gameFromDb.status !== GameStatus.IN_PROGRESS) {
+                      console.log('ending game');
                     user.socket.send(JSON.stringify({
                       type: GAME_ENDED,
                       payload: {
@@ -204,7 +206,7 @@ export class GameManager{
           
                   console.log(availableGame.getPlayer1TimeConsumed());
                   console.log(availableGame.getPlayer2TimeConsumed());
-          
+                  
                   user.socket.send(
                     JSON.stringify({
                       type: GAME_JOINED,
